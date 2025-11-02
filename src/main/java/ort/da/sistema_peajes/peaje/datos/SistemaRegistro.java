@@ -26,10 +26,10 @@ public class SistemaRegistro {
 		return this.registros;
 	}
 
-	public InfoTransito realizarTransito(Puesto puesto, Vehiculo vehiculo, LocalDateTime fechaHora) throws SaldoException, EstadoException{
-
+	public InfoTransito realizarTransito(Puesto puesto, Vehiculo vehiculo, LocalDateTime fechaHora) throws SaldoException, EstadoException, Exception{
 		Registro r = new Registro(puesto, vehiculo, fechaHora, puesto.obtenerTarifaSegunCategoriaVehiculo(vehiculo));
 		this.agregarRegistro(r);
+
 		//quien se encarga de cobrar el Registro?
 		//retorna Asigancion para poder mandar un InfoTransito?
 		return new InfoTransito(puesto, vehiculo, r.cobrar(), r.getMontoPagado());

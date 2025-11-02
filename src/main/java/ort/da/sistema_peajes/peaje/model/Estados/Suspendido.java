@@ -41,8 +41,7 @@ public class Suspendido extends EstadoPropietario {
 
     @Override
     public void puedeTransitar() throws EstadoException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'puedeTransitar'");
+        throw new EstadoException("Se encuentra actualmente Suspendido. No puede realizar Transitos");
     }
 
 }

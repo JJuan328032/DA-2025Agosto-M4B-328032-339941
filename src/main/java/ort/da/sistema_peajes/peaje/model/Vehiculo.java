@@ -56,4 +56,6 @@ public class Vehiculo {
         return this.getPropietario().realizarPago(registro);
     }
 
+
+	public String toString(){ return "MAtricula: " + this.matricula + " Categoria: " + this.getCategoriaNombre();}
 }

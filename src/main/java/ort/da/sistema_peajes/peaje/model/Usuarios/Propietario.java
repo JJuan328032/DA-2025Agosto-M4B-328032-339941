@@ -20,7 +20,6 @@ import ort.da.sistema_peajes.peaje.model.Puesto;
 public class Propietario extends Usuario {
 
 	private int saldo;
-
 	private int saldoMinimo;
 
 	private ArrayList<Vehiculo> vehiculos;

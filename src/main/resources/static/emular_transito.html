@@ -83,12 +83,13 @@
 
         function mostrar_puestos(puestos){
             console.log(puestos);
-            document.getElementById("puestoContainer").innerHTML = crearListaDesdeJson({data:puestos,id:"puesto",campoMostrar: "nombre", value: "nombre"});
+            document.getElementById("puestoContainer").innerHTML = crearListaDesdeJson({data:puestos,id:"indicePuesto",campoMostrar: "nombre", value: "nombre"});
         }
 
         function mostrarSelect(){
-            const select = document.getElementById("puesto");
+            const select = document.getElementById("indicePuesto");
             const valorSeleccionado = select.value;
+            console.log("Seleccionaste:", valorSeleccionado);
             const textoSeleccionado = select.options[select.selectedIndex].text;
 
             if (valorSeleccionado === "-1") return;
@@ -97,11 +98,13 @@
         }
 
         function pedirTarifas(){
-            const select = document.getElementById("puesto");
+            const select = document.getElementById("indicePuesto");
             if (!select) {
                 console.error("No se encontró el select de puestos");
                 return;
             }
+
+            //SI NO HAY TARIFAS, DESAHABILITAR EL BOTON?
 
             const valorSeleccionado = select.value;
             if (valorSeleccionado === "-1") return;
@@ -121,7 +124,7 @@
         }
 
         function handleEmularTransito(event){
-            const select = document.getElementById("puesto");
+            const select = document.getElementById("indicePuesto");
             if (!select) {
                 console.error("No se encontró el select de puestos");
                 return;
@@ -132,6 +135,24 @@
 
             event.preventDefault();
             submit(urlEmular, serializarFormulario("formEmular"));
+        }
+
+        function mostrar_transitoEmulado(datos){
+            console.log("Datos del tránsito:", datos);
+            
+            // Crear tabla vertical con los datos
+            let html = `
+                <h3 style="margin-top:20px;margin-bottom:10px;font-weight:700">Resultado del Tránsito</h3>
+                <table style="width:100%;border-collapse:collapse;margin-top:10px">
+                    <tr><th style="text-align:left;padding:8px;background:#f5f5f5;font-weight:700;border:1px solid #ddd">Propietario</th><td style="padding:8px;border:1px solid #ddd">${datos.propietario}</td></tr>
+                    <tr><th style="text-align:left;padding:8px;background:#f5f5f5;font-weight:700;border:1px solid #ddd">Categoría</th><td style="padding:8px;border:1px solid #ddd">${datos.categoria}</td></tr>
+                    <tr><th style="text-align:left;padding:8px;background:#f5f5f5;font-weight:700;border:1px solid #ddd">Bonificación</th><td style="padding:8px;border:1px solid #ddd">${datos.bonificacion}</td></tr>
+                    <tr><th style="text-align:left;padding:8px;background:#f5f5f5;font-weight:700;border:1px solid #ddd">Costo Tránsito</th><td style="padding:8px;border:1px solid #ddd">${datos.costoTransito}</td></tr>
+                    <tr><th style="text-align:left;padding:8px;background:#f5f5f5;font-weight:700;border:1px solid #ddd">Saldo Luego Tránsito</th><td style="padding:8px;border:1px solid #ddd">${datos.saldoLuegoTransito}</td></tr>
+                </table>
+            `;
+            
+            document.getElementById("resultado-transito").innerHTML = html;
         }
         
         async function excepcionDeAplicacion(mensaje){

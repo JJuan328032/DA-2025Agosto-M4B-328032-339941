@@ -38,7 +38,7 @@ public class SistemaPuestos {
         return obtenerPuestoPorNombre(nombre).getTarifas();
     }
 
-    public Tarifa obtenerTarifaSegunPuestoYVehiculo(String puesto, Vehiculo vehiculo) {
+    public Tarifa obtenerTarifaSegunPuestoYVehiculo(String puesto, Vehiculo vehiculo) throws Exception {
         return this.obtenerPuestoPorNombre(puesto).obtenerTarifaSegunCategoriaVehiculo(vehiculo);
     }
 

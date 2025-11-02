@@ -39,8 +39,7 @@ public class Habilitado extends EstadoPropietario {
 
     @Override
     public void puedeTransitar() throws EstadoException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'puedeTransitar'");
+        return;
     }
 
 

@@ -23,7 +23,10 @@ public class SeedData {
         // Crear usuarios
 
         Propietario prop1 = fachada.agregarPropietario("p", "p", "Carlos Rodríguez");
+        prop1.setSaldo(4000);
+
         Propietario prop2 = fachada.agregarPropietario("prop2", "prop456", "Ana Martínez");
+        prop2.setSaldo(3000);
         fachada.agregarAdministrador("a", "a", "Juan Pérez");
 
         // Crear bonificaciones
@@ -35,7 +38,7 @@ public class SeedData {
         Puesto peaje2 = new Puesto("Peaje Ruta 5", "Km 98 Ruta 5");
 
         agregarTarifas(peaje1);
-        agregarTarifas(peaje2);
+        agregarTarifas2(peaje2);
 
         try{
             fachada.agregarPuesto(peaje1);
@@ -53,10 +56,10 @@ public class SeedData {
 
         // Crear vehículos
 
-        Vehiculo v1 = new Vehiculo("ABC123", "Toyota Corolla", "Rojo", "Automóvil");
-        Vehiculo v2 = new Vehiculo("DEF456", "Ford Ranger", "Blanco", "Camioneta");
-        Vehiculo v3 = new Vehiculo("GHI789", "Honda Civic", "Azul", "Automóvil");
-        Vehiculo v4 = new Vehiculo("JKL012", "Yamaha MT-07", "Negro", "Moto");
+        Vehiculo v1 = new Vehiculo("ABC123", "Toyota Corolla", "Rojo", "(A)Automóvil");
+        Vehiculo v2 = new Vehiculo("DEF456", "Ford Ranger", "Blanco", "(B)Camioneta");
+        Vehiculo v3 = new Vehiculo("GHI789", "Honda Civic", "Azul", "(A)Automóvil");
+        Vehiculo v4 = new Vehiculo("JKL012", "Yamaha MT-07", "Negro", "(F)Moto");
 
         fachada.agregarVehiculo(v1);
         fachada.agregarVehiculo(v2);
@@ -134,6 +137,16 @@ public class SeedData {
     }
 
     private static void agregarTarifas(Puesto puesto) {
+        ArrayList<Tarifa> tarifas = new ArrayList<>();
+        tarifas.add(new Tarifa("Automóvil", 170, "(A)Automóvil"));
+        tarifas.add(new Tarifa("Camioneta", 250, "(B)Camioneta"));
+        tarifas.add(new Tarifa("Camión", 320, "(C)Camión"));
+        tarifas.add(new Tarifa("Ómnibus", 350, "(D)Ómnibus"));
+        tarifas.add(new Tarifa("Moto", 58, "(F)Moto"));
+        puesto.setTarifas(tarifas);
+    }
+
+    private static void agregarTarifas2(Puesto puesto) {
         ArrayList<Tarifa> tarifas = new ArrayList<>();
         tarifas.add(new Tarifa("Automóvil", 100, "(A)Automóvil"));
         tarifas.add(new Tarifa("Camioneta", 150, "(B)Camioneta"));

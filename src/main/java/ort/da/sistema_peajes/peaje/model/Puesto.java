@@ -44,18 +44,19 @@ public class Puesto {
 		for(Tarifa t : nuevasTarifas) this.tarifas.add(t);
     }
 
-	public int obtenerMontoTarifaSegunVehiculo(Vehiculo vehiculo) {
+	public int obtenerMontoTarifaSegunVehiculo(Vehiculo vehiculo) throws Exception{
 		return this.obtenerTarifaSegunCategoriaVehiculo(vehiculo).getMonto();
 	}
 
-	public Tarifa obtenerTarifaSegunCategoriaVehiculo(Vehiculo vehiculo) {
+	public Tarifa obtenerTarifaSegunCategoriaVehiculo(Vehiculo vehiculo) throws Exception {
+
 		for (Tarifa tarifa : this.tarifas) {
 			if (tarifa.mismaCategoria(vehiculo.getCategoria())) {
 				return tarifa;
 			}
 		}
 
-		return null;
+		throw new Exception("Hubo un error inesperado. No se encuentra la Tarifa");
 	}
 
 	public boolean equals(Puesto p){

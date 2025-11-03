@@ -6,6 +6,7 @@ import ort.da.sistema_peajes.peaje.exceptions.PuestoException;
 import ort.da.sistema_peajes.peaje.model.Puesto;
 import ort.da.sistema_peajes.peaje.model.Tarifa;
 import ort.da.sistema_peajes.peaje.model.Vehiculo;
+import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
 
 public class SistemaPuestos {
 
@@ -45,4 +46,20 @@ public class SistemaPuestos {
     public Puesto obtenerPuestoPorIndice(int indicePuesto) {
         return this.puestos.get(indicePuesto);
     }
+
+	/*
+	public <T extends Puesto> T buscarPuestoNombre(String puesto, ArrayList<T> lista) throws EstadoException {
+    for (T u : lista) {
+        if (u.getNombre().equalsIgnoreCase(puesto)) {
+            return u;
+        }
+    }
+    return null;
+	}
+	
+
+	public Puesto obtenerPuestoByNombre(String puesto) throws EstadoException {
+		return buscarPuestoNombre(puesto, this.puestos);
+	}
+		*/
 }

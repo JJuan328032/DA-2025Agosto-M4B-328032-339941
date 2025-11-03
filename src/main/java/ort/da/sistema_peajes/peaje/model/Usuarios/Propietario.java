@@ -30,8 +30,8 @@ public class Propietario extends Usuario {
 	private EstadoPropietario estadoPropietario;
 
 
-	public Propietario(String cedula, String password, String nombreCompleto) {
-        super(cedula, password, nombreCompleto);
+	public Propietario(String usuario, String password, String nombreCompleto, String cedula) {
+        super(usuario, password, nombreCompleto, cedula);
         this.vehiculos = new ArrayList<>();
         this.registros = new ArrayList<>();
         this.asignaciones = new ArrayList<>();

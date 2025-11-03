@@ -4,9 +4,11 @@ import ort.da.sistema_peajes.peaje.model.Usuarios.Usuario;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
 import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
 import ort.da.sistema_peajes.peaje.model.Vehiculo;
+import ort.da.sistema_peajes.peaje.model.Asignacion;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Administrador;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.security.auth.login.LoginException;
 
@@ -38,13 +40,13 @@ public class SistemaUsuarios {
 		return administrador;
 	}
 
-    public void agregarAdministrador(String user, String pass, String nombreCompleto) {
-        this.administradores.add(new Administrador(user, pass, nombreCompleto));
+    public void agregarAdministrador(String user, String pass, String nombreCompleto, String cedula) {
+        this.administradores.add(new Administrador(user, pass, nombreCompleto,cedula));
     }
 
 
-    public Propietario agregarPropietario(String user, String pass, String nombreCompleto) {
-		Propietario p = new Propietario(user, pass, nombreCompleto);
+    public Propietario agregarPropietario(String user, String pass, String nombreCompleto, String cedula) {
+		Propietario p = new Propietario(user, pass, nombreCompleto, cedula);
         this.propietarios.add(p);
 
 		return p;
@@ -73,5 +75,23 @@ public class SistemaUsuarios {
 	public void agregarVehiculoPropietario(Vehiculo v, Propietario p) {
 		p.agregarVehiculo(v);
 	}
+
+	public <T extends Usuario> T buscarUsuarioCedula(String cedula, ArrayList<T> lista) throws EstadoException {
+		for (T u : lista) {
+			if (u.validarCedula(cedula)) {
+				return u;
+			}
+		}
+		return null;
+	}
+
+
+	public Propietario buscarPropietarioPorCedula(String cedula) throws LoginException, EstadoException{
+		return buscarUsuarioCedula(cedula, this.propietarios);
+	}
+
+    public List<Asignacion> obtenerAsignacionesDePropietario(Propietario encontrado) {
+        return encontrado.getAsignaciones();
+    }
 
 }

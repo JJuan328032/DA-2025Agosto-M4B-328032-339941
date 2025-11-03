@@ -13,6 +13,8 @@ public abstract class Bonificacion {
 		return nombre;
 	}
 
+	
+
 	public abstract int calcular(int monto);
 	//USAMOS FACTORY PARA CREAR LAS BONIFICACIONES ESPECIFICAS?
 	

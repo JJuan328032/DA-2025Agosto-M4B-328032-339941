@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asignar Bonificaciones</title>
+    <link rel="stylesheet" href="css/asignar_bonificaciones.css">
+</head>
+<body>
+    <div class="container">
+        <div class="grid-layout">
+            <!-- Panel Izquierdo: Formulario de asignación -->
+            <div class="panel-izquierdo">
+                <div class="form-group">
+                    <label for="bonificacion">Bonificaciones definidas</label>
+                    <select id="bonificacion" name="bonificacion">
+                        <option value="">Seleccione una bonificación</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="puesto">Puestos definidos</label>
+                    <select id="puesto" name="puesto">
+                        <option value="">Seleccione un puesto</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <!-- Panel Derecho: Información del propietario y bonificaciones -->
+
+            <div class="form-group">
+                    <label for="cedula">Cédula de identidad</label>
+                    <input type="text" id="cedula" name="cedula" placeholder="Ingrese cédula">
+                    <button class="btn" onclick="buscarPropietario()">Buscar propietario</button>
+            </div>
+
+            <div class="panel-derecho">
+                <div class="section info-propietario" style="display: none;">
+                    <h3>Propietario</h3>
+                    <p><strong>Nombre:</strong> <span id="nombre-propietario"></span></p>
+                    <p><strong>Estado:</strong> <span id="estado-propietario"></span></p>
+                </div>
+
+                <div class="section">
+                    <h3>Bonificaciones asignadas</h3>
+                    <div id="tabla-bonificaciones">
+                        <!-- La tabla se llenará dinámicamente cuando se busque un propietario -->
+                    </div>
+
+                    <div class="help-text">
+                        Ingrese una cédula y presione "Buscar propietario" para ver la información.
+                    </div>
+
+                    <button class="btn" onclick="asignarBonificacion()" style="display: none;">
+                        Asignar bonificación
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="utilesVista.js"></script>
+    <script src="vistaWeb.js"></script>
+    <script>
+        // Variables para vistaWeb.js - No necesitamos carga inicial
+        var urlIniciarVista = '/bonificaciones/opciones';
+        var parametrosInicioVista = '';
+        var prefijoNombreFuncionProcesoResultado = 'mostrar_';
+
+        // Función para buscar propietario y sus bonificaciones
+        function buscarPropietario() {
+            const cedula = document.getElementById('cedula').value;
+            if (!cedula) {
+                alert('Ingrese una cédula');   
+                return;
+            }
+            submit('/bonificaciones/propietario/buscar', 'cedula=' + encodeURIComponent(cedula));
+
+        }
+
+        // Función para asignar bonificación
+        function asignarBonificacion() {
+            const bonificacion = document.getElementById('bonificacion').value;
+            const puesto = document.getElementById('puesto').value;
+            const cedula = document.getElementById('cedula').value;
+
+            if (!bonificacion || !puesto || !cedula) {
+                alert('Por favor complete todos los campos');
+                return;
+            }
+
+            const data ='cedula=' + encodeURIComponent(cedula) +
+                        '&bonificacion=' + encodeURIComponent(bonificacion) +
+                        '&puesto=' + encodeURIComponent(puesto);
+    
+            submit('/bonificaciones/propietario/asignar', data);
+        }
+
+        // Funciones para procesar respuestas del servidor
+        // Almacenamiento de opciones disponibles
+        let bonificacionesDisponibles = [];
+        let puestosDisponibles = [];
+
+        function mostrar_propietario(data) {
+            const infoPropietario = document.querySelector('.info-propietario');
+            const btnAsignar = document.querySelector('.btn[onclick="asignarBonificacion()"]');
+            
+            if (!data) {
+                infoPropietario.style.display = 'none';
+                btnAsignar.style.display = 'none';
+                return;
+            }
+
+            document.getElementById('nombre-propietario').textContent = data.nombreCompleto || '';
+            document.getElementById('estado-propietario').textContent = data.estado || '';
+            infoPropietario.style.display = 'block';
+            btnAsignar.style.display = 'block';
+            
+            // Actualizar el texto de ayuda
+            document.querySelector('.help-text').textContent = 
+                'Seleccione una bonificación y puesto en las listas de la izquierda y luego asigne.';
+
+            // Asegurarnos que los dropdowns mantengan sus opciones
+            actualizarDropdownBonificaciones(bonificacionesDisponibles);
+            actualizarDropdownPuestos(puestosDisponibles);
+        }
+
+        function mostrar_bonificaciones(bonificaciones) {
+            const contenedor = document.getElementById('tabla-bonificaciones');
+            if (!bonificaciones || bonificaciones.length === 0) {
+                contenedor.innerHTML = ''; // No mostramos mensaje si no hay bonificaciones
+                return;
+            }
+
+            const tabla = crearTablaDesdeJson(bonificaciones);
+            contenedor.innerHTML = tabla;
+        }
+
+        function mostrar_bonificacionesDefinidas(bonificaciones) {
+            if (bonificaciones && bonificaciones.length) {
+                bonificacionesDisponibles = bonificaciones; // Guardamos las opciones
+                actualizarDropdownBonificaciones(bonificaciones);
+            }
+        }
+
+        function mostrar_puestosDefinidos(puestos) {
+            if (puestos && puestos.length) {
+                puestosDisponibles = puestos; // Guardamos las opciones
+                actualizarDropdownPuestos(puestos);
+            }
+        }
+
+        // Funciones auxiliares para mantener los dropdowns
+        function actualizarDropdownBonificaciones(bonificaciones) {
+            const select = document.getElementById('bonificacion');
+            const valorActual = select.value; // Guardamos la selección actual si existe
+            
+            select.innerHTML = '<option value="">Seleccione una bonificación</option>';
+            if (bonificaciones && bonificaciones.length) {
+                bonificaciones.forEach(b => {
+                    const option = `<option value="${b.nombre}"${b.id === valorActual ? ' selected' : ''}>${b.nombre}</option>`;
+                    select.innerHTML += option;
+                });
+            }
+        }
+
+        function actualizarDropdownPuestos(puestos) {
+            const select = document.getElementById('puesto');
+            const valorActual = select.value; // Guardamos la selección actual si existe
+            
+            select.innerHTML = '<option value="">Seleccione un puesto</option>';
+            if (puestos && puestos.length) {
+                puestos.forEach(p => {
+                    const option = `<option value="${p.nombre}"${p.id === valorActual ? ' selected' : ''}>${p.nombre}</option>`;
+                    select.innerHTML += option;
+                });
+            }
+        }
+
+        // Manejador de errores del servidor
+        function mostrar_error(mensaje) {
+            alert(mensaje);
+        }
+    </script>
+</body>
+</html>

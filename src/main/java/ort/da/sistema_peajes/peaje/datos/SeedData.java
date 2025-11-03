@@ -22,16 +22,16 @@ public class SeedData {
 
         // Crear usuarios
 
-        Propietario prop1 = fachada.agregarPropietario("p", "p", "Carlos Rodríguez");
+        Propietario prop1 = fachada.agregarPropietario("p", "p", "Carlos Rodríguez", "52468975");
         prop1.setSaldo(4000);
 
-        Propietario prop2 = fachada.agregarPropietario("prop2", "prop456", "Ana Martínez");
+        Propietario prop2 = fachada.agregarPropietario("prop2", "prop456", "Ana Martínez", "50231689");
         prop2.setSaldo(3000);
-        fachada.agregarAdministrador("a", "a", "Juan Pérez");
+        fachada.agregarAdministrador("a", "a", "Juan Pérez", "56464987");
 
         // Crear bonificaciones
-        Bonificacion bonFrecuente = new Descuento(20, "Frecuente");
-        Bonificacion bonTrabajador = new Descuento(50, "Trabajador");
+        Bonificacion bonFrecuente = fachada.agregarBonificacion(20, "Frecuente");
+        Bonificacion bonTrabajador = fachada.agregarBonificacion(50, "Trabajador");
 
         // Crear puestos con tarifas
         Puesto peaje1 = new Puesto("Peaje Ruta 1", "Km 56 Ruta 1");

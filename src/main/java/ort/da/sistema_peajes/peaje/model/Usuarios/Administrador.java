@@ -9,8 +9,8 @@ public class Administrador extends Usuario {
     private boolean logged;
 
 
-    public Administrador(String cedula, String password, String nombreCompleto) {
-        super(cedula, password, nombreCompleto);
+    public Administrador(String usuario, String password, String nombreCompleto, String cedula) {
+        super(usuario, password, nombreCompleto, cedula);  
         this.logged = false;
     }
 

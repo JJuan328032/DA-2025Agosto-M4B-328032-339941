@@ -72,7 +72,7 @@
         function buscarPropietario() {
             const cedula = document.getElementById('cedula').value;
             if (!cedula) {
-                alert('Ingrese una cédula');
+                alert('Ingrese una cédula');   
                 return;
             }
             submit('/bonificaciones/propietario/buscar', 'cedula=' + encodeURIComponent(cedula));
@@ -90,11 +90,11 @@
                 return;
             }
 
-            const data = 'bonificacion=' + encodeURIComponent(bonificacion) +
-                        '&puesto=' + encodeURIComponent(puesto) +
-                        '&cedula=' + encodeURIComponent(cedula);
-            
-            submit('/bonificaciones/asignar', data);
+            const data ='cedula=' + encodeURIComponent(cedula) +
+                        '&bonificacion=' + encodeURIComponent(bonificacion) +
+                        '&puesto=' + encodeURIComponent(puesto);
+    
+            submit('/bonificaciones/propietario/asignar', data);
         }
 
         // Funciones para procesar respuestas del servidor
@@ -159,7 +159,7 @@
             select.innerHTML = '<option value="">Seleccione una bonificación</option>';
             if (bonificaciones && bonificaciones.length) {
                 bonificaciones.forEach(b => {
-                    const option = `<option value="${b.id}"${b.id === valorActual ? ' selected' : ''}>${b.nombre}</option>`;
+                    const option = `<option value="${b.nombre}"${b.id === valorActual ? ' selected' : ''}>${b.nombre}</option>`;
                     select.innerHTML += option;
                 });
             }
@@ -172,7 +172,7 @@
             select.innerHTML = '<option value="">Seleccione un puesto</option>';
             if (puestos && puestos.length) {
                 puestos.forEach(p => {
-                    const option = `<option value="${p.id}"${p.id === valorActual ? ' selected' : ''}>${p.nombre}</option>`;
+                    const option = `<option value="${p.nombre}"${p.id === valorActual ? ' selected' : ''}>${p.nombre}</option>`;
                     select.innerHTML += option;
                 });
             }

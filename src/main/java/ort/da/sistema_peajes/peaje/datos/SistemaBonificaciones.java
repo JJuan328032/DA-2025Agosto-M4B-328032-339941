@@ -2,6 +2,7 @@ package ort.da.sistema_peajes.peaje.datos;
 
 import java.util.ArrayList;
 
+import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
 import ort.da.sistema_peajes.peaje.model.Bonificacion.*;
 
 public class SistemaBonificaciones {
@@ -19,6 +20,22 @@ public class SistemaBonificaciones {
     public ArrayList<Bonificacion> getBonificaciones() {
         return bonificaciones;
     }
+
+    public <T extends Bonificacion> T buscarBonificacionNombre(String bonificacion, ArrayList<T> lista) throws EstadoException {
+    for (T u : lista) {
+        if (u.getNombre().equalsIgnoreCase(bonificacion)) {
+            return u;
+        }
+    }
+    return null;
+	}
+
+
+    public Bonificacion obtenerBonificacionByNombre(String bonificacion) throws EstadoException {
+        return buscarBonificacionNombre(bonificacion, this.bonificaciones);
+    }
+
+  
 
 }
     

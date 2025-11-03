@@ -1,9 +1,12 @@
 package ort.da.sistema_peajes.peaje.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.security.auth.login.LoginException;
+
+import org.springframework.cglib.core.Local;
 
 import ort.da.sistema_peajes.peaje.datos.SistemaBonificaciones;
 import ort.da.sistema_peajes.peaje.datos.SistemaPuestos;
@@ -11,6 +14,7 @@ import ort.da.sistema_peajes.peaje.datos.SistemaRegistro;
 import ort.da.sistema_peajes.peaje.datos.SistemaVehiculos;
 import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
 import ort.da.sistema_peajes.peaje.datos.SistemaUsuarios;
+import ort.da.sistema_peajes.peaje.model.Asignacion;
 import ort.da.sistema_peajes.peaje.model.Puesto;
 import ort.da.sistema_peajes.peaje.model.Vehiculo;
 import ort.da.sistema_peajes.peaje.model.Bonificacion.*;
@@ -108,18 +112,30 @@ public class Fachada {
 		
 	}
 	
-	/*
-	public List<Bonificacion> obtenerBonificacionesDePropietario(Propietario encontrado) {
-		
-		throw new UnsupportedOperationException("Unimplemented method 'obtenerBonificacionesDePropietario'");
+	public List<Asignacion> obtenerAsignacionesDePropietario(Propietario encontrado) {
+		List<Asignacion> asignaciones = sistemaUsuarios.obtenerAsignacionesDePropietario(encontrado);
+		System.out.println("Cantidad de Asignaciones del usuario: " + asignaciones.size());
+		return asignaciones;
 	}
 
-    public boolean asignarBonificaciones(Propietario propietario, List<Integer> idsBonificaciones,
-            List<Integer> idsPuestos) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'asignarBonificaciones'");
+    public boolean asignarBonificaciones(Propietario propietario, String Bonificacion,String Puesto) throws EstadoException {
+		Bonificacion bonificacion = sistemaBonificaciones.obtenerBonificacionByNombre(Bonificacion);
+		Puesto puesto = sistemaPuestos.obtenerPuestoByNombre(Puesto);
+
+		System.out.println("🏗️ [FACHADA] Asignando bonificación...");
+    	System.out.println("   Propietario: " + (propietario != null ? propietario.getNombreCompleto() : "null"));
+    	System.out.println("   Bonificacion: " + bonificacion);
+    	System.out.println("   Puesto: " + puesto);
+		
+		if (bonificacion == null || puesto == null) {
+			return false;
+		}
+		Asignacion asignacion = new Asignacion(puesto,bonificacion,LocalDate.now());
+		propietario.agregarAsignacion(asignacion);
+
+        return true;
     }
 
-  */
+
 }
  

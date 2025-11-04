@@ -26,7 +26,7 @@ public abstract class EstadoPropietario {
     public abstract void deshabilitado() throws EstadoException;
 
 
-
+    public abstract boolean bonificable();
     public abstract void puedeTransitar() throws EstadoException;
 
 

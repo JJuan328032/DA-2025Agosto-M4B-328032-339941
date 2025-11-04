@@ -8,12 +8,12 @@ public class RegistroDTO {
     private String tarifa;
     private int montoTarifa;
     private String bonificacion;
-    private int montoBonificacion;
-    private int montoPagado;
+    private double montoBonificacion;
+    private double montoPagado;
     private LocalDateTime fecha;
 
     public RegistroDTO(String puesto, String matricula, String tarifa, int montoTarifa, String bonificacion,
-            int montoBonificacion, int montoPagado, LocalDateTime fecha) {
+            double montoBonificacion, double montoPagado, LocalDateTime fecha) {
         this.puesto = puesto;
         this.matricula = matricula;
         this.tarifa = tarifa;
@@ -39,10 +39,10 @@ public class RegistroDTO {
     public String getBonificacion() {
         return bonificacion;
     }
-    public int getMontoBonificacion() {
+    public double getMontoBonificacion() {
         return montoBonificacion;
     }
-    public int getMontoPagado() {
+    public double getMontoPagado() {
         return montoPagado;
     }
     public LocalDateTime getFecha() {

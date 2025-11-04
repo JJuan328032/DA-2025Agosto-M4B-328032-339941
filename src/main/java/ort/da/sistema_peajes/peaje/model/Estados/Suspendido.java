@@ -44,4 +44,9 @@ public class Suspendido extends EstadoPropietario {
         throw new EstadoException("Se encuentra actualmente Suspendido. No puede realizar Transitos");
     }
 
+    @Override
+    public boolean bonificable() {
+        return false;
+    }
+
 }

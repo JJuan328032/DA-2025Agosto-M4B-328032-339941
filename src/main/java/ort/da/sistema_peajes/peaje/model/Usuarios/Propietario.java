@@ -5,6 +5,7 @@ import ort.da.sistema_peajes.peaje.model.Estados.EstadoPropietario;
 import ort.da.sistema_peajes.peaje.model.Estados.Habilitado;
 import ort.da.sistema_peajes.peaje.model.Registro;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import javax.security.auth.login.LoginException;
@@ -134,43 +135,47 @@ public class Propietario extends Usuario {
 	}
 
 
-    public Asignacion realizarPago(Registro registro) throws SaldoException, EstadoException{
-        //validar si tengo una bonificacion en el puesto
-        Asignacion a = this.buscarAsignacionSegunPuesto(registro.getPuesto());
+    public String realizarPago(Registro registro) throws SaldoException, EstadoException{
 
-        //si la tengo, seteo el montoBonificado previamente inicializado en cero
-        if(a != null) registro.setMontoBonificado(a.calcularMontoBonificado(registro.getMontoTarifa()));
-        
-        validarRealizarTransito(registro.calcularPrecioFinal());
+        if(validarEstado()){
+            //validar si tengo una bonificacion en el puesto
+            Asignacion a = this.buscarAsignacionSegunPuesto(registro.getPuesto());
+
+            //si la tengo, seteo el montoBonificado previamente inicializado en cero
+            if(a != null) registro.setMontoBonificado(a.calcularMontoBonificado(registro.getMontoTarifa(), this.esSegundoTransitoDelDia(registro.getPuesto(), registro.getVehiculo(), registro.getFecha())));
+            
+            completarRegistro(registro);
+
+            //retorna Asignacion porque solo el Propietario sabe si tiene bonificacion en el Puesto y se necesita el nombre de dicho bono
+            return a.getBonificacionNombre();
+        }else{
+
+            completarRegistro(registro);
+        }
+
+        return null;
+    }
+
+    private void completarRegistro(Registro registro) throws SaldoException{
+        descontarTransito(registro.calcularPrecioFinal());
         registro.setMontoPagado();
-        //modifico Registro desde acá
-        //Hay que completar el nombre de la bonificacion y validar el estado del saldo
-        //Validar por Estado también
 
         this.agregarRegistro(registro);
-
-        //retorna Asignacion porque solo el Propietario sabe si tiene bonificacion en el Puesto y se necesita el nombre de dicho bono
-        return a;
     }
 
-    private void validarRealizarTransito(int monto) throws SaldoException, EstadoException{
-        //de no estar habilitado no se descuenta 
-        validarEstado();
-
-        //como el 
-        descontarTransito(monto);
-    }
-
-    private void descontarTransito(int monto) throws SaldoException{
+    private void descontarTransito(double monto) throws SaldoException{
         if(this.saldo - monto < 0) throw new SaldoException("Saldo insuficiente: " + this.saldo + " para cobrar el total: " + monto);
 
-        //cuando vaya a descontar tambien hay que cambar el campo montoPagado de Registro
         //funciona si es Exonerado y el saldo es cero
         this.saldo -= monto;
     }
 
-    private void validarEstado() throws EstadoException{
+    private boolean validarEstado() throws EstadoException{
+        //si no puede, manda exception y corta ejecucion
         this.estadoPropietario.puedeTransitar();
+
+        //si no puede recibir bonificaciones registro se encarga
+        return this.estadoPropietario.bonificable();
     }
 
     private Asignacion buscarAsignacionSegunPuesto(Puesto puesto) {
@@ -181,6 +186,14 @@ public class Propietario extends Usuario {
         return null;
     }
 
-    
+    private boolean esSegundoTransitoDelDia(Puesto puesto, Vehiculo vehiculo, LocalDateTime fecha) {
+		int cont = 0;
+
+		for(int i = 0; i < this.registros.size() && cont < 2; i++){
+			if(this.registros.get(i).validarMismoDia(puesto, vehiculo, fecha)) cont++;
+		}
+
+		return cont == 2;
+	}
 
 }

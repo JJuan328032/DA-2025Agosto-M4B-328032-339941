@@ -6,13 +6,13 @@ public class InfoTransito {
     
     private Puesto puesto;
     private Vehiculo vehiculo;
-    private Asignacion asignacion;
-    private int montoTransito;
+    private String bono;
+    private double montoTransito;
 
-    public InfoTransito(Puesto puesto, Vehiculo vehiculo, Asignacion asignacion, int montoTransito) {
+    public InfoTransito(Puesto puesto, Vehiculo vehiculo, String bono, double montoTransito) {
         this.puesto = puesto;
         this.vehiculo = vehiculo;
-        this.asignacion = asignacion;
+        this.bono = bono;
         this.montoTransito = montoTransito;
     }
 
@@ -22,10 +22,10 @@ public class InfoTransito {
     public Vehiculo getVehiculo() {
         return vehiculo;
     }
-    public Asignacion getAsignacion() {
-        return asignacion;
+    public String getAsignacion() {
+        return bono;
     }
-    public int getMontoTransito() {
+    public double getMontoTransito() {
         return montoTransito;
     }
     public Propietario getPropietario() {

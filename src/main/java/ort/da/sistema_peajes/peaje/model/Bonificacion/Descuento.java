@@ -1,11 +1,10 @@
 package ort.da.sistema_peajes.peaje.model.Bonificacion;
 
-public class Descuento extends Bonificacion {
+public class Descuento {
 
-	private double porcentaje;
+	private final double porcentaje;
 
-	public Descuento(double porcentaje, String nombre) {
-		super(nombre);
+	public Descuento(double porcentaje) {
 		this.porcentaje = porcentaje;
 	}
 
@@ -13,8 +12,7 @@ public class Descuento extends Bonificacion {
 		return porcentaje;
 	}
 
-
-	public int calcular(int monto) {
-		return monto - (int) (monto * (porcentaje / 100));
+	public double calcularDescuento(int monto) {
+		return (int) (monto * (porcentaje / 100));
 	}
 }

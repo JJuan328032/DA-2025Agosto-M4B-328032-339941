@@ -44,6 +44,11 @@ public class Deshabilitado extends EstadoPropietario {
         throw new EstadoException("No puede realizar Transitos");
     }
 
+    @Override
+    public boolean bonificable() {
+        return false;
+    }
+
     
 
 }

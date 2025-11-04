@@ -5,14 +5,16 @@ public class TransitoDTO {
     private String propietario;
     private String categoria;
     private String bonificacion;
-    private int costoTransito;
+    private double costoTransito;
     private int saldoLuegoTransito;
 
-    public TransitoDTO(String propietario, String categoria, String bonificacion, int costoTransito,
-            int saldoLuegoTransito) {
+    public TransitoDTO(String propietario, String categoria, String bonificacion, double costoTransito, int saldoLuegoTransito) {
         this.propietario = propietario;
         this.categoria = categoria;
-        this.bonificacion = bonificacion;
+
+        if(bonificacion == null) this.bonificacion = "Sin Bonificación";
+        else this.bonificacion = bonificacion;
+
         this.costoTransito = costoTransito;
         this.saldoLuegoTransito = saldoLuegoTransito;
     }
@@ -26,7 +28,7 @@ public class TransitoDTO {
     public String getBonificacion() {
         return bonificacion;
     }
-    public int getCostoTransito() {
+    public double getCostoTransito() {
         return costoTransito;
     }
     public int getSaldoLuegoTransito() {

@@ -35,9 +35,10 @@ public class SistemaBonificaciones {
         return buscarBonificacionNombre(bonificacion, this.bonificaciones);
     }
 
-    public Bonificacion agregarBonificacion(int i, String descripcion) {
-        //como sabemos que tipo de bonificacion hay que crear?
-        return null;
+    public Bonificacion agregarBonificacion(String tipo) {
+        Bonificacion b = BonificacionFactory.crear(tipo);
+        agregarBonificacion(b);
+        return b;
     }
 
   

@@ -13,10 +13,10 @@ public class Registro {
     private String tarifa;
     private int montoTarifa;
 
-    private int montoBonificado;
+    private double montoBonificado;
     private String bonificacion;
 
-    private int montoPagado;
+    private double montoPagado;
 
     public Registro(Puesto puesto, Vehiculo vehiculo, LocalDateTime fecha, Tarifa tarifa) {
         this.puesto = puesto;
@@ -40,7 +40,7 @@ public class Registro {
         return fecha;
     }
 
-    public int getMontoBonificado() {
+    public double getMontoBonificado() {
         return montoBonificado;
     }
 
@@ -48,7 +48,7 @@ public class Registro {
         this.bonificacion = b;
     }
 
-    public void setMontoBonificado(int montoBonificado) {
+    public void setMontoBonificado(double montoBonificado) {
         this.montoBonificado = montoBonificado;
     }
 
@@ -56,7 +56,7 @@ public class Registro {
         return bonificacion;
     }
 
-    public int getMontoPagado() {
+    public double getMontoPagado() {
         return montoPagado;
     }
 
@@ -73,7 +73,7 @@ public class Registro {
     }
 
 
-    public int getMontoBonificacion() {
+    public double getMontoBonificacion() {
         return this.montoBonificado;
     }
 
@@ -83,7 +83,7 @@ public class Registro {
 
 
     public void setMontoPagado() {
-        this.montoPagado = this.montoTarifa - this.montoBonificado;
+        this.montoPagado = (double) (this.montoTarifa - this.montoBonificado);
     }
 
     public String toString() {
@@ -94,16 +94,17 @@ public class Registro {
     }
 
 
-    public Asignacion cobrar() throws SaldoException, EstadoException{
-        //hay bonificaciones?
-        //  preguntar a Propietario
-
-        //Como es el propietario que sabe si tiene una bonificacion en un Puesto, no puedo hacer todo el calculo desde Registro con el diseño actual
+    public String cobrar() throws SaldoException, EstadoException{
         return this.getVehiculo().realizarPago(this);
     }
 
 
-    public int calcularPrecioFinal() {
+    public double calcularPrecioFinal() {
         return this.montoTarifa - this.montoBonificado;
+    }
+
+
+    public boolean validarMismoDia(Puesto puesto2, Vehiculo vehiculo2, LocalDateTime fecha2) {
+        return this.puesto.equals(puesto2) && this.vehiculo.equals(vehiculo2) && this.fecha.equals(fecha2);
     }
 }

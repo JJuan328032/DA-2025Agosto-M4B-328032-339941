@@ -6,9 +6,7 @@ import ort.da.sistema_peajes.peaje.model.Bonificacion.Bonificacion;
 public class Asignacion {
 
 	private Puesto puesto;
-
 	private Bonificacion bonificacion;
-
 	private LocalDate fecha;
 
 	public Asignacion(Puesto puesto, Bonificacion bonificacion, LocalDate fecha) {
@@ -35,7 +33,7 @@ public class Asignacion {
 	}
 
 
-    public int calcularMontoBonificado(int montoTarifa) {
-        return this.bonificacion.calcular(montoTarifa);
+    public double calcularMontoBonificado(int montoTarifa, boolean val) {
+        return this.bonificacion.calcular(montoTarifa, val);
     }
 }

@@ -1,6 +1,6 @@
 package ort.da.sistema_peajes.peaje;
 
-import ort.da.sistema_peajes.peaje.datos.SeedData;
+import ort.da.sistema_peajes.peaje.service.SeedData;
 
 public class Precarga {
     public static void cargar() {

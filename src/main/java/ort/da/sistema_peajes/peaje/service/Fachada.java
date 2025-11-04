@@ -25,7 +25,6 @@ import ort.da.sistema_peajes.peaje.model.Vehiculo;
 import ort.da.sistema_peajes.peaje.model.Bonificacion.*;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Administrador;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
-import ort.da.sistema_peajes.peaje.model.Usuarios.Usuario;
 
 
 
@@ -53,13 +52,6 @@ public class Fachada {
         }
         return instancia;
     }
-
-	/**
-	 * return login.login(usuario, password);
-	 */
-	public Usuario login(LoginUsuario login, String usuario, String password) {
-		return login.login(usuario, password);
-	}
 
 	public Propietario loginPropietario(String user, String pass) throws LoginException, EstadoException{
 		return sistemaUsuarios.loginPropietario(user, pass);
@@ -118,11 +110,8 @@ public class Fachada {
 	}
 
 
-	 public Bonificacion agregarBonificacion(int i, String descripcion) {
-		//Bonificacion b = new Descuento(i, descripcion);
-		//sistemaBonificaciones.agregarBonificacion(b);
-		//return b;
-		return sistemaBonificaciones.agregarBonificacion(i ,descripcion);
+	 public Bonificacion agregarBonificacion(String tipo) {
+		return sistemaBonificaciones.agregarBonificacion(tipo);
 	}
 
 	public List<Bonificacion> obtenerBonificaciones() {

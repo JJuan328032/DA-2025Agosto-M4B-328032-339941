@@ -52,7 +52,7 @@ public class Vehiculo {
         return this.matricula.equalsIgnoreCase(matricula);
     }
 
-    public Asignacion realizarPago(Registro registro) throws SaldoException, EstadoException{
+    public String realizarPago(Registro registro) throws SaldoException, EstadoException{
         return this.getPropietario().realizarPago(registro);
     }
 

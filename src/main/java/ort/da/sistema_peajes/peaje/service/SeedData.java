@@ -1,9 +1,8 @@
-package ort.da.sistema_peajes.peaje.datos;
+package ort.da.sistema_peajes.peaje.service;
 
 import ort.da.sistema_peajes.peaje.model.Bonificacion.*;
 import ort.da.sistema_peajes.peaje.model.*;
 import ort.da.sistema_peajes.peaje.model.Usuarios.*;
-import ort.da.sistema_peajes.peaje.service.Fachada;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,11 +26,12 @@ public class SeedData {
 
         Propietario prop2 = fachada.agregarPropietario("prop2", "prop456", "Ana Martínez", "50231689");
         prop2.setSaldo(3000);
+
         fachada.agregarAdministrador("a", "a", "Juan Pérez", "56464987");
 
-        // Crear bonificaciones
-        Bonificacion bonFrecuente = fachada.agregarBonificacion(20, "Frecuente");
-        Bonificacion bonTrabajador = fachada.agregarBonificacion(50, "Trabajador");
+        
+        Bonificacion bonFrecuente = fachada.agregarBonificacion("frecuente");
+        Bonificacion bonTrabajador = fachada.agregarBonificacion("trabajador");
 
         // Crear puestos con tarifas
         Puesto peaje1 = new Puesto("Peaje Ruta 1", "Km 56 Ruta 1");

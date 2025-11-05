@@ -2,6 +2,7 @@ package ort.da.sistema_peajes.peaje.datos;
 
 import java.util.ArrayList;
 
+import ort.da.sistema_peajes.peaje.exceptions.PropietarioException;
 import ort.da.sistema_peajes.peaje.exceptions.PuestoException;
 import ort.da.sistema_peajes.peaje.model.Puesto;
 import ort.da.sistema_peajes.peaje.model.Tarifa;
@@ -16,25 +17,34 @@ public class SistemaPuestos {
 	}
 
 	public void agregarPuesto(Puesto puesto) throws PuestoException {
+		try{
+			this.obtenerPuestoPorNombre(puesto.getNombre());
+			this.puestos.add(puesto);
+		}catch(Exception e){
+			throw new PuestoException(e.getMessage());
+		}
+
+		/*
 		if(this.obtenerPuestoPorNombre(puesto.getNombre()) == null) this.puestos.add(puesto);
 		else throw new PuestoException("Ya existe el Puesto con nombre: " + puesto.getNombre());
+		*/
 	}
 
 	public ArrayList<Puesto> getPuestos() {
 		return this.puestos;
 	}
 
-    public Puesto obtenerPuestoPorNombre(String nombre) {
+    public Puesto obtenerPuestoPorNombre(String nombre) throws PuestoException{
 		for (Puesto p : this.puestos) {
 			if (p.getNombre().equals(nombre)) {
 				return p;
 			}
 		}
 
-		return null;
+		throw new PuestoException(nombre);
     }
 
-    public ArrayList<Tarifa> obtenerTarifasPorPuestoNombre(String nombre) {
+    public ArrayList<Tarifa> obtenerTarifasPorPuestoNombre(String nombre) throws PuestoException{
         return obtenerPuestoPorNombre(nombre).getTarifas();
     }
 

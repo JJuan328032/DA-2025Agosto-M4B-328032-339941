@@ -2,7 +2,6 @@ package ort.da.sistema_peajes.peaje.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.time.LocalDate;
 import java.util.List;
 
 import javax.security.auth.login.LoginException;
@@ -11,6 +10,8 @@ import ort.da.sistema_peajes.peaje.datos.SistemaBonificaciones;
 import ort.da.sistema_peajes.peaje.datos.SistemaPuestos;
 import ort.da.sistema_peajes.peaje.datos.SistemaRegistro;
 import ort.da.sistema_peajes.peaje.datos.SistemaVehiculos;
+import ort.da.sistema_peajes.peaje.exceptions.PropietarioException;
+import ort.da.sistema_peajes.peaje.exceptions.BonificacionException;
 import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
 import ort.da.sistema_peajes.peaje.exceptions.PuestoException;
 import ort.da.sistema_peajes.peaje.exceptions.SaldoException;
@@ -73,7 +74,7 @@ public class Fachada {
         sistemaUsuarios.logoutAdmin(a);
     }
 
-    public ArrayList<Tarifa> obtenerTarifasPorPuestoNombre(String nombre) {
+    public ArrayList<Tarifa> obtenerTarifasPorPuestoNombre(String nombre) throws PuestoException{
         return sistemaPuestos.obtenerTarifasPorPuestoNombre(nombre);
     }
 
@@ -121,7 +122,7 @@ public class Fachada {
 		return sistemaBonificaciones.getBonificaciones();
 	}
 
-	public Propietario buscarPropietarioPorCedula(String cedula) throws LoginException, EstadoException {
+	public Propietario buscarPropietarioPorCedula(String cedula) throws LoginException, EstadoException, Exception {
 		//Propietario p = sistemaUsuarios.buscarPropietarioPorCedula(cedula);
 		//if (p == null) {
 		//	return null;
@@ -137,7 +138,8 @@ public class Fachada {
 		return sistemaUsuarios.obtenerAsignacionesDePropietario(encontrado);
 	}
 
-    public boolean asignarBonificaciones(Propietario propietario, String Bonificacion,String Puesto) throws EstadoException {
+    public void asignarBonificaciones(String cedulaPropietario, String nombreBonificacion, String nombrePuesto) throws PropietarioException, BonificacionException, PuestoException {
+		/*
 		Bonificacion bonificacion = sistemaBonificaciones.obtenerBonificacionByNombre(Bonificacion);
 		Puesto puesto = sistemaPuestos.obtenerPuestoPorNombre(Puesto);
 
@@ -151,10 +153,13 @@ public class Fachada {
 			return false;
 		}
 
-		Asignacion asignacion = new Asignacion(puesto,bonificacion,LocalDate.now());
+		Asignacion asignacion = new Asignacion(puesto, bonificacion, LocalDate.now());
 		propietario.agregarAsignacion(asignacion);
 
         return true;
+		*/
+
+		sistemaUsuarios.buscarPropietarioPorCedula(cedulaPropietario).agregarAsignacion(sistemaBonificaciones.obtenerBonificacionByNombre(nombreBonificacion), sistemaPuestos.obtenerPuestoPorNombre(nombrePuesto));
     }
 
 

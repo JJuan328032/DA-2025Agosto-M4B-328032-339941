@@ -2,9 +2,12 @@ package ort.da.sistema_peajes.peaje.datos;
 
 import ort.da.sistema_peajes.peaje.model.Usuarios.Usuario;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
+import ort.da.sistema_peajes.peaje.exceptions.PropietarioException;
 import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
 import ort.da.sistema_peajes.peaje.model.Vehiculo;
+import ort.da.sistema_peajes.peaje.model.Bonificacion.Bonificacion;
 import ort.da.sistema_peajes.peaje.model.Asignacion;
+import ort.da.sistema_peajes.peaje.model.Puesto;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Administrador;
 
 import java.util.ArrayList;
@@ -76,22 +79,29 @@ public class SistemaUsuarios {
 		p.agregarVehiculo(v);
 	}
 
-	public <T extends Usuario> T buscarUsuarioCedula(String cedula, ArrayList<T> lista) throws EstadoException {
+	public <T extends Usuario> T buscarUsuarioCedula(String cedula, ArrayList<T> lista) throws PropietarioException {
 		for (T u : lista) {
 			if (u.validarCedula(cedula)) {
 				return u;
 			}
 		}
-		return null;
+
+		throw new PropietarioException(cedula);
 	}
 
 
-	public Propietario buscarPropietarioPorCedula(String cedula) throws LoginException, EstadoException{
+	public Propietario buscarPropietarioPorCedula(String cedula) throws PropietarioException{
 		return buscarUsuarioCedula(cedula, this.propietarios);
 	}
 
     public List<Asignacion> obtenerAsignacionesDePropietario(Propietario encontrado) {
         return encontrado.getAsignaciones();
+    }
+
+
+    public void agregarAsignacionPropietario(Bonificacion obtenerBonificacionByNombre, Puesto obtenerPuestoPorNombre) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'agregarAsignacionPropietario'");
     }
 
 }

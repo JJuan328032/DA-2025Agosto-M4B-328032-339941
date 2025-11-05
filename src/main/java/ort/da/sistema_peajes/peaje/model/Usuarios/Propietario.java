@@ -1,10 +1,12 @@
 package ort.da.sistema_peajes.peaje.model.Usuarios;
 
 import ort.da.sistema_peajes.peaje.model.Vehiculo;
+import ort.da.sistema_peajes.peaje.model.Bonificacion.Bonificacion;
 import ort.da.sistema_peajes.peaje.model.Estados.EstadoPropietario;
 import ort.da.sistema_peajes.peaje.model.Estados.Habilitado;
 import ort.da.sistema_peajes.peaje.model.Registro;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -94,6 +96,10 @@ public class Propietario extends Usuario {
 
     public void agregarAsignacion(Asignacion a) {
         this.asignaciones.add(a);
+    }
+
+    public void agregarAsignacion(Bonificacion obtenerBonificacionByNombre, Puesto obtenerPuestoPorNombre) {
+        this.asignaciones.add(new Asignacion(obtenerPuestoPorNombre, obtenerBonificacionByNombre, LocalDate.now()));
     }
 
     public void agregarNotificacion(String mensaje) {

@@ -2,7 +2,6 @@ package ort.da.sistema_peajes.peaje.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.security.auth.login.LoginException;
 
@@ -103,26 +102,18 @@ public class Fachada {
         sistemaRegistro.agregarRegistro(r1);
     }
 
-	public List<Puesto> obtenerPuestos() {
-		//List<Puesto> puestos = new ArrayList<>(sistemaPuestos.getPuestos());
-		//System.out.println("Cantidad de puestos cargados en la Fachada: " + puestos.size());
-		//return puestos;
-		return sistemaPuestos.getPuestos();
-	}
-
-
-	 public Bonificacion agregarBonificacion(String tipo) {
+	public Bonificacion agregarBonificacion(String tipo) {
 		return sistemaBonificaciones.agregarBonificacion(tipo);
 	}
 
-	public List<Bonificacion> obtenerBonificaciones() {
+	public ArrayList<Bonificacion> obtenerBonificaciones() {
 		//List<Bonificacion> bonificaciones = new ArrayList<>(sistemaBonificaciones.getBonificaciones());
 		//System.out.println("Cantidad de bonificaciones cargadas en la Fachada: " + bonificaciones.size());
 		//return bonificaciones;
 		return sistemaBonificaciones.getBonificaciones();
 	}
 
-	public Propietario buscarPropietarioPorCedula(String cedula) throws LoginException, EstadoException, Exception {
+	public Propietario buscarPropietarioPorCedula(String cedula) throws PropietarioException {
 		//Propietario p = sistemaUsuarios.buscarPropietarioPorCedula(cedula);
 		//if (p == null) {
 		//	return null;
@@ -131,7 +122,7 @@ public class Fachada {
 		return sistemaUsuarios.buscarPropietarioPorCedula(cedula);
 	}
 	
-	public List<Asignacion> obtenerAsignacionesDePropietario(Propietario encontrado) {
+	public ArrayList<Asignacion> obtenerAsignacionesDePropietario(Propietario encontrado) {
 		//List<Asignacion> asignaciones = sistemaUsuarios.obtenerAsignacionesDePropietario(encontrado);
 		//System.out.println("Cantidad de Asignaciones del usuario: " + asignaciones.size());
 		//return asignaciones;

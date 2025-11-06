@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import ort.da.sistema_peajes.ConexionNavegador;
 import ort.da.sistema_peajes.Respuesta;
-import ort.da.sistema_peajes.peaje.dto.mappers.MapperPuesto;
+import ort.da.sistema_peajes.peaje.dto.mappers.MapperSoloNombre;
 import ort.da.sistema_peajes.peaje.dto.mappers.MapperTarifa;
 import ort.da.sistema_peajes.peaje.dto.mappers.MapperTransito;
 import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
@@ -57,12 +57,12 @@ public class ControladorEmular {
 
     @PostMapping("/transito")
     public List<Respuesta> emularTransito(@RequestParam int indicePuesto, @RequestParam String matricula, @RequestParam LocalDateTime fechaHora) throws SaldoException, EstadoException, VehiculoException, Exception{
-        //TODO
+        //las exceptions son manejadas en sus respectivos objetos usando mensajes genericos o mas de un atributo
         return Respuesta.lista(new Respuesta("transitoEmulado", MapperTransito.toDTO(Fachada.getInstancia().emularTransito(indicePuesto, matricula, fechaHora))));
     }
 
     private Respuesta puestos() {
-        return new Respuesta("puestos", MapperPuesto.toDTOlist(Fachada.getInstancia().getPuestos()));
+        return new Respuesta("puestos", MapperSoloNombre.toDTOlistPuestos(Fachada.getInstancia().getPuestos()));
     }
 
     private Respuesta tarifas(String nombre) throws PuestoException{

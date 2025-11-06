@@ -4,11 +4,11 @@ import java.time.LocalDate;
 
 
 public class AsignacionDTO {
-    private String puesto;
 	private String bonificacion;
+    private String puesto;
 	private LocalDate fecha;
 
-	public AsignacionDTO(String puesto, String bonificacion, LocalDate fecha) {
+	public AsignacionDTO(String bonificacion, String puesto, LocalDate fecha) {
 		this.puesto = puesto;
 		this.bonificacion = bonificacion;
 		this.fecha = fecha;

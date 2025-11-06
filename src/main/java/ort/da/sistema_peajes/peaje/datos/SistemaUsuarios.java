@@ -11,7 +11,6 @@ import ort.da.sistema_peajes.peaje.model.Puesto;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Administrador;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.security.auth.login.LoginException;
 
@@ -94,7 +93,7 @@ public class SistemaUsuarios {
 		return buscarUsuarioCedula(cedula, this.propietarios);
 	}
 
-    public List<Asignacion> obtenerAsignacionesDePropietario(Propietario encontrado) {
+    public ArrayList<Asignacion> obtenerAsignacionesDePropietario(Propietario encontrado) {
         return encontrado.getAsignaciones();
     }
 

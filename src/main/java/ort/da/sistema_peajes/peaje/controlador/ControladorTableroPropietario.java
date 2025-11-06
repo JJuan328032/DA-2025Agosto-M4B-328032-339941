@@ -42,6 +42,9 @@ public class ControladorTableroPropietario {
     @PostMapping("/informacion")
     public List<Respuesta> iniciarTablero(@SessionAttribute(name = "propietario") Propietario p){
 
+        //si entra por url se rompe todo
+        //TODO
+
         return Respuesta.lista(
             propietario(p),
             asignaciones(p),

@@ -1,9 +1,9 @@
 package ort.da.sistema_peajes.peaje.dto;
 
-public class PuestoDTO {
+public class NombreDTO {
     private String nombre;
 
-    public PuestoDTO(String nombre){
+    public NombreDTO(String nombre){
         this.nombre = nombre;
     }
 

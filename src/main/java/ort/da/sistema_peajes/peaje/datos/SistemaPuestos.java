@@ -2,7 +2,6 @@ package ort.da.sistema_peajes.peaje.datos;
 
 import java.util.ArrayList;
 
-import ort.da.sistema_peajes.peaje.exceptions.PropietarioException;
 import ort.da.sistema_peajes.peaje.exceptions.PuestoException;
 import ort.da.sistema_peajes.peaje.model.Puesto;
 import ort.da.sistema_peajes.peaje.model.Tarifa;
@@ -17,11 +16,11 @@ public class SistemaPuestos {
 	}
 
 	public void agregarPuesto(Puesto puesto) throws PuestoException {
+
 		try{
 			this.obtenerPuestoPorNombre(puesto.getNombre());
+		}catch(PuestoException e){
 			this.puestos.add(puesto);
-		}catch(Exception e){
-			throw new PuestoException(e.getMessage());
 		}
 
 		/*

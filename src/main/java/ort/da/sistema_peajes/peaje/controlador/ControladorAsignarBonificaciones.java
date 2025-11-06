@@ -13,7 +13,10 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import jakarta.servlet.http.HttpSession;
 import ort.da.sistema_peajes.ConexionNavegador;
 import ort.da.sistema_peajes.Respuesta;
+import ort.da.sistema_peajes.peaje.dto.AsignacionDTO;
+import ort.da.sistema_peajes.peaje.dto.PropietarioBonificacionDTO;
 import ort.da.sistema_peajes.peaje.dto.mappers.MapperPropietarioBonificacion;
+import ort.da.sistema_peajes.peaje.dto.mappers.MapperSoloNombre;
 import ort.da.sistema_peajes.peaje.exceptions.PropietarioException;
 import ort.da.sistema_peajes.peaje.exceptions.PuestoException;
 import ort.da.sistema_peajes.peaje.exceptions.BonificacionException;
@@ -45,19 +48,16 @@ public class ControladorAsignarBonificaciones {
 
         ValidarUsuario.validar(sesionHttp, "administrador");
 
-        return Respuesta.lista(
-                new Respuesta("bonificacionesDefinidas", getBonificaciones()),
-                new Respuesta("puestosDefinidos", getPuestos())
-        );
+        return Respuesta.lista(bonificaciones(), puestos());
     }
 
     // Buscar propietario por cédula
     @PostMapping("/propietario/buscar")
-    public List<Respuesta> buscarPropietario(@RequestParam String cedula, HttpSession sesionHttp) throws LoginException, EstadoException, Exception {
+    public List<Respuesta> buscarPropietario(@RequestParam String cedula) throws LoginException, EstadoException, Exception {
 
-        //System.out.println("Llegó al controlador con cédula: " + cedula);
+        System.out.println("Llegó al controlador con cédula: " + cedula);
 
-        ValidarUsuario.validar(sesionHttp, "administrador");
+        //ValidarUsuario.validar(sesionHttp, "administrador");
 
         /*
         Administrador admin = (Administrador) sesionHttp.getAttribute("administrador");
@@ -90,11 +90,39 @@ public class ControladorAsignarBonificaciones {
         );
         */
 
-        //TODO
-        //Por los cambios de la Respuesta hay que cambiar como se recibe la informacion en la vista
+        //return Respuesta.lista(new Respuesta("propietarioBonificacion", MapperPropietarioBonificacion.toDTO(Fachada.getInstancia().buscarPropietarioPorCedula(cedula))));
+        
+        //PropietarioBonificacionDTO dto = MapperPropietarioBonificacion.toDTO(Fachada.getInstancia().buscarPropietarioPorCedula(cedula));
+        
+        
+        
+        try{
+            PropietarioBonificacionDTO dto = MapperPropietarioBonificacion.toDTO(Fachada.getInstancia().buscarPropietarioPorCedula(cedula));
 
-        return Respuesta.lista(new Respuesta("propietarioBonificacion", MapperPropietarioBonificacion.toDTO(Fachada.getInstancia().buscarPropietarioPorCedula(cedula))));
-    } 
+            mostrarPropietarioBonificacionDTO(dto);
+
+            return Respuesta.lista(new Respuesta("propietario", dto));
+        }catch(PropietarioException e){
+            return Respuesta.lista(new Respuesta("error", "No se pudo encontrar un propietario con cedula: " + e.getMessage()));
+        }
+    }
+
+    private void mostrarPropietarioBonificacionDTO(PropietarioBonificacionDTO dto){
+
+        System.out.println();
+        System.out.println("Nombre: " + dto.getNombreCompleto());
+        System.out.println("Estado: " + dto.getEstado());
+
+        for(AsignacionDTO a : dto.geAsignaciones()){
+            System.out.println("Bono: " + a.getBonificacion() + " | Puesto: " + a.getPuesto());
+        }
+    }
+
+    /*
+    private Respuesta test(String cedula) throws PropietarioException{
+        return new Respuesta("propietarioBonificacion", MapperPropietarioBonificacion.toDTO(Fachada.getInstancia().buscarPropietarioPorCedula(cedula)));
+    }
+    */
 
     //  Asignar bonificaciones a un propietario
     
@@ -139,11 +167,13 @@ public class ControladorAsignarBonificaciones {
         }
         */
 
-        String mensaje = "";
+        String estado = "mal";
+        String mensaje = "Bonificación: " + bonificacion + " asignada con Éxito en el puesto: " + puesto;
 
         try{
             ValidarUsuario.validar(sesionHttp, "administrador");
             Fachada.getInstancia().asignarBonificaciones(cedula, bonificacion, puesto);
+            estado = "ok";
         }catch(PropietarioException e){
             mensaje = "No se pudo encontrar un Propietario con nombre: " + e.getMessage();
         }catch(BonificacionException e){
@@ -152,16 +182,16 @@ public class ControladorAsignarBonificaciones {
             mensaje = "No se pudo encontrar un Puesto con nombre: " + e.getMessage();
         }
 
-        return new Respuesta("mensaje", mensaje); 
+        return new Respuesta(estado, mensaje); 
     }
 
 
 
-    private List<Respuesta> getBonificaciones(){
-        return Respuesta.lista(new Respuesta("bonificacionesDefinidas", Fachada.getInstancia().obtenerBonificaciones()));
+    private Respuesta bonificaciones(){
+        return new Respuesta("bonificacionesDefinidas", MapperSoloNombre.toDTOlistBonos(Fachada.getInstancia().obtenerBonificaciones()));
     }
 
-    private List<Respuesta> getPuestos(){
-        return Respuesta.lista(new Respuesta("puestosDefinidos", Fachada.getInstancia().obtenerPuestos()));
+    private Respuesta puestos() {
+        return new Respuesta("puestosDefinidos", MapperSoloNombre.toDTOlistPuestos(Fachada.getInstancia().getPuestos()));
     }
 }

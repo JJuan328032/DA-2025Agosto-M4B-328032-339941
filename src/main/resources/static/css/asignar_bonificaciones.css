@@ -1,0 +1,143 @@
+:root {
+    --color-primary: #1a237e;
+    --color-secondary: #534bae;
+    --color-bg: #f5f6fa;
+    --color-text: #333;
+    --shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--color-bg);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.grid-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+.panel-izquierdo {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.panel-derecho {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.section {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--color-text);
+    font-weight: 500;
+}
+
+select, input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.btn {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    width: calc(100% - 2px); /* Ajuste para el borde */
+    margin: 8px 0;
+}
+
+.btn:hover {
+    background-color: var(--color-secondary);
+}
+
+.btn.buscar {
+    margin-top: 4px;
+    margin-bottom: 15px;
+}
+
+/* Ajustes adicionales para el layout */
+.panel-izquierdo {
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+}
+
+.panel-derecho .section:last-child {
+    margin-bottom: 0;
+}
+
+.info-propietario {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 4px;
+    margin: 15px 0;
+}
+
+.info-propietario p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f8f9fa;
+    font-weight: 500;
+}
+
+.sin-bonificaciones {
+    text-align: center;
+    color: #666;
+    padding: 20px;
+    font-style: italic;
+}
+
+.help-text {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+}

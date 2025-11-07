@@ -2,7 +2,9 @@ package ort.da.sistema_peajes.peaje.datos;
 
 import java.util.ArrayList;
 
+import ort.da.sistema_peajes.peaje.exceptions.VehiculoException;
 import ort.da.sistema_peajes.peaje.model.Vehiculo;
+import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
 
 public class SistemaVehiculos {
 
@@ -20,9 +22,17 @@ public class SistemaVehiculos {
 		this.vehiculos.add(vehiculo);
 	}
 
-	public Vehiculo buscarVehiculoPorPatente(String matricula) {
-		for (Vehiculo vehiculo : vehiculos) if (vehiculo.igualPatente(matricula)) return vehiculo;
-		return null;
+	public void agregarVariosVehiculos(ArrayList<Vehiculo> vehiculos) {
+		this.vehiculos.addAll(vehiculos);
 	}
+
+	public Vehiculo obtenerVehiculoPorMatricula(String matricula) throws VehiculoException{
+		for (Vehiculo vehiculo : vehiculos) if (vehiculo.igualPatente(matricula)) return vehiculo;
+		throw new VehiculoException(matricula);
+	}
+
+    public void asociarVehiculoAPropietario(Vehiculo v, Propietario p) {
+        v.setPropietario(p);
+    }
 
 }

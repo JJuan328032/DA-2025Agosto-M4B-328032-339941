@@ -7,7 +7,6 @@ public class Penalizado extends EstadoPropietario {
 
     public Penalizado(Propietario propietario) {
         super(propietario);
-        //TODO Auto-generated constructor stub
     }
 
     @Override
@@ -37,6 +36,16 @@ public class Penalizado extends EstadoPropietario {
     public void deshabilitado() throws EstadoException {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deshabilitado'");
+    }
+
+    @Override
+    public void puedeTransitar() throws EstadoException {
+        return;
+    }
+
+    @Override
+    public boolean bonificable() {
+        return false;
     }
 
 }

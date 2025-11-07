@@ -10,7 +10,6 @@ public class Habilitado extends EstadoPropietario {
         super(propietario);
     }
 
-
     @Override
     public void puedeEntrar() throws EstadoException {
         return;
@@ -18,7 +17,7 @@ public class Habilitado extends EstadoPropietario {
 
     @Override
     public void habilitado() throws EstadoException {
-        // ya esta habilitado
+        //ya esta habilitado
     }
 
     @Override
@@ -34,6 +33,18 @@ public class Habilitado extends EstadoPropietario {
     @Override
     public void deshabilitado() throws EstadoException {
         throw new EstadoException("No se puede deshabilitar un propietario habilitado directamente. Debe ser penalizado primero.");
+    }
+
+
+    @Override
+    public void puedeTransitar() throws EstadoException {
+        return;
+    }
+
+
+    @Override
+    public boolean bonificable() {
+        return true;
     }
 
 

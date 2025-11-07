@@ -13,11 +13,10 @@ public class MapperRegistro {
             r.getMatricula(),
             r.getTipoTarifa(),
             r.getMontoTarifa(),
-            r.getNombreBonificacion(),
+            r.getBonificacion(),
             r.getMontoBonificacion(),
             r.getMontoPagado(),
-            r.getFecha(),
-            r.getHora()
+            r.getFecha()
         );
     }
 

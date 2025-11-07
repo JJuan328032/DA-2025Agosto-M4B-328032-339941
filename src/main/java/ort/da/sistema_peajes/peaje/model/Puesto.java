@@ -41,6 +41,31 @@ public class Puesto {
 	}
 
     public void setTarifas(ArrayList<Tarifa> nuevasTarifas) {
-        this.tarifas.addAll(nuevasTarifas);
+		for(Tarifa t : nuevasTarifas) this.tarifas.add(t);
     }
+
+	public int obtenerMontoTarifaSegunVehiculo(Vehiculo vehiculo) throws Exception{
+		return this.obtenerTarifaSegunCategoriaVehiculo(vehiculo).getMonto();
+	}
+
+	public Tarifa obtenerTarifaSegunCategoriaVehiculo(Vehiculo vehiculo) throws Exception {
+
+		for (Tarifa tarifa : this.tarifas) {
+			if (tarifa.mismaCategoria(vehiculo.getCategoria())) {
+				return tarifa;
+			}
+		}
+
+		//TODO
+		//generalizar el mensaje en controller
+		throw new Exception("Hubo un error inesperado. No se encuentra la Tarifa");
+	}
+
+	public boolean equals(Puesto p){
+		return this.getNombre().equals(p.getNombre());
+	}
+
+	public String toString(){
+		return "Nombre: " + nombre + " Direccion: " + direccion;
+	}
 }

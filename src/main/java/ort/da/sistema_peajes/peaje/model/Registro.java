@@ -1,32 +1,31 @@
 package ort.da.sistema_peajes.peaje.model;
 
+import java.time.LocalDateTime;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-
-import ort.da.sistema_peajes.peaje.model.Bonificacion.Bonificacion;
+import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
+import ort.da.sistema_peajes.peaje.exceptions.SaldoException;
 
 public class Registro {
     private Puesto puesto;
     private Vehiculo vehiculo;
-    private LocalDate fecha;
-    private LocalTime hora;
+    private LocalDateTime fecha;
     
     private String tarifa;
     private int montoTarifa;
 
-    private int montoBonificado;
-    private Bonificacion bonificacion;
+    private double montoBonificado;
+    private String bonificacion;
 
-    private int montoPagado;
+    private double montoPagado;
 
-    public Registro(Puesto puesto, Vehiculo vehiculo, LocalDate fecha, LocalTime hora, Tarifa tarifa) {
+    public Registro(Puesto puesto, Vehiculo vehiculo, LocalDateTime fecha, Tarifa tarifa) {
         this.puesto = puesto;
         this.vehiculo = vehiculo;
         this.fecha = fecha;
-        this.hora = hora;
         this.tarifa = tarifa.getTipo();
         this.montoTarifa = tarifa.getMonto();
+        this.montoBonificado = 0;
+        this.bonificacion = "Sin Bonificacion";
     }
 
 
@@ -38,31 +37,27 @@ public class Registro {
         return vehiculo;
     }
 
-    public LocalDate getFecha() {
+    public LocalDateTime getFecha() {
         return fecha;
     }
 
-    public LocalTime getHora(){
-        return this.hora; 
-    }
-
-    public int getMontoBonificado() {
+    public double getMontoBonificado() {
         return montoBonificado;
     }
 
-    public void setMontoBonificado(int montoBonificado) {
+    public void setBonificacion(String b){
+        this.bonificacion = b;
+    }
+
+    public void setMontoBonificado(double montoBonificado) {
         this.montoBonificado = montoBonificado;
     }
 
-    public Bonificacion getBonificacion() {
+    public String getBonificacion() {
         return bonificacion;
     }
 
-    public void setBonificacion(Bonificacion bonificacion) {
-        this.bonificacion = bonificacion;
-    }
-
-    public int getMontoPagado() {
+    public double getMontoPagado() {
         return montoPagado;
     }
 
@@ -78,16 +73,8 @@ public class Registro {
         return this.montoTarifa;
     }
 
-    
-    public String getNombreBonificacion() {
-        if (this.bonificacion == null) {
-            return "Ninguna";
-        }
 
-        return this.bonificacion.getNombre();
-    }
-
-    public int getMontoBonificacion() {
+    public double getMontoBonificacion() {
         return this.montoBonificado;
     }
 
@@ -95,15 +82,38 @@ public class Registro {
         return this.puesto.getNombre();
     }
 
-
-    public void setMontoPagado(int i) {
-        this.montoPagado = i;
+    //usado en SeedData
+    public void setMontoPagado() {
+        this.montoPagado = (double) (this.montoTarifa - this.montoBonificado);
     }
 
     public String toString() {
-        return "Registro [puesto=" + puesto.getNombre() + ", vehiculo=" + vehiculo.getMatricula() + ", fecha=" + fecha
-                + ", hora=" + hora + ", tarifa=" + tarifa + ", montoTarifa=" + montoTarifa + ", montoBonificado="
-                + montoBonificado + ", bonificacion=" + (bonificacion != null ? bonificacion.getNombre() : "N/A") 
+        return "Registro [puesto=" + puesto.getNombre() + ", vehiculo=" + vehiculo.getMatricula() + ", fecha=" + fecha.toLocalDate()
+                + ", hora=" + fecha.toLocalTime() + ", tarifa=" + tarifa + ", montoTarifa=" + montoTarifa + ", montoBonificado="
+                + montoBonificado + ", bonificacion=" + (bonificacion != null ? bonificacion : "N/A") 
                 + ", montoPagado=" + montoPagado + "]";
+    }
+
+
+    public void cobrar() throws SaldoException, EstadoException{
+        this.getVehiculo().realizarPago(this);
+    }
+
+
+    public double calcularAsignarMontoPagado(){
+        this.montoPagado = (double) (this.montoTarifa - this.montoBonificado);
+        System.out.println("MontoPagado en Registro: " + this.montoPagado);
+        return this.montoPagado;
+    }
+
+    /*
+    public double calcularPrecioFinal() {
+        return this.montoTarifa - this.montoBonificado;
+    }
+    */
+
+
+    public boolean validarMismoDia(Puesto puesto2, Vehiculo vehiculo2, LocalDateTime fecha2) {
+        return this.puesto.equals(puesto2) && this.vehiculo.equals(vehiculo2) && this.fecha.equals(fecha2);
     }
 }

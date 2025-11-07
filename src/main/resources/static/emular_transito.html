@@ -4,45 +4,134 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Emular Tránsito</title>
-    <link rel="stylesheet" href="menu_administrador.css">
-    <script src="utilesVista.js"></script>
+    <link rel="stylesheet" href="css/common.css">
     <script src="vistaWeb.js"></script>
 </head>
 <body>
-    <nav class="sidebar">
-        <div class="nav-container">
-            <h2><a href="menu_administrador.html" style="text-decoration: none; color: inherit;">Sistema de Peajes</a></h2>
-            <ul class="nav-links">
-                <li><a href="asignar_bonificacion.html">Asignar Bonificación</a></li>
-                <li><a href="emular_transito.html">Emular Tránsito</a></li>
-                <li><a href="cambiar_estado.html">Cambiar Estado</a></li>
-            </ul>
+    <script src="utilesVista.js"></script>
+    <div class="page-wrapper">
+        <div class="panel">
+            <h1>Emular Tránsito</h1>
+            <div class="subtitle">Seleccione un puesto, verifique sus tarifas, ingrese una matrícula y emule un tránsito.</div>
+
+            <form id="formEmular" onsubmit="handleEmularTransito(event)" class="emular-grid">
+                <div class="left-col">
+                    <div class="field">
+                        <div class="field-label">Puesto</div>
+                        <span id="puestoContainer" onchange="pedirTarifas()" required>Cargando puestos...</span>
+                    </div>
+
+                    <div class="field">
+                        <div class="field-label">Matrícula</div>
+                        <input type="text" id="matricula" name="matricula" placeholder="ABC123" required />
+                    </div>
+
+                    <div class="field">
+                        <div class="field-label">Fecha y Hora del tránsito</div>
+                        <input type="datetime-local" id="fechaHora" name="fechaHora" required />
+                    </div>
+
+                    <div>
+                        <button type="submit" class="btn-emular">Emular Tránsito</button>
+                    </div>
+                </div>
+
+                <div class="right-col">
+                    <div>
+                        <h3 style="margin:0;font-weight:700">Tarifas del Puesto</h3>
+                        <div id="tarifas-container" style="margin-top:8px">Seleccione un puesto para ver tarifas</div>
+                        <div class="tarifas-note">se muestran categoría y monto actuales del puesto seleccionado</div>
+                    </div>
+                </div>
+            </form>
+
+            <div id="resultado-transito" class="result-area">Aquí se mostrarán los datos del tránsito emulado.</div>
         </div>
-        <button onclick="cerrarSesion()" class="btn-salir">Salir</button>
-    </nav>
+    </div>
 
     <script>
-        // URL para cerrar sesión (a completar)
-        const URL_CERRAR_SESION = "acceso/salirAdministrador"; // Esta URL debe ser reemplazada por la correcta
-        
-        function cerrarSesion() {
-            // Realizar la petición de cierre de sesión
-            submit(URL_CERRAR_SESION);
+        urlIniciarVista = "/emular/inicio";
+        urlTarifas = "/emular/tarifas";
+        urlEmular = "/emular/transito";
+
+        function mostrar_puestos(puestos){
+            console.log(puestos);
+            document.getElementById("puestoContainer").innerHTML = crearListaDesdeJson({data:puestos,id:"indicePuesto",campoMostrar: "nombre", value: "nombre"});
         }
 
-        // Manejador de respuesta exitosa del cierre de sesión
-        function mostrar_LogoutExitoso(urlDestino) {
-            window.location.href = urlDestino;
+        function mostrarSelect(){
+            const select = document.getElementById("indicePuesto");
+            const valorSeleccionado = select.value;
+            console.log("Seleccionaste:", valorSeleccionado);
+            const textoSeleccionado = select.options[select.selectedIndex].text;
+
+            if (valorSeleccionado === "-1") return;
+
+            console.log("Seleccionaste:", valorSeleccionado, " Nombre: ", textoSeleccionado);
         }
+
+        function pedirTarifas(){
+            const select = document.getElementById("indicePuesto");
+            if (!select) {
+                console.error("No se encontró el select de puestos");
+                return;
+            }
+
+            //SI NO HAY TARIFAS, DESAHABILITAR EL BOTON?
+
+            const valorSeleccionado = select.value;
+            if (valorSeleccionado === "-1") return;
+
+            console.log("valorSeleccionado: " + valorSeleccionado);
+
+            const nombre = select.options[select.selectedIndex].text;
+            // Construir los datos en formato application/x-www-form-urlencoded
+            const params = "nombre=" + encodeURIComponent(nombre);
+            
+            //console.log("Enviando a " + urlTarifas + " con parámetros: " + params);
+            submit(urlTarifas, params);
+        }
+
+        function mostrar_tarifas(tarifas){
+            document.getElementById("tarifas-container").innerHTML = crearTablaDesdeJson(tarifas);
+        }
+
+        function handleEmularTransito(event){
+            const select = document.getElementById("indicePuesto");
+            if (!select) {
+                console.error("No se encontró el select de puestos");
+                return;
+            }
+
+            const valorSeleccionado = select.value;
+            if (valorSeleccionado === "-1") return;
+
+            event.preventDefault();
+            submit(urlEmular, serializarFormulario("formEmular"));
+        }
+
+        function mostrar_transitoEmulado(datos){
+            console.log("Datos del tránsito:", datos);
+            
+            // Crear tabla vertical con los datos
+            let html = `
+                <h3 style="margin-top:20px;margin-bottom:10px;font-weight:700">Resultado del Tránsito</h3>
+                <table style="width:100%;border-collapse:collapse;margin-top:10px">
+                    <tr><th style="text-align:left;padding:8px;background:#f5f5f5;font-weight:700;border:1px solid #ddd">Propietario</th><td style="padding:8px;border:1px solid #ddd">${datos.propietario}</td></tr>
+                    <tr><th style="text-align:left;padding:8px;background:#f5f5f5;font-weight:700;border:1px solid #ddd">Categoría</th><td style="padding:8px;border:1px solid #ddd">${datos.categoria}</td></tr>
+                    <tr><th style="text-align:left;padding:8px;background:#f5f5f5;font-weight:700;border:1px solid #ddd">Bonificación</th><td style="padding:8px;border:1px solid #ddd">${datos.bonificacion}</td></tr>
+                    <tr><th style="text-align:left;padding:8px;background:#f5f5f5;font-weight:700;border:1px solid #ddd">Costo Tránsito</th><td style="padding:8px;border:1px solid #ddd">${datos.costoTransito}</td></tr>
+                    <tr><th style="text-align:left;padding:8px;background:#f5f5f5;font-weight:700;border:1px solid #ddd">Saldo Luego Tránsito</th><td style="padding:8px;border:1px solid #ddd">${datos.saldoLuegoTransito}</td></tr>
+                </table>
+            `;
+            
+            document.getElementById("resultado-transito").innerHTML = html;
+        }
+        
+        async function excepcionDeAplicacion(mensaje){
+            await mostrarMensaje(mensaje);
+        } 
     </script>
 
-    <main class="main-content">
-        <section class="welcome-section">
-            <h1>Emulación de Tránsito</h1>
-            <p>Simula el paso de vehículos por los puestos de peaje.</p>
-        </section>
-
-        <!-- Aquí irá el formulario de emulación de tránsito -->
-    </main>
 </body>
 </html>

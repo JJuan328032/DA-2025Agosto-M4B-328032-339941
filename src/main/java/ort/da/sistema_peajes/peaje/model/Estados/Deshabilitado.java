@@ -39,6 +39,16 @@ public class Deshabilitado extends EstadoPropietario {
         throw new UnsupportedOperationException("Unimplemented method 'deshabilitado'");
     }
 
+    @Override
+    public void puedeTransitar() throws EstadoException {
+        throw new EstadoException("No puede realizar Transitos");
+    }
+
+    @Override
+    public boolean bonificable() {
+        return false;
+    }
+
     
 
 }

@@ -2,7 +2,10 @@ package ort.da.sistema_peajes.peaje.datos;
 
 import java.util.ArrayList;
 
+import ort.da.sistema_peajes.peaje.exceptions.PuestoException;
 import ort.da.sistema_peajes.peaje.model.Puesto;
+import ort.da.sistema_peajes.peaje.model.Tarifa;
+import ort.da.sistema_peajes.peaje.model.Vehiculo;
 
 public class SistemaPuestos {
 
@@ -12,11 +15,39 @@ public class SistemaPuestos {
 		this.puestos = new ArrayList<>();
 	}
 
-	public void agregarPuesto(Puesto puesto) {
-		this.puestos.add(puesto);
+	public void agregarPuesto(Puesto puesto) throws PuestoException {
+
+		try{
+			this.obtenerPuestoPorNombre(puesto.getNombre());
+		}catch(PuestoException e){
+			this.puestos.add(puesto);
+		}
 	}
 
 	public ArrayList<Puesto> getPuestos() {
 		return this.puestos;
 	}
+
+    public Puesto obtenerPuestoPorNombre(String nombre) throws PuestoException{
+		for (Puesto p : this.puestos) {
+			if (p.getNombre().equals(nombre)) {
+				return p;
+			}
+		}
+
+		throw new PuestoException(nombre);
+    }
+
+    public ArrayList<Tarifa> obtenerTarifasPorPuestoNombre(String nombre) throws PuestoException{
+        return obtenerPuestoPorNombre(nombre).getTarifas();
+    }
+
+    public Tarifa obtenerTarifaSegunPuestoYVehiculo(String puesto, Vehiculo vehiculo) throws Exception {
+        return this.obtenerPuestoPorNombre(puesto).obtenerTarifaSegunCategoriaVehiculo(vehiculo);
+    }
+
+    public Puesto obtenerPuestoPorIndice(int indicePuesto) throws PuestoException{
+		if(indicePuesto > -1 && indicePuesto < this.puestos.size()) return this.puestos.get(indicePuesto);
+		throw new PuestoException("indice inaccesible");
+    }
 }

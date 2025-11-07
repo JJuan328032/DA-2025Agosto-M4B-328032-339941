@@ -1,8 +1,15 @@
 package ort.da.sistema_peajes.peaje.datos;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+
+import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
+import ort.da.sistema_peajes.peaje.exceptions.SaldoException;
+import ort.da.sistema_peajes.peaje.model.InfoTransito;
+import ort.da.sistema_peajes.peaje.model.Puesto;
 import ort.da.sistema_peajes.peaje.model.Registro;
+import ort.da.sistema_peajes.peaje.model.Vehiculo;
 
 public class SistemaRegistro {
 
@@ -18,5 +25,13 @@ public class SistemaRegistro {
 
 	public ArrayList<Registro> getRegistros() {
 		return this.registros;
+	}
+
+	public InfoTransito realizarTransito(Puesto puesto, Vehiculo vehiculo, LocalDateTime fechaHora) throws SaldoException, EstadoException, Exception{
+		Registro r = new Registro(puesto, vehiculo, fechaHora, puesto.obtenerTarifaSegunCategoriaVehiculo(vehiculo));
+		r.cobrar();
+		this.agregarRegistro(r);
+
+		return new InfoTransito(puesto, vehiculo, r.getBonificacion(), r.getMontoPagado());
 	}
 }

@@ -39,4 +39,14 @@ public class Suspendido extends EstadoPropietario {
         throw new UnsupportedOperationException("Unimplemented method 'deshabilitado'");
     }
 
+    @Override
+    public void puedeTransitar() throws EstadoException {
+        throw new EstadoException("Se encuentra actualmente Suspendido. No puede realizar Transitos");
+    }
+
+    @Override
+    public boolean bonificable() {
+        return false;
+    }
+
 }

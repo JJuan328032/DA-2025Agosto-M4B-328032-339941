@@ -2,7 +2,12 @@ package ort.da.sistema_peajes.peaje.datos;
 
 import ort.da.sistema_peajes.peaje.model.Usuarios.Usuario;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
+import ort.da.sistema_peajes.peaje.exceptions.PropietarioException;
 import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
+import ort.da.sistema_peajes.peaje.model.Vehiculo;
+import ort.da.sistema_peajes.peaje.model.Bonificacion.Bonificacion;
+import ort.da.sistema_peajes.peaje.model.Asignacion;
+import ort.da.sistema_peajes.peaje.model.Puesto;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Administrador;
 
 import java.util.ArrayList;
@@ -37,13 +42,13 @@ public class SistemaUsuarios {
 		return administrador;
 	}
 
-    public void agregarAdministrador(String user, String pass, String nombreCompleto) {
-        this.administradores.add(new Administrador(user, pass, nombreCompleto));
+    public void agregarAdministrador(String user, String pass, String nombreCompleto, String cedula) {
+        this.administradores.add(new Administrador(user, pass, nombreCompleto,cedula));
     }
 
 
-    public Propietario agregarPropietario(String user, String pass, String nombreCompleto) {
-		Propietario p = new Propietario(user, pass, nombreCompleto);
+    public Propietario agregarPropietario(String user, String pass, String nombreCompleto, String cedula) {
+		Propietario p = new Propietario(user, pass, nombreCompleto, cedula);
         this.propietarios.add(p);
 
 		return p;
@@ -66,6 +71,36 @@ public class SistemaUsuarios {
 
     public void logoutAdmin(Administrador a) {
         a.setLogged(false);
+    }
+
+
+	public void agregarVehiculoPropietario(Vehiculo v, Propietario p) {
+		p.agregarVehiculo(v);
+	}
+
+	public <T extends Usuario> T buscarUsuarioCedula(String cedula, ArrayList<T> lista) throws PropietarioException {
+		for (T u : lista) {
+			if (u.validarCedula(cedula)) {
+				return u;
+			}
+		}
+
+		throw new PropietarioException(cedula);
+	}
+
+
+	public Propietario buscarPropietarioPorCedula(String cedula) throws PropietarioException{
+		return buscarUsuarioCedula(cedula, this.propietarios);
+	}
+
+    public ArrayList<Asignacion> obtenerAsignacionesDePropietario(Propietario encontrado) {
+        return encontrado.getAsignaciones();
+    }
+
+
+    public void agregarAsignacionPropietario(Bonificacion obtenerBonificacionByNombre, Puesto obtenerPuestoPorNombre) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'agregarAsignacionPropietario'");
     }
 
 }

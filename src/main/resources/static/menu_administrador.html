@@ -7,24 +7,31 @@
     <link rel="stylesheet" href="menu_administrador.css">
     <script src="utilesVista.js"></script>
     <script src="vistaWeb.js"></script>
+    <script src='sse.js'></script>
 </head>
 <body>
     <!-- Sidebar -->
     <nav class="sidebar">
+        <button class="toggle-button" onclick="toggleSidebar()"></button>
         <div class="nav-container">
-            <h2><a href="menu_administrador.html" style="text-decoration: none; color: inherit;">Sistema de Peajes</a></h2>
+            <h2><span style="text-decoration: none; color: inherit;">Sistema de Peajes</span></h2>
             <ul class="nav-links">
-                <li><a href="asignar_bonificacion.html">Asignar Bonificación</a></li>
-                <li><a href="emular_transito.html">Emular Tránsito</a></li>
-                <li><a href="cambiar_estado.html">Cambiar Estado</a></li>
+                <li><button onclick="cargarContenido('asignar_bonificaciones.html')" class="nav-button">Asignar Bonificación</button></li>
+                <li><button onclick="cargarContenido('emular_transito.html')" class="nav-button">Emular Tránsito</button></li>
+                <li><button onclick="cargarContenido('cambiar_estado.html')" class="nav-button">Cambiar Estado</button></li>
             </ul>
         </div>
         <button onclick="cerrarSesion()" class="btn-salir">Salir</button>
     </nav>
 
+    <div class="content">
+        <iframe id="contenidoFrame" src="presentacion.html"></iframe>
+    </div>
+
     <script>
         // URL para cerrar sesión (a completar)
         const URL_CERRAR_SESION = "acceso/salirAdministrador"; // Esta URL debe ser reemplazada por la correcta
+        urlRegistroSSE="/menu/registrarSSE";
         
         function cerrarSesion() {
             // Realizar la petición de cierre de sesión
@@ -35,32 +42,28 @@
         function mostrar_LogoutExitoso(urlDestino) {
             window.location.href = urlDestino;
         }
+
+        function cargarContenido(pagina) {
+            document.getElementById('contenidoFrame').src = pagina;
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('collapsed');
+            
+            // Guardar el estado en localStorage para mantenerlo entre recargas
+            localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+        }
+
+        // Restaurar el estado del sidebar al cargar la página
+        window.addEventListener('load', function() {
+            const sidebar = document.querySelector('.sidebar');
+            const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+            if (isCollapsed) {
+                sidebar.classList.add('collapsed');
+            }
+        });
     </script>
 
-    <!-- Contenido principal -->
-    <main class="main-content">
-        <section class="welcome-section">
-            <h1>¡Bienvenido al Panel de Administración!</h1>
-            <p>Desde aquí podrás gestionar todos los aspectos del sistema de peajes.</p>
-        </section>
-
-        <section class="instructions">
-            <h3>Funcionalidades Disponibles</h3>
-            <ul class="feature-list">
-                <li>
-                    <span class="feature-title">Asignar Bonificación</span>
-                    <p>Gestiona las bonificaciones para los propietarios de vehículos. Puedes asignar diferentes tipos de descuentos según las políticas establecidas.</p>
-                </li>
-                <li>
-                    <span class="feature-title">Emular Tránsito</span>
-                    <p>Simula el paso de vehículos por los puestos de peaje para pruebas y verificación del sistema.</p>
-                </li>
-                <li>
-                    <span class="feature-title">Cambiar Estado</span>
-                    <p>Modifica el estado de los diferentes elementos del sistema, como puestos de peaje o bonificaciones activas.</p>
-                </li>
-            </ul>
-        </section>
-    </main>
 </body>
 </html>

@@ -1,8 +1,13 @@
 package ort.da.sistema_peajes.peaje.model.Bonificacion;
 
-public class Exonerado {
+public class Exonerado extends Bonificacion{
 
-	private Exonerado exonerado;
+	public Exonerado() {
+		super("Exonerado", 100);
+	}
 
-
+	@Override
+	public double calcular(int monto, boolean validar) {
+		return this.getDescuento().calcularDescuento(monto);
+	}
 }

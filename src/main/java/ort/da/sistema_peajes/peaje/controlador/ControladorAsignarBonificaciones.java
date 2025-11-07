@@ -93,7 +93,7 @@ public class ControladorAsignarBonificaciones {
             mensaje = "Ya existe un bono " + bonificacion + " en el puesto " + puesto + " asociada a ese propietario. Vuelva a Intentar con otros valores";
         }
 
-        return Respuesta.lista(new Respuesta(estado, mensaje), bonosPropietario()); 
+        return Respuesta.lista(new Respuesta(estado, mensaje), bonosPropietario());
     }
 
 

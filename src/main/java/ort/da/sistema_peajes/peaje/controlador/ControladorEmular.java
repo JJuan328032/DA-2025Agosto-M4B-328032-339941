@@ -25,7 +25,6 @@ import ort.da.sistema_peajes.peaje.exceptions.VehiculoException;
 import ort.da.sistema_peajes.peaje.service.Fachada;
 
 
-
 @RestController
 @RequestMapping("/emular")
 @Scope("session")
@@ -56,9 +55,14 @@ public class ControladorEmular {
     }
 
     @PostMapping("/transito")
-    public List<Respuesta> emularTransito(@RequestParam int indicePuesto, @RequestParam String matricula, @RequestParam LocalDateTime fechaHora) throws SaldoException, EstadoException, VehiculoException, Exception{
+    public List<Respuesta> emularTransito(@RequestParam int indicePuesto, @RequestParam String matricula, @RequestParam LocalDateTime fechaHora) throws SaldoException, EstadoException, VehiculoException, PuestoException, Exception{
         //las exceptions son manejadas en sus respectivos objetos usando mensajes genericos o mas de un atributo
-        return Respuesta.lista(new Respuesta("transitoEmulado", MapperTransito.toDTO(Fachada.getInstancia().emularTransito(indicePuesto, matricula, fechaHora))));
+
+        try{
+            return Respuesta.lista(new Respuesta("transitoEmulado", MapperTransito.toDTO(Fachada.getInstancia().emularTransito(indicePuesto, matricula, fechaHora))));
+        }catch(VehiculoException e){
+            return Respuesta.lista(new Respuesta("error", "No existe el Vehiculo con Matricula: " + e.getMessage()));
+        }
     }
 
     private Respuesta puestos() {

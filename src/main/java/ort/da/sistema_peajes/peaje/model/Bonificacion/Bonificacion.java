@@ -3,7 +3,7 @@ package ort.da.sistema_peajes.peaje.model.Bonificacion;
 
 public abstract class Bonificacion {
 
-	private String nombre;
+    private String nombre;
 	private Descuento descuento;
 
 	public Bonificacion(String nombre, double descuento) {

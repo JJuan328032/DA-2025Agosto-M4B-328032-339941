@@ -121,6 +121,8 @@
             mostrar_bonificaciones(propietarioBonificacion.asignaciones);
         }
 
+        //SE PUEDE SEPARAR MÁS PARA EVITAR FALIDACIONES INNECESARIAS
+
         function mostrar_bonificaciones(bonos){
             // Mostrar la tabla de asignaciones
             const contenedorTabla = document.getElementById("tabla-bonificaciones");
@@ -141,6 +143,7 @@
         }
 
 
+
         // Función para asignar bonificación
         function asignarBonificacion() {
             const bonificacion = document.getElementById('indiceBono');
@@ -152,7 +155,7 @@
             console.log("Cedula: " + cedula);
 
             if (!bonificacion.value || !puesto.value || !cedula) {
-                alert('Por favor complete todos los campos');
+                mostrar_mal('Por favor complete todos los campos');
                 return;
             }
 
@@ -174,13 +177,6 @@
             div.style.background = "#d4edda";  // verde claro
             div.style.borderColor = "#28a745"; // verde intenso
             div.style.color = "#155724";       // texto verde oscuro
-
-            /*
-            // Efecto temporal (opcional)
-            setTimeout(() => {
-                resetearMensajeEstado();
-            }, 10000);
-            */
         }
 
         function mostrar_mal(mensaje) {
@@ -191,25 +187,7 @@
             div.style.background = "#f8d7da";  // rojo claro
             div.style.borderColor = "#dc3545"; // rojo intenso
             div.style.color = "#721c24";       // texto rojo oscuro
-
-            /*
-            // Efecto temporal (opcional)
-            setTimeout(() => {
-                resetearMensajeEstado();
-            }, 10000);
-            */
         }
-
-        /*
-        function resetearMensajeEstado() {
-            const div = document.getElementById("mensaje-estado");
-            div.textContent = "Seleccione los datos y realice una acción";
-            div.style.background = "#f9f9f9";
-            div.style.borderColor = "var(--color-primary)";
-            div.style.color = "#666";
-        }
-        */
-
 
         function mostrar_mensaje(mensaje){
             alert(mensaje);

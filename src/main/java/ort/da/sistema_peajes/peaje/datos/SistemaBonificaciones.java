@@ -3,7 +3,6 @@ package ort.da.sistema_peajes.peaje.datos;
 import java.util.ArrayList;
 
 import ort.da.sistema_peajes.peaje.exceptions.BonificacionException;
-import ort.da.sistema_peajes.peaje.exceptions.PropietarioException;
 import ort.da.sistema_peajes.peaje.model.Bonificacion.*;
 
 public class SistemaBonificaciones {

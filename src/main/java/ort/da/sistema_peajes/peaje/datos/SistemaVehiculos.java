@@ -28,7 +28,7 @@ public class SistemaVehiculos {
 
 	public Vehiculo obtenerVehiculoPorMatricula(String matricula) throws VehiculoException{
 		for (Vehiculo vehiculo : vehiculos) if (vehiculo.igualPatente(matricula)) return vehiculo;
-		throw new VehiculoException("No existe el Vehiculo con Matricula: " + matricula);
+		throw new VehiculoException(matricula);
 	}
 
     public void asociarVehiculoAPropietario(Vehiculo v, Propietario p) {

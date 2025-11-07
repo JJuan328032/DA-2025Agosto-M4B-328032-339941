@@ -2,6 +2,7 @@ package ort.da.sistema_peajes.peaje.model.Usuarios;
 
 import ort.da.sistema_peajes.peaje.model.Vehiculo;
 import ort.da.sistema_peajes.peaje.model.Bonificacion.Bonificacion;
+import ort.da.sistema_peajes.peaje.model.Bonificacion.Frecuente;
 import ort.da.sistema_peajes.peaje.model.Estados.EstadoPropietario;
 import ort.da.sistema_peajes.peaje.model.Estados.Habilitado;
 import ort.da.sistema_peajes.peaje.model.Registro;
@@ -144,30 +145,32 @@ public class Propietario extends Usuario {
 	}
 
 
-    public String realizarPago(Registro registro) throws SaldoException, EstadoException{
+    public void realizarPago(Registro registro) throws SaldoException, EstadoException{
+
+        //nueva clase Pagar
+        //conoce a Registro, Vehiculo, Propietario
+        //maneja registro de quienes pagaron y c centraliza la logica de pago
 
         if(validarEstado()){
             //validar si tengo una bonificacion en el puesto
             Asignacion a = this.buscarAsignacionSegunPuesto(registro.getPuesto());
 
             //si la tengo, seteo el montoBonificado previamente inicializado en cero
-            if(a != null) registro.setMontoBonificado(a.calcularMontoBonificado(registro.getMontoTarifa(), this.esSegundoTransitoDelDia(registro.getPuesto(), registro.getVehiculo(), registro.getFecha())));
-            
-            completarRegistro(registro);
-
-            //retorna Asignacion porque solo el Propietario sabe si tiene bonificacion en el Puesto y se necesita el nombre de dicho bono
-            return a.getBonificacionNombre();
-        }else{
-
-            completarRegistro(registro);
+            //Y si dejamos propietario en Bonificacion y si es frecuente accede directamente a esSegundoTransitoDelDia()?
+            if(a != null) {
+                //no deja preguntar si es Frecuente :c 
+                //boolean b = (a.getBonificacion() == Frecuente) ? this.esSegundoTransitoDelDia(registro.getPuesto(), registro.getVehiculo(), registro.getFecha()) : false;
+                registro.setMontoBonificado(a.calcularMontoBonificado(registro.getMontoTarifa(), this.esSegundoTransitoDelDia(registro.getPuesto(), registro.getVehiculo(), registro.getFecha())));
+                registro.setBonificacion(a.getBonificacionNombre());
+            }
         }
 
-        return null;
+        completarRegistro(registro);
     }
 
     private void completarRegistro(Registro registro) throws SaldoException{
-        descontarTransito(registro.calcularPrecioFinal());
-        registro.setMontoPagado();
+        //se usa registro.calcularPrecioFinal() por si existe un montoBonificado. Así se se puede usar para ambos casos
+        descontarTransito(registro.calcularAsignarMontoPagado());
 
         this.agregarRegistro(registro);
     }
@@ -183,7 +186,7 @@ public class Propietario extends Usuario {
         //si no puede, manda exception y corta ejecucion
         this.estadoPropietario.puedeTransitar();
 
-        //si no puede recibir bonificaciones registro se encarga
+        //si no puede recibir bonificaciones, registro se encarga
         return this.estadoPropietario.bonificable();
     }
 
@@ -199,7 +202,7 @@ public class Propietario extends Usuario {
         for(Asignacion a : this.asignaciones) if(a.equals(buscada)) throw new AsignacionException("");
     }
 
-    private boolean esSegundoTransitoDelDia(Puesto puesto, Vehiculo vehiculo, LocalDateTime fecha) {
+    public boolean esSegundoTransitoDelDia(Puesto puesto, Vehiculo vehiculo, LocalDateTime fecha) {
 		int cont = 0;
 
 		for(int i = 0; i < this.registros.size() && cont < 2; i++){

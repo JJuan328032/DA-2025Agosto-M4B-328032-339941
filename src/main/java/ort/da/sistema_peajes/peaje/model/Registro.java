@@ -25,6 +25,7 @@ public class Registro {
         this.tarifa = tarifa.getTipo();
         this.montoTarifa = tarifa.getMonto();
         this.montoBonificado = 0;
+        this.bonificacion = "Sin Bonificacion";
     }
 
 
@@ -81,7 +82,7 @@ public class Registro {
         return this.puesto.getNombre();
     }
 
-
+    //usado en SeedData
     public void setMontoPagado() {
         this.montoPagado = (double) (this.montoTarifa - this.montoBonificado);
     }
@@ -94,14 +95,22 @@ public class Registro {
     }
 
 
-    public String cobrar() throws SaldoException, EstadoException{
-        return this.getVehiculo().realizarPago(this);
+    public void cobrar() throws SaldoException, EstadoException{
+        this.getVehiculo().realizarPago(this);
     }
 
 
+    public double calcularAsignarMontoPagado(){
+        this.montoPagado = (double) (this.montoTarifa - this.montoBonificado);
+        System.out.println("MontoPagado en Registro: " + this.montoPagado);
+        return this.montoPagado;
+    }
+
+    /*
     public double calcularPrecioFinal() {
         return this.montoTarifa - this.montoBonificado;
     }
+    */
 
 
     public boolean validarMismoDia(Puesto puesto2, Vehiculo vehiculo2, LocalDateTime fecha2) {

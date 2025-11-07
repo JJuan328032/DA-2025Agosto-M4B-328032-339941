@@ -22,11 +22,6 @@ public class SistemaPuestos {
 		}catch(PuestoException e){
 			this.puestos.add(puesto);
 		}
-
-		/*
-		if(this.obtenerPuestoPorNombre(puesto.getNombre()) == null) this.puestos.add(puesto);
-		else throw new PuestoException("Ya existe el Puesto con nombre: " + puesto.getNombre());
-		*/
 	}
 
 	public ArrayList<Puesto> getPuestos() {
@@ -51,23 +46,8 @@ public class SistemaPuestos {
         return this.obtenerPuestoPorNombre(puesto).obtenerTarifaSegunCategoriaVehiculo(vehiculo);
     }
 
-    public Puesto obtenerPuestoPorIndice(int indicePuesto) {
-        return this.puestos.get(indicePuesto);
+    public Puesto obtenerPuestoPorIndice(int indicePuesto) throws PuestoException{
+		if(indicePuesto > -1 && indicePuesto < this.puestos.size()) return this.puestos.get(indicePuesto);
+		throw new PuestoException("indice inaccesible");
     }
-
-	/*
-	public <T extends Puesto> T buscarPuestoNombre(String puesto, ArrayList<T> lista) throws EstadoException {
-    for (T u : lista) {
-        if (u.getNombre().equalsIgnoreCase(puesto)) {
-            return u;
-        }
-    }
-    return null;
-	}
-	
-
-	public Puesto obtenerPuestoByNombre(String puesto) throws EstadoException {
-		return buscarPuestoNombre(puesto, this.puestos);
-	}
-		*/
 }

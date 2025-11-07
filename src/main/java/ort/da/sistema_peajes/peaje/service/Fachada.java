@@ -10,6 +10,7 @@ import ort.da.sistema_peajes.peaje.datos.SistemaPuestos;
 import ort.da.sistema_peajes.peaje.datos.SistemaRegistro;
 import ort.da.sistema_peajes.peaje.datos.SistemaVehiculos;
 import ort.da.sistema_peajes.peaje.exceptions.PropietarioException;
+import ort.da.sistema_peajes.peaje.exceptions.AsignacionException;
 import ort.da.sistema_peajes.peaje.exceptions.BonificacionException;
 import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
 import ort.da.sistema_peajes.peaje.exceptions.PuestoException;
@@ -129,7 +130,7 @@ public class Fachada {
 		return sistemaUsuarios.obtenerAsignacionesDePropietario(encontrado);
 	}
 
-    public void asignarBonificaciones(String cedulaPropietario, String nombreBonificacion, String nombrePuesto) throws PropietarioException, BonificacionException, PuestoException {
+    public void asignarBonificaciones(String cedulaPropietario, String nombreBonificacion, String nombrePuesto) throws PropietarioException, BonificacionException, PuestoException, AsignacionException {
 		/*
 		Bonificacion bonificacion = sistemaBonificaciones.obtenerBonificacionByNombre(Bonificacion);
 		Puesto puesto = sistemaPuestos.obtenerPuestoPorNombre(Puesto);

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 import javax.security.auth.login.LoginException;
 
-
+import ort.da.sistema_peajes.peaje.exceptions.AsignacionException;
 import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
 import ort.da.sistema_peajes.peaje.exceptions.SaldoException;
 import ort.da.sistema_peajes.peaje.model.Asignacion;
@@ -98,8 +98,11 @@ public class Propietario extends Usuario {
         this.asignaciones.add(a);
     }
 
-    public void agregarAsignacion(Bonificacion obtenerBonificacionByNombre, Puesto obtenerPuestoPorNombre) {
-        this.asignaciones.add(new Asignacion(obtenerPuestoPorNombre, obtenerBonificacionByNombre, LocalDate.now()));
+    public void agregarAsignacion(Bonificacion obtenerBonificacionByNombre, Puesto obtenerPuestoPorNombre) throws AsignacionException{
+        Asignacion nueva = new Asignacion(obtenerPuestoPorNombre, obtenerBonificacionByNombre, LocalDate.now());
+
+        existeAsignacion(nueva);
+        this.asignaciones.add(nueva);
     }
 
     public void agregarNotificacion(String mensaje) {
@@ -190,6 +193,10 @@ public class Propietario extends Usuario {
         }
 
         return null;
+    }
+
+    private void existeAsignacion(Asignacion buscada) throws AsignacionException{
+        for(Asignacion a : this.asignaciones) if(a.equals(buscada)) throw new AsignacionException("");
     }
 
     private boolean esSegundoTransitoDelDia(Puesto puesto, Vehiculo vehiculo, LocalDateTime fecha) {

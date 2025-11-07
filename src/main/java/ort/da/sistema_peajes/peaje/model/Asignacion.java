@@ -15,6 +15,8 @@ public class Asignacion {
 		this.fecha = fecha;
 	}
 
+	public Puesto getPuesto(){ return this.puesto;}
+	public Bonificacion getBonificacion(){ return this.bonificacion;}
 
 	public String getPuestoNombre() {
 		return this.puesto.getNombre();
@@ -32,6 +34,9 @@ public class Asignacion {
 		return this.puesto.equals(p);
 	}
 
+	public boolean equals(Asignacion a){
+		return this.bonificacion.equals(a.getBonificacion()) && this.puesto.equals(a.getPuesto());
+	}
 
     public double calcularMontoBonificado(int montoTarifa, boolean val) {
         return this.bonificacion.calcular(montoTarifa, val);

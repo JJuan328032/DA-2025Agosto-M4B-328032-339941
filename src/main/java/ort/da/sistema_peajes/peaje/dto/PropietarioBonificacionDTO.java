@@ -27,5 +27,5 @@ public class PropietarioBonificacionDTO {
         return estado;
     }
 
-    public ArrayList<AsignacionDTO> geAsignaciones(){ return this.asignaciones;}
+    public ArrayList<AsignacionDTO> getAsignaciones(){ return this.asignaciones;}
 }

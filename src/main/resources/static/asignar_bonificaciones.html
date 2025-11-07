@@ -8,7 +8,6 @@
     <script src="vistaWeb.js"></script>
 </head>
 <body>
-    <script src="utilesVista.js" defer></script>
     <div class="page-wrapper">
         <div class="panel">
             <div class="emular-grid">
@@ -80,12 +79,12 @@
         console.log("Cedula Propietario existente: " + 52468975);
 
         function mostrar_bonificacionesDefinidas(bonificaciones) {
-            console.log(bonificaciones);
+            //console.log(bonificaciones);
             document.getElementById("bonos").innerHTML = crearListaDesdeJson({data:bonificaciones,id:"indiceBono",campoMostrar: "nombre"});
         }
 
         function mostrar_puestosDefinidos(puestos) {
-            console.log(puestos);
+            //console.log(puestos);
             document.getElementById("puestos").innerHTML = crearListaDesdeJson({data:puestos,id:"indicePuesto",campoMostrar: "nombre"});
         }
 
@@ -105,7 +104,7 @@
             submit('/bonificaciones/propietario/buscar', 'cedula=' + cedula);
         }
 
-        /*
+        
         function mostrar_propietarioBonificacion(propietarioBonificacion) {
             console.log(propietarioBonificacion);
 
@@ -119,10 +118,14 @@
             document.getElementById("nombre-propietario").textContent = propietarioBonificacion.nombreCompleto || "Sin nombre";
             document.getElementById("estado-propietario").textContent = propietarioBonificacion.estado || "Sin estado";
 
+            mostrar_bonificaciones(propietarioBonificacion.asignaciones);
+        }
+
+        function mostrar_bonificaciones(bonos){
             // Mostrar la tabla de asignaciones
             const contenedorTabla = document.getElementById("tabla-bonificaciones");
 
-            const asignaciones = propietarioBonificacion.asignaciones || [];
+            const asignaciones = bonos || [];
 
             if (asignaciones.length === 0) {
                 contenedorTabla.innerHTML = "<p>Este propietario no tiene bonificaciones asignadas.</p>";
@@ -136,115 +139,77 @@
             // Mostrar el botón de asignar bonificación si hay listas cargadas
             document.querySelector("button[onclick='asignarBonificacion()']").style.display = "block";
         }
-        */
-
-        function mostrar_propietario(propietario){
-            console.log("Propietario encontrado: " + propietario)
-            document.getElementById("nombre-propietario").innerHTML = propietario.nombreCompleto || "Sin nombre";
-            document.getElementById("estado-propietario").textContent = propietario.estado || "Sin estado";
-
-            document.getElementById("tabla-bonificaciones").innerHTML = crearTablaDesdeJson(propietario.asignaciones);
-        }
 
 
         // Función para asignar bonificación
         function asignarBonificacion() {
-            const bonificacion = document.getElementById('bonificacion').value;
-            const puesto = document.getElementById('puesto').value;
+            const bonificacion = document.getElementById('indiceBono');
+            const puesto = document.getElementById('indicePuesto');
             const cedula = document.getElementById('cedula').value;
 
-            if (!bonificacion || !puesto || !cedula) {
+            console.log("Bono: " + bonificacion.value);
+            console.log("Puesto: " + puesto.value);
+            console.log("Cedula: " + cedula);
+
+            if (!bonificacion.value || !puesto.value || !cedula) {
                 alert('Por favor complete todos los campos');
                 return;
             }
 
             const data ='cedula=' + encodeURIComponent(cedula) +
-                        '&bonificacion=' + encodeURIComponent(bonificacion) +
-                        '&puesto=' + encodeURIComponent(puesto);
+                        '&bonificacion=' + encodeURIComponent(bonificacion.options[bonificacion.selectedIndex].text) +
+                        '&puesto=' + encodeURIComponent(puesto.options[puesto.selectedIndex].text);
+
+            console.log(data);
     
             submit('/bonificaciones/propietario/asignar', data);
         }
 
 
+        function mostrar_ok(mensaje) {
+            const div = document.getElementById("mensaje-estado");
 
-        // Funciones para procesar respuestas del servidor
-        // Almacenamiento de opciones disponibles
-        let bonificacionesDisponibles = [];
-        let puestosDisponibles = [];
+            // Cambiar el texto y color
+            div.textContent = mensaje || "Operación realizada con éxito.";
+            div.style.background = "#d4edda";  // verde claro
+            div.style.borderColor = "#28a745"; // verde intenso
+            div.style.color = "#155724";       // texto verde oscuro
+
+            /*
+            // Efecto temporal (opcional)
+            setTimeout(() => {
+                resetearMensajeEstado();
+            }, 10000);
+            */
+        }
+
+        function mostrar_mal(mensaje) {
+            const div = document.getElementById("mensaje-estado");
+
+            // Cambiar el texto y color
+            div.textContent = mensaje || "Ocurrió un error al procesar la solicitud.";
+            div.style.background = "#f8d7da";  // rojo claro
+            div.style.borderColor = "#dc3545"; // rojo intenso
+            div.style.color = "#721c24";       // texto rojo oscuro
+
+            /*
+            // Efecto temporal (opcional)
+            setTimeout(() => {
+                resetearMensajeEstado();
+            }, 10000);
+            */
+        }
 
         /*
-        function mostrar_propietario(data) {
-            const infoPropietario = document.querySelector('.info-propietario');
-            const btnAsignar = document.querySelector('.btn[onclick="asignarBonificacion()"]');
-            
-            if (!data) {
-                infoPropietario.style.display = 'none';
-                btnAsignar.style.display = 'none';
-                return;
-            }
-
-            document.getElementById('nombre-propietario').textContent = data.nombreCompleto || '';
-            document.getElementById('estado-propietario').textContent = data.estado || '';
-            infoPropietario.style.display = 'block';
-            btnAsignar.style.display = 'block';
-            
-            // Actualizar el texto de ayuda
-            document.querySelector('.help-text').textContent = 
-                'Seleccione una bonificación y puesto en las listas de la izquierda y luego asigne.';
-
-            // Asegurarnos que los dropdowns mantengan sus opciones
-            actualizarDropdownBonificaciones(bonificacionesDisponibles);
-            actualizarDropdownPuestos(puestosDisponibles);
+        function resetearMensajeEstado() {
+            const div = document.getElementById("mensaje-estado");
+            div.textContent = "Seleccione los datos y realice una acción";
+            div.style.background = "#f9f9f9";
+            div.style.borderColor = "var(--color-primary)";
+            div.style.color = "#666";
         }
-            */
+        */
 
-        function mostrar_bonificaciones(bonificaciones) {
-            const contenedor = document.getElementById('tabla-bonificaciones');
-            if (!bonificaciones || bonificaciones.length === 0) {
-                contenedor.innerHTML = ''; // No mostramos mensaje si no hay bonificaciones
-                return;
-            }
-
-            const tabla = crearTablaDesdeJson(bonificaciones);
-            contenedor.innerHTML = tabla;
-        }
-
-        // Funciones auxiliares para mantener los dropdowns
-        function actualizarDropdownBonificaciones(bonificaciones) {
-            console.log(bonificaciones);
-            const select = document.getElementById('bonificacion');
-            const valorActual = select.value; // Guardamos la selección actual si existe
-            
-            select.innerHTML = '<option value="">Seleccione una bonificación</option>';
-            if (bonificaciones && bonificaciones.length) {
-                bonificaciones.forEach(b => {
-                    const option = `<option value="${b.nombre}"${b.id === valorActual ? ' selected' : ''}>${b.nombre}</option>`;
-                    select.innerHTML += option;
-                });
-            }
-        }
-
-        function actualizarDropdownPuestos(puestos) {
-            const select = document.getElementById('puesto');
-            const valorActual = select.value; // Guardamos la selección actual si existe
-            
-            select.innerHTML = '<option value="">Seleccione un puesto</option>';
-            if (puestos && puestos.length) {
-                puestos.forEach(p => {
-                    const option = `<option value="${p.nombre}"${p.id === valorActual ? ' selected' : ''}>${p.nombre}</option>`;
-                    select.innerHTML += option;
-                });
-            }
-        }
-
-        // Manejador de errores del servidor
-        function mostrar_mal(mensaje) {
-            //
-        }
-
-        function mostrar_ok(mensaje){
-
-        }
 
         function mostrar_mensaje(mensaje){
             alert(mensaje);
@@ -255,5 +220,7 @@
             alert(mensaje);
         }
     </script>
+
+    <script src="utilesVista.js"></script>
 </body>
 </html>

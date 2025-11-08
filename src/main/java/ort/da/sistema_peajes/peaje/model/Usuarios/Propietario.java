@@ -2,7 +2,6 @@ package ort.da.sistema_peajes.peaje.model.Usuarios;
 
 import ort.da.sistema_peajes.peaje.model.Vehiculo;
 import ort.da.sistema_peajes.peaje.model.Bonificacion.Bonificacion;
-import ort.da.sistema_peajes.peaje.model.Bonificacion.Frecuente;
 import ort.da.sistema_peajes.peaje.model.Estados.EstadoPropietario;
 import ort.da.sistema_peajes.peaje.model.Estados.Habilitado;
 import ort.da.sistema_peajes.peaje.model.Registro;
@@ -29,6 +28,8 @@ public class Propietario extends Usuario {
 	private ArrayList<Vehiculo> vehiculos;
 	private ArrayList<Registro> registros;
 	private ArrayList<Asignacion> asignaciones;
+
+
     private ArrayList<Notificacion> notificaciones;
 
 	private EstadoPropietario estadoPropietario;
@@ -160,7 +161,17 @@ public class Propietario extends Usuario {
             if(a != null) {
                 //no deja preguntar si es Frecuente :c 
                 //boolean b = (a.getBonificacion() == Frecuente) ? this.esSegundoTransitoDelDia(registro.getPuesto(), registro.getVehiculo(), registro.getFecha()) : false;
-                registro.setMontoBonificado(a.calcularMontoBonificado(registro.getMontoTarifa(), this.esSegundoTransitoDelDia(registro.getPuesto(), registro.getVehiculo(), registro.getFecha())));
+                registro.setMontoBonificado(
+                        a.calcularMontoBonificado(
+                                registro.getMontoTarifa(), 
+                                this.esSegundoTransitoDelDia(
+                                        registro.getPuesto(), 
+                                        registro.getVehiculo(), 
+                                        registro.getFecha()
+                                )
+                            )
+                        );
+                        
                 registro.setBonificacion(a.getBonificacionNombre());
             }
         }
@@ -176,6 +187,7 @@ public class Propietario extends Usuario {
     }
 
     private void descontarTransito(double monto) throws SaldoException{
+        //TODO: queda negativo por la resta?
         if(this.saldo - monto < 0) throw new SaldoException("Saldo insuficiente: " + this.saldo + " para cobrar el total: " + monto);
 
         //funciona si es Exonerado y el saldo es cero

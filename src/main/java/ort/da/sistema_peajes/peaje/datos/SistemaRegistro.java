@@ -30,6 +30,7 @@ public class SistemaRegistro {
 	public InfoTransito realizarTransito(Puesto puesto, Vehiculo vehiculo, LocalDateTime fechaHora) throws SaldoException, EstadoException, Exception{
 		Registro r = new Registro(puesto, vehiculo, fechaHora, puesto.obtenerTarifaSegunCategoriaVehiculo(vehiculo));
 		r.cobrar();
+		
 		this.agregarRegistro(r);
 
 		return new InfoTransito(puesto, vehiculo, r.getBonificacion(), r.getMontoPagado());

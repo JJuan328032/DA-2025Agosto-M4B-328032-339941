@@ -5,9 +5,7 @@ import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
 import ort.da.sistema_peajes.peaje.exceptions.PropietarioException;
 import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
 import ort.da.sistema_peajes.peaje.model.Vehiculo;
-import ort.da.sistema_peajes.peaje.model.Bonificacion.Bonificacion;
 import ort.da.sistema_peajes.peaje.model.Asignacion;
-import ort.da.sistema_peajes.peaje.model.Puesto;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Administrador;
 
 import java.util.ArrayList;
@@ -95,12 +93,6 @@ public class SistemaUsuarios {
 
     public ArrayList<Asignacion> obtenerAsignacionesDePropietario(Propietario encontrado) {
         return encontrado.getAsignaciones();
-    }
-
-
-    public void agregarAsignacionPropietario(Bonificacion obtenerBonificacionByNombre, Puesto obtenerPuestoPorNombre) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'agregarAsignacionPropietario'");
     }
 
 }

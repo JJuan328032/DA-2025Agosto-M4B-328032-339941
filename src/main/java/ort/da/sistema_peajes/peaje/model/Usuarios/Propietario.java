@@ -16,6 +16,7 @@ import ort.da.sistema_peajes.peaje.exceptions.AsignacionException;
 import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
 import ort.da.sistema_peajes.peaje.exceptions.SaldoException;
 import ort.da.sistema_peajes.peaje.model.Asignacion;
+import ort.da.sistema_peajes.peaje.model.EventosSistema;
 import ort.da.sistema_peajes.peaje.model.InfoVehiculo;
 import ort.da.sistema_peajes.peaje.model.Notificacion;
 import ort.da.sistema_peajes.peaje.model.Puesto;
@@ -80,6 +81,10 @@ public class Propietario extends Usuario {
         return this.asignaciones;
     }
 
+    public ArrayList<Notificacion> getNotificaciones() {
+        return this.notificaciones;
+    }
+
     public EstadoPropietario getEstadoPropietario() {
         return this.estadoPropietario;
     }
@@ -105,6 +110,7 @@ public class Propietario extends Usuario {
 
         existeAsignacion(nueva);
         this.asignaciones.add(nueva);
+        this.avisar(EventosSistema.BONO_ASIGNADO);
     }
 
     public void agregarNotificacion(String mensaje) {
@@ -177,6 +183,7 @@ public class Propietario extends Usuario {
         }
 
         completarRegistro(registro);
+        this.avisar(EventosSistema.SALDO);
     }
 
     private void completarRegistro(Registro registro) throws SaldoException{

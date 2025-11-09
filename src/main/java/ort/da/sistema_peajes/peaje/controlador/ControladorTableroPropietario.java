@@ -12,21 +12,26 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import observador.Observable;
+import observador.Observador;
 import ort.da.sistema_peajes.ConexionNavegador;
 import ort.da.sistema_peajes.Respuesta;
 import ort.da.sistema_peajes.peaje.dto.mappers.MapperAsignacion;
 import ort.da.sistema_peajes.peaje.dto.mappers.MapperInfoVehiculo;
+import ort.da.sistema_peajes.peaje.dto.mappers.MapperNotificacion;
 import ort.da.sistema_peajes.peaje.dto.mappers.MapperRegistro;
 import ort.da.sistema_peajes.peaje.dto.mappers.MapperPropietario;
+import ort.da.sistema_peajes.peaje.model.EventosSistema;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
 
 @RestController
 @RequestMapping("/tablero")
 @Scope("session")
 
-public class ControladorTableroPropietario {
+public class ControladorTableroPropietario implements Observador{
 
-    private final ConexionNavegador conexionNavegador; 
+    private final ConexionNavegador conexionNavegador;
+    private Propietario propietario;
     
     public ControladorTableroPropietario(@Autowired ConexionNavegador conexionNavegador) {
         this.conexionNavegador = conexionNavegador;
@@ -42,8 +47,10 @@ public class ControladorTableroPropietario {
     @PostMapping("/informacion")
     public List<Respuesta> iniciarTablero(@SessionAttribute(name = "propietario") Propietario p){
 
-        //si entra por url se rompe todo
-        //TODO
+        //TODO si entra por url se rompe todo
+
+        this.propietario = p;
+        this.propietario.agregarObservador(this);
 
         return Respuesta.lista(
             propietario(p),
@@ -73,5 +80,24 @@ public class ControladorTableroPropietario {
         return new Respuesta("transitosRealizados", MapperRegistro.toDTO(p.getRegistros()));
     }
 
+    private Respuesta notificaciones(Propietario p){
+        return new Respuesta("notificaciones", MapperNotificacion.toDTOList(p.getNotificaciones()));
+    }
 
+    //TODO separar en vista el espacio del saldo y estado. Si no se separan, siempre actualizo tres campos por cambiar uno
+
+    @Override
+    public void actualizar(Object evento, Observable origen) {
+        if(evento.equals(EventosSistema.TRANSITO_REALIZADO) || evento.equals(EventosSistema.ESTADO)){
+            conexionNavegador.enviarJSON(Respuesta.lista(propietario(this.propietario), transitosRealizados(this.propietario)));
+        }
+
+        if(evento.equals(EventosSistema.BONO_ASIGNADO)){
+            conexionNavegador.enviarJSON(Respuesta.lista(asignaciones(this.propietario)));
+        }
+
+        if(evento.equals(EventosSistema.NOTIFICACION)){
+            conexionNavegador.enviarJSON(Respuesta.lista(notificaciones(this.propietario)));
+        }
+    }
 }

@@ -15,13 +15,8 @@ public class SistemaPuestos {
 		this.puestos = new ArrayList<>();
 	}
 
-	public void agregarPuesto(Puesto puesto) throws PuestoException {
-
-		try{
-			this.obtenerPuestoPorNombre(puesto.getNombre());
-		}catch(PuestoException e){
-			this.puestos.add(puesto);
-		}
+	public void agregarPuesto(Puesto puesto) {
+		if(existePuesto(puesto)) this.puestos.add(puesto);
 	}
 
 	public ArrayList<Puesto> getPuestos() {
@@ -37,6 +32,11 @@ public class SistemaPuestos {
 
 		throw new PuestoException(nombre);
     }
+
+	private boolean existePuesto(Puesto puesto){
+		for(Puesto p : this.puestos) if(p.equals(puesto)) return true;
+		return false;
+	}
 
     public ArrayList<Tarifa> obtenerTarifasPorPuestoNombre(String nombre) throws PuestoException{
         return obtenerPuestoPorNombre(nombre).getTarifas();

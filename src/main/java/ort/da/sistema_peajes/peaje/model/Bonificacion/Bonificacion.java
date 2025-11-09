@@ -11,6 +11,10 @@ public abstract class Bonificacion {
 		this.descuento = new Descuento(descuento);
 	}
 
+	public Bonificacion(String nombre){
+		this.nombre = nombre;
+	}
+
 	public String getNombre() {
 		return nombre;
 	}	
@@ -19,5 +23,13 @@ public abstract class Bonificacion {
     }
 	
 	public abstract double calcular(int monto, boolean validar);
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null || getClass() != obj.getClass()) return false;
+		Bonificacion other = (Bonificacion) obj;
+		return nombre.equals(other.nombre) && descuento.equals(other.descuento);
+	}
 	
 }

@@ -88,70 +88,57 @@ public class Fachada {
 	}
 
     public InfoTransito emularTransito(int indicePuesto, String matricula, LocalDateTime fechaHora) throws SaldoException, EstadoException, VehiculoException, PuestoException, Exception{
-		return sistemaRegistro.realizarTransito(sistemaPuestos.obtenerPuestoPorIndice(indicePuesto), sistemaVehiculos.obtenerVehiculoPorMatricula(matricula), fechaHora);
+		Puesto puesto = sistemaPuestos.obtenerPuestoPorIndice(indicePuesto);
+		Vehiculo vehiculo = sistemaVehiculos.obtenerVehiculoPorMatricula(matricula);
+
+		return sistemaRegistro.realizarTransito(puesto, vehiculo, fechaHora);
+
+		//return sistemaRegistro.realizarTransito(sistemaPuestos.obtenerPuestoPorIndice(indicePuesto), sistemaVehiculos.obtenerVehiculoPorMatricula(matricula), fechaHora);
     }
 
 	public void agregarPuesto(Puesto peaje1) throws PuestoException{
+
 		sistemaPuestos.agregarPuesto(peaje1);
 	}
 
     public void agregarVehiculo(Vehiculo v1) {
+
         sistemaVehiculos.agregarVehiculo(v1);
     }
 
     public void agregarRegistro(Registro r1) {
+
         sistemaRegistro.agregarRegistro(r1);
     }
 
 	public Bonificacion agregarBonificacion(String tipo) {
+
 		return sistemaBonificaciones.agregarBonificacion(tipo);
 	}
 
 	public ArrayList<Bonificacion> obtenerBonificaciones() {
-		//List<Bonificacion> bonificaciones = new ArrayList<>(sistemaBonificaciones.getBonificaciones());
-		//System.out.println("Cantidad de bonificaciones cargadas en la Fachada: " + bonificaciones.size());
-		//return bonificaciones;
+
 		return sistemaBonificaciones.getBonificaciones();
 	}
 
 	public Propietario buscarPropietarioPorCedula(String cedula) throws PropietarioException {
-		//Propietario p = sistemaUsuarios.buscarPropietarioPorCedula(cedula);
-		//if (p == null) {
-		//	return null;
-		//}
-		//return p;
+
 		return sistemaUsuarios.buscarPropietarioPorCedula(cedula);
 	}
 	
 	public ArrayList<Asignacion> obtenerAsignacionesDePropietario(Propietario encontrado) {
-		//List<Asignacion> asignaciones = sistemaUsuarios.obtenerAsignacionesDePropietario(encontrado);
-		//System.out.println("Cantidad de Asignaciones del usuario: " + asignaciones.size());
-		//return asignaciones;
+
 		return sistemaUsuarios.obtenerAsignacionesDePropietario(encontrado);
 	}
 
     public void asignarBonificaciones(String cedulaPropietario, String nombreBonificacion, String nombrePuesto) throws PropietarioException, BonificacionException, PuestoException, AsignacionException {
-		/*
-		Bonificacion bonificacion = sistemaBonificaciones.obtenerBonificacionByNombre(Bonificacion);
-		Puesto puesto = sistemaPuestos.obtenerPuestoPorNombre(Puesto);
+		Propietario propietario = sistemaUsuarios.buscarPropietarioPorCedula(cedulaPropietario);
+		Bonificacion bonificacion = sistemaBonificaciones.obtenerBonificacionByNombre(nombreBonificacion);
+		Puesto puesto = sistemaPuestos.obtenerPuestoPorNombre(nombrePuesto);
 
-		System.out.println("🏗️ [FACHADA] Asignando bonificación...");
-    	System.out.println("   Propietario: " + (propietario != null ? propietario.getNombreCompleto() : "null"));
-    	System.out.println("   Bonificacion: " + bonificacion);
-    	System.out.println("   Puesto: " + puesto);
+		propietario.agregarAsignacion(bonificacion, puesto);
 		
-		//no estamos creando la bonificacion actualmente, podria devolver null
-		if (bonificacion == null || puesto == null) {
-			return false;
-		}
-
-		Asignacion asignacion = new Asignacion(puesto, bonificacion, LocalDate.now());
-		propietario.agregarAsignacion(asignacion);
-
-        return true;
-		*/
-
-		sistemaUsuarios.buscarPropietarioPorCedula(cedulaPropietario).agregarAsignacion(sistemaBonificaciones.obtenerBonificacionByNombre(nombreBonificacion), sistemaPuestos.obtenerPuestoPorNombre(nombrePuesto));
+		//sistemaUsuarios.buscarPropietarioPorCedula(cedulaPropietario).agregarAsignacion(sistemaBonificaciones.obtenerBonificacionByNombre(nombreBonificacion), sistemaPuestos.obtenerPuestoPorNombre(nombrePuesto));
     }
 
 

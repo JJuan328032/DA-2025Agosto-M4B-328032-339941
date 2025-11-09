@@ -1,18 +1,18 @@
 package ort.da.sistema_peajes.peaje.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Notificacion {
-    private LocalDate fecha;
+    private LocalDateTime fecha;
     private String mensaje;
     
 
     public Notificacion(String mensaje) {
-        this.fecha = LocalDate.now();
+        this.fecha = LocalDateTime.now();
         this.mensaje = mensaje;
     }
 
-    public LocalDate getFecha() { return fecha; }
+    public LocalDateTime getFecha() { return fecha; }
     public String getMensaje() { return mensaje; }
 }
 

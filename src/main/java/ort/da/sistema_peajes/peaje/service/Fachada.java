@@ -154,6 +154,16 @@ public class Fachada {
 		sistemaUsuarios.buscarPropietarioPorCedula(cedulaPropietario).agregarAsignacion(sistemaBonificaciones.obtenerBonificacionByNombre(nombreBonificacion), sistemaPuestos.obtenerPuestoPorNombre(nombrePuesto));
     }
 
+    public Object obtenerEstadosPropietario() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'obtenerEstadosPropietario'");
+    }
+
+	public void cambiarEstado(String cedula, String nuevoEstado) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'cambiarEstado'");
+	}
+
 
 }
  

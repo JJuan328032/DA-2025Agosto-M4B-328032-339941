@@ -1,6 +1,5 @@
 package ort.da.sistema_peajes.peaje.controlador;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import observador.Observable;
 import observador.Observador;
 import ort.da.sistema_peajes.ConexionNavegador;
 import ort.da.sistema_peajes.Respuesta;
-import ort.da.sistema_peajes.peaje.dto.AsignacionDTO;
 import ort.da.sistema_peajes.peaje.dto.mappers.MapperAsignacion;
 import ort.da.sistema_peajes.peaje.dto.mappers.MapperInfoVehiculo;
 import ort.da.sistema_peajes.peaje.dto.mappers.MapperNotificacion;
@@ -69,16 +67,7 @@ public class ControladorTableroPropietario implements Observador{
 
     //Lista de Asignaciones de Peajes del Propietario - Bonificacion, Puesto, FechaAsignada
     private Respuesta asignaciones(Propietario p){
-
-        ArrayList<AsignacionDTO> lista = MapperAsignacion.toDTOList(p.getAsignaciones());
-
-        System.out.println("asignaciones desde TableroPropietario");
-        for(AsignacionDTO a : lista){
-            System.out.println(a.getBonificacion() + " | " + a.getPuesto());
-        }
-
-
-        return new Respuesta("asignaciones", lista);
+        return new Respuesta("asignaciones", MapperAsignacion.toDTOList(p.getAsignaciones()));
     }
 
     //Vehiculos del Propietario - Matricula, Modelo, Color, Transitos, MontoTotal
@@ -99,13 +88,12 @@ public class ControladorTableroPropietario implements Observador{
 
     @Override
     public void actualizar(Object evento, Observable origen) {
+        System.out.println("Entrando en actualizar de tableroPropietario");
         if(evento.equals(EventosSistema.TRANSITO_REALIZADO) || evento.equals(EventosSistema.ESTADO)){
             conexionNavegador.enviarJSON(Respuesta.lista(propietario(this.propietario), transitosRealizados(this.propietario)));
         }
 
-        System.out.println("recibiendo BONO_ASIGNADO TableroPropietario");
         if(evento.equals(EventosSistema.BONO_ASIGNADO)){
-            System.out.println("mando a vista asignaciones(this.propietario) dessde TableroPropietario");
             conexionNavegador.enviarJSON(Respuesta.lista(asignaciones(this.propietario)));
         }
 

@@ -189,7 +189,7 @@ public class Propietario extends Usuario {
         }
 
         completarRegistro(registro);
-        this.avisar(EventosSistema.SALDO);
+        this.avisar(EventosSistema.TRANSITO_REALIZADO);
     }
 
     private void completarRegistro(Registro registro) throws SaldoException{

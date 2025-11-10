@@ -58,11 +58,19 @@ public class ControladorEmular {
     public List<Respuesta> emularTransito(@RequestParam int indicePuesto, @RequestParam String matricula, @RequestParam LocalDateTime fechaHora) throws SaldoException, EstadoException, VehiculoException, PuestoException, Exception{
         //las exceptions son manejadas en sus respectivos objetos usando mensajes genericos o mas de un atributo
 
+        String mensaje = "";
+
         try{
             return Respuesta.lista(new Respuesta("transitoEmulado", MapperTransito.toDTO(Fachada.getInstancia().emularTransito(indicePuesto, matricula, fechaHora))));
         }catch(VehiculoException e){
-            return Respuesta.lista(new Respuesta("error", "No existe el Vehiculo con Matricula: " + e.getMessage()));
+            mensaje = "No existe el Vehiculo con Matricula: " + e.getMessage();
+        }catch(SaldoException e){
+            mensaje = e.getMessage();
+        }catch(EstadoException e){
+            mensaje = e.getMessage();
         }
+
+        return Respuesta.lista(new Respuesta("error", mensaje));
     }
 
     private Respuesta puestos() {

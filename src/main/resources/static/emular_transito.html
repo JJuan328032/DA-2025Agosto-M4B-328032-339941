@@ -44,7 +44,7 @@
                     </div>
                 </div>
             </form>
-
+            <div id="error"></div>
             <div id="resultado-transito" class="result-area">Aquí se mostrarán los datos del tránsito emulado.</div>
         </div>
     </div>
@@ -122,6 +122,7 @@
 
         function mostrar_transitoEmulado(datos){
             console.log("Datos del tránsito:", datos);
+            ocultarError();
             
             // Crear tabla vertical con los datos
             let html = `
@@ -137,10 +138,33 @@
             
             document.getElementById("resultado-transito").innerHTML = html;
         }
+
+        function mostrar_error(error){
+            aparecerError();
+            const div = document.getElementById("error");
+
+            // Cambiar el texto y color
+            div.textContent = error || "Ocurrió un error al procesar la solicitud.";
+            div.style.background = "#f8d7da";  // rojo claro
+            div.style.borderColor = "#dc3545"; // rojo intenso
+            div.style.color = "#721c24";       // texto rojo oscuro
+        }
         
         async function excepcionDeAplicacion(mensaje){
             await mostrarMensaje(mensaje);
-        } 
+        }
+
+        function aparecerError() {
+            document.getElementById("error").style.display = "block";
+        }
+
+        function ocultarError() {
+            document.getElementById("error").style.display = "none";
+        }
+
+        async function excepcionDeAplicacion(text){
+            await mostrarMensaje(text);
+        }
     </script>
 
 </body>

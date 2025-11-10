@@ -1,6 +1,7 @@
 package ort.da.sistema_peajes.peaje.dto;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class RegistroDTO {
     private String puesto;
@@ -10,7 +11,9 @@ public class RegistroDTO {
     private String bonificacion;
     private double montoBonificacion;
     private double montoPagado;
-    private LocalDateTime fecha;
+    private String fecha;
+
+    private static final DateTimeFormatter FORMATO = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public RegistroDTO(String puesto, String matricula, String tarifa, int montoTarifa, String bonificacion,
             double montoBonificacion, double montoPagado, LocalDateTime fecha) {
@@ -21,7 +24,7 @@ public class RegistroDTO {
         this.bonificacion = bonificacion;
         this.montoBonificacion = montoBonificacion;
         this.montoPagado = montoPagado;
-        this.fecha = fecha;
+        this.fecha = fecha.format(FORMATO);
     }
 
     public String getPuesto() {
@@ -45,7 +48,7 @@ public class RegistroDTO {
     public double getMontoPagado() {
         return montoPagado;
     }
-    public LocalDateTime getFecha() {
+    public String getFecha() {
         return fecha;
     }
     

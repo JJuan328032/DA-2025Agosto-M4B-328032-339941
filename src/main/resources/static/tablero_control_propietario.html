@@ -99,16 +99,6 @@
             }
         }
 
-        /*
-        //Cuando llega un mensaje SSE lo delego al iFrame actual como una respuesta del controlador
-        function procesarMensajeSSE(mensaje) {
-  
-            var iframe = document.getElementById('contenidoFrame');
-            var iframeWindow = iframe.contentWindow;
-            iframeWindow.procesarResultadosSubmit(mensaje); //asumo que el iFrame tiene vistaWeb.js incluida
-        }
-            */
-
         function conexionSSECerrada(event){
               cerrar();
         }

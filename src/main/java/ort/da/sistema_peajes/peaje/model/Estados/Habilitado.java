@@ -47,5 +47,10 @@ public class Habilitado extends EstadoPropietario {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "Habilitado";
+    }
+
 
 }

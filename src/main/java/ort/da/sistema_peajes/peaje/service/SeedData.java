@@ -24,14 +24,15 @@ public class SeedData {
         Propietario prop1 = fachada.agregarPropietario("p", "p", "Carlos Rodríguez", "52468975");
         prop1.setSaldo(4000);
 
-        Propietario prop2 = fachada.agregarPropietario("prop2", "prop456", "Ana Martínez", "50231689");
-        prop2.setSaldo(3000);
+        Propietario prop2 = fachada.agregarPropietario("q", "q", "Ana Martínez", "50231689");
+        prop2.setSaldo(0);
 
         fachada.agregarAdministrador("a", "a", "Juan Pérez", "56464987");
+        fachada.agregarAdministrador("s", "s", "Manuel Kant", "53464987");
 
         
         Bonificacion bonFrecuente = fachada.agregarBonificacion("frecuente");
-        Bonificacion bonTrabajador = fachada.agregarBonificacion("trabajador");
+        Bonificacion bonExonerado = fachada.agregarBonificacion("exonerado");
 
         // Crear puestos con tarifas
         Puesto peaje1 = new Puesto("Peaje Ruta 1", "Km 56 Ruta 1");
@@ -47,10 +48,14 @@ public class SeedData {
             System.out.println("Error al agregar puestos: " + e.getMessage());
         }
 
+        ArrayList<Puesto> puestos = Fachada.getInstancia().getPuestos();
+
+        System.out.println("Puestos desde Seed");
+        for(Puesto p : puestos) System.out.println(p);
 
         // Asignar bonificaciones a propietarios
         Asignacion asig1 = new Asignacion(peaje1, bonFrecuente, LocalDate.of(2025, 1, 1));
-        Asignacion asig2 = new Asignacion(peaje2, bonTrabajador, LocalDate.of(2025, 1, 2));
+        Asignacion asig2 = new Asignacion(peaje2, bonExonerado, LocalDate.of(2025, 1, 2));
         prop1.getAsignaciones().add(asig1);
         prop2.getAsignaciones().add(asig2);
 
@@ -93,7 +98,7 @@ public class SeedData {
         //System.out.println("Primer Registro: " + r1);
 
         Registro r2 = new Registro(peaje1, v2, LocalDateTime.of(2025, 10, 27, 8, 30), tCamioneta);
-        r2.setBonificacion(bonTrabajador.getNombre());
+        r2.setBonificacion(bonExonerado.getNombre());
         r2.setMontoBonificado(0);
         r2.setMontoPagado();
         fachada.agregarRegistro(r2);
@@ -102,7 +107,7 @@ public class SeedData {
         //System.out.println("Segundo Registro: " + r2);
 
         Registro r3 = new Registro(peaje2, v3, LocalDateTime.of(2025, 10, 28, 8, 20), tAuto);
-        r3.setBonificacion(bonTrabajador.getNombre());
+        r3.setBonificacion(bonExonerado.getNombre());
         r3.setMontoBonificado(50);
         r3.setMontoPagado();
         fachada.agregarRegistro(r3);
@@ -120,7 +125,7 @@ public class SeedData {
         //System.out.println("Cuarto Registro: " + r4);
 
         Registro r5 = new Registro(peaje1, v1, LocalDateTime.of(2025, 10, 30, 8, 10), tAuto);
-        r5.setBonificacion(bonTrabajador.getNombre());
+        r5.setBonificacion(bonExonerado.getNombre());
         r5.setMontoBonificado(10);
         r5.setMontoPagado();
         fachada.agregarRegistro(r5);

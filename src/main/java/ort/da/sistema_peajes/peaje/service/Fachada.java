@@ -131,8 +131,7 @@ public class Fachada {
 		return sistemaUsuarios.obtenerAsignacionesDePropietario(encontrado);
 	}
 
-    public void asignarBonificaciones(String cedulaPropietario, String nombreBonificacion, String nombrePuesto) throws PropietarioException, BonificacionException, PuestoException, AsignacionException {
-		Propietario propietario = sistemaUsuarios.buscarPropietarioPorCedula(cedulaPropietario);
+    public void asignarBonificaciones(Propietario propietario, String nombreBonificacion, String nombrePuesto) throws PropietarioException, BonificacionException, PuestoException, AsignacionException {
 		Bonificacion bonificacion = sistemaBonificaciones.obtenerBonificacionByNombre(nombreBonificacion);
 		Puesto puesto = sistemaPuestos.obtenerPuestoPorNombre(nombrePuesto);
 
@@ -140,6 +139,10 @@ public class Fachada {
 		
 		//sistemaUsuarios.buscarPropietarioPorCedula(cedulaPropietario).agregarAsignacion(sistemaBonificaciones.obtenerBonificacionByNombre(nombreBonificacion), sistemaPuestos.obtenerPuestoPorNombre(nombrePuesto));
     }
+
+	public ArrayList<Tarifa> obtenerTarifasPorPuesto(int indicePuesto) throws PuestoException{
+		return sistemaPuestos.obtenerTarifasPuestoPorIndice(indicePuesto);
+	}
 
 
 }

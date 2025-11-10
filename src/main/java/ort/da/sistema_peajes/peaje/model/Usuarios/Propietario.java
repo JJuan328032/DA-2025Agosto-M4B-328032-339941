@@ -50,7 +50,7 @@ public class Propietario extends Usuario {
 
     //usado para mostrar el tipo de estado en tablero CU Tablero de control del propietario
     public String getEstado() {
-        return "Por Hacer";
+        return this.estadoPropietario.toString();
     }
 
     public int getSaldo() {
@@ -110,6 +110,8 @@ public class Propietario extends Usuario {
 
         existeAsignacion(nueva);
         this.asignaciones.add(nueva);
+
+        System.out.println("Mandando avisar(EventosSistema.BONO_ASIGNADO)");
         this.avisar(EventosSistema.BONO_ASIGNADO);
     }
 
@@ -160,25 +162,29 @@ public class Propietario extends Usuario {
 
         if(validarEstado()){
             //validar si tengo una bonificacion en el puesto
-            Asignacion a = this.buscarAsignacionSegunPuesto(registro.getPuesto());
+            Puesto puesto = registro.getPuesto();
+            Vehiculo vehiculo = registro.getVehiculo();
+            int montoTarifa = registro.getMontoTarifa();
+
+
+            Asignacion a = this.buscarAsignacionSegunPuesto(puesto);
 
             //si la tengo, seteo el montoBonificado previamente inicializado en cero
             //Y si dejamos propietario en Bonificacion y si es frecuente accede directamente a esSegundoTransitoDelDia()?
             if(a != null) {
-                //no deja preguntar si es Frecuente :c 
-                //boolean b = (a.getBonificacion() == Frecuente) ? this.esSegundoTransitoDelDia(registro.getPuesto(), registro.getVehiculo(), registro.getFecha()) : false;
-                registro.setMontoBonificado(
-                        a.calcularMontoBonificado(
-                                registro.getMontoTarifa(), 
-                                this.esSegundoTransitoDelDia(
-                                        registro.getPuesto(), 
-                                        registro.getVehiculo(), 
-                                        registro.getFecha()
-                                )
-                            )
-                        );
-                        
-                registro.setBonificacion(a.getBonificacionNombre());
+
+                boolean segundoTransito =  false;
+
+                boolean aux = this.esSegundoTransitoDelDia(puesto, vehiculo, registro.getFecha());
+                System.out.println("segundoTransitoDia: " + aux);
+
+                if(a.getBonificacionNombre() == "frecuente") segundoTransito =  aux;
+
+                double montoBonificado = a.calcularMontoBonificado(montoTarifa, segundoTransito);
+                System.out.println("montoBonificado: " + montoBonificado);
+
+
+                registro.setMontoNombreBono(montoBonificado, a.getBonificacionNombre());
             }
         }
 
@@ -188,13 +194,15 @@ public class Propietario extends Usuario {
 
     private void completarRegistro(Registro registro) throws SaldoException{
         //se usa registro.calcularPrecioFinal() por si existe un montoBonificado. Así se se puede usar para ambos casos
-        descontarTransito(registro.calcularAsignarMontoPagado());
+        descontarTransito(registro.calcularMontoPagar());
+        registro.setMontoPagado();
 
         this.agregarRegistro(registro);
     }
 
     private void descontarTransito(double monto) throws SaldoException{
-        //TODO: queda negativo por la resta?
+        //TODO: queda negativo por la resta? si saldo es cero y monto no
+        System.out.println("Resta descontarTransito: " + (this.saldo - monto));
         if(this.saldo - monto < 0) throw new SaldoException("Saldo insuficiente: " + this.saldo + " para cobrar el total: " + monto);
 
         //funciona si es Exonerado y el saldo es cero

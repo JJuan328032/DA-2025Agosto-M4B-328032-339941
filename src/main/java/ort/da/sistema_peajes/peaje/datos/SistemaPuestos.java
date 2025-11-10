@@ -16,7 +16,7 @@ public class SistemaPuestos {
 	}
 
 	public void agregarPuesto(Puesto puesto) {
-		if(existePuesto(puesto)) this.puestos.add(puesto);
+		if(!existePuesto(puesto)) this.puestos.add(puesto);
 	}
 
 	public ArrayList<Puesto> getPuestos() {
@@ -50,4 +50,8 @@ public class SistemaPuestos {
 		if(indicePuesto > -1 && indicePuesto < this.puestos.size()) return this.puestos.get(indicePuesto);
 		throw new PuestoException("indice inaccesible");
     }
+
+	public ArrayList<Tarifa> obtenerTarifasPuestoPorIndice(int indicePuesto) throws PuestoException{
+		return this.obtenerPuestoPorIndice(indicePuesto).getTarifas();
+	}
 }

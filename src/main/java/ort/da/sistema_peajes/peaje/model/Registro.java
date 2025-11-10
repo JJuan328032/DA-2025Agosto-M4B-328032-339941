@@ -82,6 +82,11 @@ public class Registro {
         return this.puesto.getNombre();
     }
 
+    public void setMontoNombreBono(double monto, String nombre){
+        this.setBonificacion(nombre);
+        this.setMontoBonificado(monto);
+    }
+
     //usado en SeedData
     public void setMontoPagado() {
         this.montoPagado = (double) (this.montoTarifa - this.montoBonificado);
@@ -100,9 +105,9 @@ public class Registro {
     }
 
 
-    public double calcularAsignarMontoPagado(){
+    public double calcularMontoPagar(){
         this.montoPagado = (double) (this.montoTarifa - this.montoBonificado);
-        System.out.println("MontoPagado en Registro: " + this.montoPagado);
+        //System.out.println("MontoPagado en Registro: " + this.montoPagado);
         return this.montoPagado;
     }
 
@@ -116,4 +121,5 @@ public class Registro {
     public boolean validarMismoDia(Puesto puesto2, Vehiculo vehiculo2, LocalDateTime fecha2) {
         return this.puesto.equals(puesto2) && this.vehiculo.equals(vehiculo2) && this.fecha.equals(fecha2);
     }
+
 }

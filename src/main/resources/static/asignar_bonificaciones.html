@@ -8,6 +8,7 @@
     <script src="vistaWeb.js"></script>
 </head>
 <body>
+    <script src="utilesVista.js"></script>
     <div class="page-wrapper">
         <div class="panel">
             <div class="emular-grid">
@@ -76,7 +77,13 @@
         var parametrosInicioVista = '';
         var prefijoNombreFuncionProcesoResultado = 'mostrar_';
 
-        console.log("Cedula Propietario existente: " + 52468975);
+        console.log("Carlos Rodríguez | 52468975");
+        console.log("Vehiculo: DEF456");
+        console.log("          ABC123");
+
+        console.log("Ana Martínez | 50231689");
+        console.log("Vehiculo: JKL012");
+        console.log("          GHI789");
 
         function mostrar_bonificacionesDefinidas(bonificaciones) {
             //console.log(bonificaciones);
@@ -124,6 +131,13 @@
         //SE PUEDE SEPARAR MÁS PARA EVITAR FALIDACIONES INNECESARIAS
 
         function mostrar_bonificaciones(bonos){
+
+            console.log();
+            console.log("Llegó a mostrar_bonificaciones");
+            console.log("Bonos: ", bonos);
+            console.log();
+
+
             // Mostrar la tabla de asignaciones
             const contenedorTabla = document.getElementById("tabla-bonificaciones");
 
@@ -197,8 +211,10 @@
         function mostrar_error(mensaje) {
             alert(mensaje);
         }
-    </script>
 
-    <script src="utilesVista.js"></script>
+        async function excepcionDeAplicacion(mensaje){
+            await mostrarMensaje(mensaje);
+        } 
+    </script>
 </body>
 </html>

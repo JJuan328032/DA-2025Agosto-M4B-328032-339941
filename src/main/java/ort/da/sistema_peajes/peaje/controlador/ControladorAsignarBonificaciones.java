@@ -1,23 +1,26 @@
 package ort.da.sistema_peajes.peaje.controlador;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.security.auth.login.LoginException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import jakarta.servlet.http.HttpSession;
+import observador.Observable;
+import observador.Observador;
 import ort.da.sistema_peajes.ConexionNavegador;
 import ort.da.sistema_peajes.Respuesta;
+import ort.da.sistema_peajes.peaje.dto.AsignacionDTO;
 import ort.da.sistema_peajes.peaje.dto.mappers.MapperAsignacion;
 import ort.da.sistema_peajes.peaje.dto.mappers.MapperPropietarioBonificacion;
 import ort.da.sistema_peajes.peaje.dto.mappers.MapperSoloNombre;
 import ort.da.sistema_peajes.peaje.exceptions.PropietarioException;
 import ort.da.sistema_peajes.peaje.exceptions.PuestoException;
+import ort.da.sistema_peajes.peaje.model.EventosSistema;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
 import ort.da.sistema_peajes.peaje.exceptions.AsignacionException;
 import ort.da.sistema_peajes.peaje.exceptions.BonificacionException;
@@ -28,7 +31,7 @@ import ort.da.sistema_peajes.peaje.service.Fachada;
 @RequestMapping("/bonificaciones")
 @Scope("session")
 
-public class ControladorAsignarBonificaciones {
+public class ControladorAsignarBonificaciones implements Observador{
 
     private Propietario propietario;
     private final ConexionNavegador conexionNavegador; 
@@ -36,13 +39,6 @@ public class ControladorAsignarBonificaciones {
     public ControladorAsignarBonificaciones(@Autowired ConexionNavegador conexionNavegador) {
         this.conexionNavegador = conexionNavegador;
     }
-    @GetMapping(value = "/registrarSSE", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter registrarSSE() {
-        conexionNavegador.conectarSSE();
-        return conexionNavegador.getConexionSSE(); 
-       
-    }
-
 
     // Obtener bonificaciones y puestos para llenar los dropdowns
     @PostMapping("/opciones")
@@ -61,27 +57,41 @@ public class ControladorAsignarBonificaciones {
         
         try{
             this.propietario = Fachada.getInstancia().buscarPropietarioPorCedula(cedula);
+
+            sesionHttp.setAttribute("propietario", this.propietario);
+            //si un admin agrega un bono y están mirando al mismo propietario, la vista debe actualizarse
+            this.propietario.agregarObservador(this);
+
             return Respuesta.lista(formatoPropietario());
         }catch(PropietarioException e){
             return Respuesta.lista(new Respuesta("error", "No se pudo encontrar un propietario con cedula: " + e.getMessage()));
         }
     }
 
-
     //  Asignar bonificaciones a un propietario
     @PostMapping("/propietario/asignar")
     public List<Respuesta> asignarBonificaciones(
-            @RequestParam String cedula,
             @RequestParam String bonificacion,
             @RequestParam String puesto,
             HttpSession sesionHttp) throws PropietarioException, Exception {
 
+
+        ValidarUsuario.validar(sesionHttp, "administrador");
+
         String estado = "mal";
-        String mensaje = "Bonificación: " + bonificacion + " asignada con Éxito en el puesto: " + puesto;
+        String mensaje;
+
+        this.propietario = (Propietario) sesionHttp.getAttribute("propietario");
+
+        if(this.propietario == null){ 
+            mensaje = "Debe buscar un Propietario primero";
+            return Respuesta.lista(new Respuesta(estado, mensaje));
+        }
+
+        mensaje = "Bonificación: " + bonificacion + " asignada con Éxito en el puesto: " + puesto;
 
         try{
-            ValidarUsuario.validar(sesionHttp, "administrador");
-            Fachada.getInstancia().asignarBonificaciones(cedula, bonificacion, puesto);
+            Fachada.getInstancia().asignarBonificaciones(this.propietario, bonificacion, puesto);
             estado = "ok";
         }catch(PropietarioException e){
             mensaje = "No se pudo encontrar un Propietario con nombre: " + e.getMessage();
@@ -93,7 +103,7 @@ public class ControladorAsignarBonificaciones {
             mensaje = "Ya existe un bono " + bonificacion + " en el puesto " + puesto + " asociada a ese propietario. Vuelva a Intentar con otros valores";
         }
 
-        return Respuesta.lista(new Respuesta(estado, mensaje), bonosPropietario());
+        return Respuesta.lista(new Respuesta(estado, mensaje));
     }
 
 
@@ -111,6 +121,24 @@ public class ControladorAsignarBonificaciones {
     }
 
     private Respuesta bonosPropietario(){
-        return new Respuesta("bonificaciones", MapperAsignacion.toDTOList((this.propietario.getAsignaciones())));
+
+        ArrayList<AsignacionDTO> lista = MapperAsignacion.toDTOList((this.propietario.getAsignaciones()));
+
+        System.out.println();
+        for(AsignacionDTO a : lista) System.out.println(a.getBonificacion() + " | " + a.getPuesto());
+
+
+        return new Respuesta("bonificaciones", lista);
+    }
+
+
+    @Override
+    public void actualizar(Object evento, Observable origen) {
+
+        System.out.println("Controller recibió evento: " + evento);
+        if(evento.equals(EventosSistema.BONO_ASIGNADO)){
+            System.out.println("ejecutando bonosPropietario");
+            conexionNavegador.enviarJSON(Respuesta.lista(bonosPropietario()));
+        }
     }
 }

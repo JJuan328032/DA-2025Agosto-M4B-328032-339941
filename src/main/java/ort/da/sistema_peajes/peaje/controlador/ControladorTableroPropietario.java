@@ -1,5 +1,6 @@
 package ort.da.sistema_peajes.peaje.controlador;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import observador.Observable;
 import observador.Observador;
 import ort.da.sistema_peajes.ConexionNavegador;
 import ort.da.sistema_peajes.Respuesta;
+import ort.da.sistema_peajes.peaje.dto.AsignacionDTO;
 import ort.da.sistema_peajes.peaje.dto.mappers.MapperAsignacion;
 import ort.da.sistema_peajes.peaje.dto.mappers.MapperInfoVehiculo;
 import ort.da.sistema_peajes.peaje.dto.mappers.MapperNotificacion;
@@ -67,7 +69,15 @@ public class ControladorTableroPropietario implements Observador{
 
     //Lista de Asignaciones de Peajes del Propietario - Bonificacion, Puesto, FechaAsignada
     private Respuesta asignaciones(Propietario p){
-        return new Respuesta("asignaciones", MapperAsignacion.toDTOList(p.getAsignaciones()));
+
+        ArrayList<AsignacionDTO> lista = MapperAsignacion.toDTOList(p.getAsignaciones());
+
+        for(AsignacionDTO a : lista){
+            System.out.println(a.getBonificacion() + " | " + a.getPuesto());
+        }
+
+
+        return new Respuesta("asignaciones", lista);
     }
 
     //Vehiculos del Propietario - Matricula, Modelo, Color, Transitos, MontoTotal
@@ -92,12 +102,14 @@ public class ControladorTableroPropietario implements Observador{
             conexionNavegador.enviarJSON(Respuesta.lista(propietario(this.propietario), transitosRealizados(this.propietario)));
         }
 
+        System.out.println("recibiendo BONO_ASIGNADO");
         if(evento.equals(EventosSistema.BONO_ASIGNADO)){
-            conexionNavegador.enviarJSON(Respuesta.lista(asignaciones(this.propietario)));
+            System.out.println("mando a vista asignaciones(this.propietario)");
+            conexionNavegador.enviarJSON(asignaciones(this.propietario));
         }
 
         if(evento.equals(EventosSistema.NOTIFICACION)){
-            conexionNavegador.enviarJSON(Respuesta.lista(notificaciones(this.propietario)));
+            conexionNavegador.enviarJSON(notificaciones(this.propietario));
         }
     }
 }

@@ -54,6 +54,15 @@
         urlTarifas = "/emular/tarifas";
         urlEmular = "/emular/transito";
 
+        console.log("Carlos Rodríguez | 52468975");
+        console.log("Vehiculo: DEF456");
+        console.log("          ABC123");
+
+        console.log("Ana Martínez | 50231689");
+        console.log("Vehiculo: JKL012");
+        console.log("          GHI789");
+
+
         function mostrar_puestos(puestos){
             console.log(puestos);
             document.getElementById("puestoContainer").innerHTML = crearListaDesdeJson({data:puestos,id:"indicePuesto",campoMostrar: "nombre", value: "nombre"});
@@ -87,6 +96,7 @@
             const nombre = select.options[select.selectedIndex].text;
             // Construir los datos en formato application/x-www-form-urlencoded
             const params = "nombre=" + encodeURIComponent(nombre);
+            
             
             //console.log("Enviando a " + urlTarifas + " con parámetros: " + params);
             submit(urlTarifas, params);

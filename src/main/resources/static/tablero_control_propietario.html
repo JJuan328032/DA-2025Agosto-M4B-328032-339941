@@ -5,12 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tablero de Control - Propietario</title>
     <link rel="stylesheet" href="tablero_control_propietario.css">
-    <script src="utilesVista.js"></script>
     <script src="vistaWeb.js"></script>
     
 </head>
 <body>
-    
+    <script src="utilesVista.js"></script>
     <div class="tablero-container">
         <!-- Datos del Propietario -->
         <section class="seccion" id="datos-propietario">
@@ -70,6 +69,7 @@
         }
 
         function mostrar_asignaciones(asignaciones) {
+            console.log("Llegaron asignaciones: ", asignaciones);
             const bonificacionesDiv = document.getElementById('lista-bonificaciones');
             bonificacionesDiv.innerHTML = crearTablaDesdeJson(asignaciones);
         }

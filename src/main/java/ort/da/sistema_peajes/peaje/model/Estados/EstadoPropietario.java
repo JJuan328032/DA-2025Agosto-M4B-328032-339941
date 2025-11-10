@@ -29,5 +29,5 @@ public abstract class EstadoPropietario {
     public abstract boolean bonificable();
     public abstract void puedeTransitar() throws EstadoException;
 
-
+    public abstract String toString();
 }

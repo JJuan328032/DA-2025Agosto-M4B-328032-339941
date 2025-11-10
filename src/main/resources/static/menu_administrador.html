@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administración</title>
     <link rel="stylesheet" href="menu_administrador.css">
-    <script src="utilesVista.js"></script>
     <script src="vistaWeb.js"></script>
     <script src='sse.js'></script>
 </head>
 <body>
+    <script src="utilesVista.js"></script>
     <!-- Sidebar -->
     <nav class="sidebar">
         <button class="toggle-button" onclick="toggleSidebar()"></button>
         <div class="nav-container">
-            <h2><span style="text-decoration: none; color: inherit;">Sistema de Peajes</span></h2>
+            <h2><span style="text-decoration: none; color: inherit;" id="nombre"></span></h2>
             <ul class="nav-links">
                 <li><button onclick="cargarContenido('asignar_bonificaciones.html')" class="nav-button">Asignar Bonificación</button></li>
                 <li><button onclick="cargarContenido('emular_transito.html')" class="nav-button">Emular Tránsito</button></li>
@@ -30,12 +30,18 @@
 
     <script>
         // URL para cerrar sesión (a completar)
-        const URL_CERRAR_SESION = "acceso/salirAdministrador"; // Esta URL debe ser reemplazada por la correcta
+        urlIniciarVista="/menu/vistaConectada";
+        urlCierreVista = "acceso/salirAdministrador";
         urlRegistroSSE="/menu/registrarSSE";
         
+        function mostrar_nombre(nombre){
+            console.log(nombre);
+            document.getElementById("nombre").innerHTML = nombre;
+        }
+
         function cerrarSesion() {
             // Realizar la petición de cierre de sesión
-            submit(URL_CERRAR_SESION, "");
+            submit(urlCierreVista, "");
         }
 
         // Manejador de respuesta exitosa del cierre de sesión
@@ -55,6 +61,20 @@
             localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
         }
 
+        function procesarErrorSubmit(status,text){
+            if(status==400){
+                window.location.href="login_Administrador.html";
+            }
+        }
+
+        //Cuando llega un mensaje SSE lo delego al iFrame actual como una respuesta del controlador
+        function procesarMensajeSSE(mensaje) {
+  
+            var iframe = document.getElementById('contenidoFrame');
+            var iframeWindow = iframe.contentWindow;
+            iframeWindow.procesarResultadosSubmit(mensaje); //asumo que el iFrame tiene vistaWeb.js incluida
+        }
+
         // Restaurar el estado del sidebar al cargar la página
         window.addEventListener('load', function() {
             const sidebar = document.querySelector('.sidebar');
@@ -63,6 +83,19 @@
                 sidebar.classList.add('collapsed');
             }
         });
+
+        function conexionSSECerrada(event){
+              cerrar();
+        }
+        async function cerrar(){
+            let respuesta = await mostrarConfirmacion("Se ha cerrado la aplicacion en esta ventana", "Intenar volver a abrirla", "Cerrar");
+            if (respuesta) {
+                location.reload();
+            } else {
+                document.body.innerHTML = '';
+            }
+        }
+
     </script>
 
 </body>

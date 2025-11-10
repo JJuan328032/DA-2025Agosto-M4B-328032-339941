@@ -27,7 +27,6 @@ public class ControladorLogin {
 
         Propietario p = Fachada.getInstancia().loginPropietario(user, pass);
         
-        
         sesionHttp.setAttribute("propietario", p);
         return Respuesta.lista(new Respuesta("LoginExitoso", "tablero_control_propietario.html"));
     }

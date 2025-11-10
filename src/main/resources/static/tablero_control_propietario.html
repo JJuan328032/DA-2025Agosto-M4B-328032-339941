@@ -6,6 +6,7 @@
     <title>Tablero de Control - Propietario</title>
     <link rel="stylesheet" href="tablero_control_propietario.css">
     <script src="vistaWeb.js"></script>
+    <script src='sse.js'></script>
     
 </head>
 <body>
@@ -61,6 +62,7 @@
     <script>
         // URL de inicio para la vista
         urlIniciarVista = "/tablero/informacion";
+        urlRegistroSSE="/tablero/registrarSSE";
 
         // Funciones para mostrar los datos recibidos del controlador
         function mostrar_propietario(propietario) {
@@ -89,6 +91,34 @@
             lista.innerHTML = '';
             // Opcional: llamar al backend para marcar como leídas
             submit('/api/propietario/notificaciones/borrar', '');
+        }
+
+        function procesarErrorSubmit(status,text){
+            if(status==400){
+                window.location.href="login_Propietario.html";
+            }
+        }
+
+        /*
+        //Cuando llega un mensaje SSE lo delego al iFrame actual como una respuesta del controlador
+        function procesarMensajeSSE(mensaje) {
+  
+            var iframe = document.getElementById('contenidoFrame');
+            var iframeWindow = iframe.contentWindow;
+            iframeWindow.procesarResultadosSubmit(mensaje); //asumo que el iFrame tiene vistaWeb.js incluida
+        }
+            */
+
+        function conexionSSECerrada(event){
+              cerrar();
+        }
+        async function cerrar(){
+            let respuesta = await mostrarConfirmacion("Se ha cerrado la aplicacion en esta ventana", "Intenar volver a abrirla", "Cerrar");
+            if (respuesta) {
+                location.reload();
+            } else {
+                document.body.innerHTML = '';
+            }
         }
     </script>
 </body>

@@ -1,6 +1,5 @@
 package ort.da.sistema_peajes.peaje.controlador;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.security.auth.login.LoginException;
@@ -14,7 +13,6 @@ import observador.Observable;
 import observador.Observador;
 import ort.da.sistema_peajes.ConexionNavegador;
 import ort.da.sistema_peajes.Respuesta;
-import ort.da.sistema_peajes.peaje.dto.AsignacionDTO;
 import ort.da.sistema_peajes.peaje.dto.mappers.MapperAsignacion;
 import ort.da.sistema_peajes.peaje.dto.mappers.MapperPropietarioBonificacion;
 import ort.da.sistema_peajes.peaje.dto.mappers.MapperSoloNombre;
@@ -122,22 +120,24 @@ public class ControladorAsignarBonificaciones implements Observador{
 
     private Respuesta bonosPropietario(){
 
+        /*
         ArrayList<AsignacionDTO> lista = MapperAsignacion.toDTOList((this.propietario.getAsignaciones()));
 
         System.out.println();
         for(AsignacionDTO a : lista) System.out.println(a.getBonificacion() + " | " + a.getPuesto());
+        */
 
 
-        return new Respuesta("bonificaciones", lista);
+        return new Respuesta("bonificaciones", MapperAsignacion.toDTOList((this.propietario.getAsignaciones())));
     }
 
 
     @Override
     public void actualizar(Object evento, Observable origen) {
 
-        System.out.println("Controller recibió evento: " + evento);
+        //System.out.println("Controller recibió evento: " + evento);
         if(evento.equals(EventosSistema.BONO_ASIGNADO)){
-            System.out.println("ejecutando bonosPropietario");
+            //System.out.println("ejecutando bonosPropietario");
             conexionNavegador.enviarJSON(Respuesta.lista(bonosPropietario()));
         }
     }

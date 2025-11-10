@@ -72,6 +72,7 @@ public class ControladorTableroPropietario implements Observador{
 
         ArrayList<AsignacionDTO> lista = MapperAsignacion.toDTOList(p.getAsignaciones());
 
+        System.out.println("asignaciones desde TableroPropietario");
         for(AsignacionDTO a : lista){
             System.out.println(a.getBonificacion() + " | " + a.getPuesto());
         }
@@ -102,14 +103,14 @@ public class ControladorTableroPropietario implements Observador{
             conexionNavegador.enviarJSON(Respuesta.lista(propietario(this.propietario), transitosRealizados(this.propietario)));
         }
 
-        System.out.println("recibiendo BONO_ASIGNADO");
+        System.out.println("recibiendo BONO_ASIGNADO TableroPropietario");
         if(evento.equals(EventosSistema.BONO_ASIGNADO)){
-            System.out.println("mando a vista asignaciones(this.propietario)");
-            conexionNavegador.enviarJSON(asignaciones(this.propietario));
+            System.out.println("mando a vista asignaciones(this.propietario) dessde TableroPropietario");
+            conexionNavegador.enviarJSON(Respuesta.lista(asignaciones(this.propietario)));
         }
 
         if(evento.equals(EventosSistema.NOTIFICACION)){
-            conexionNavegador.enviarJSON(notificaciones(this.propietario));
+            conexionNavegador.enviarJSON(Respuesta.lista(notificaciones(this.propietario)));
         }
     }
 }

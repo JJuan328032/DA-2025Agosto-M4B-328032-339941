@@ -49,4 +49,10 @@ public class Suspendido extends EstadoPropietario {
         return false;
     }
 
+    @Override
+    public String getNombre() {
+        return "Suspendido";
+        
+    }
+
 }

@@ -48,4 +48,9 @@ public class Penalizado extends EstadoPropietario {
         return false;
     }
 
+    @Override
+    public String getNombre() {
+        return "Penalizado";
+    }
+
 }

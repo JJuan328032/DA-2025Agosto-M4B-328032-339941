@@ -49,9 +49,8 @@ public class Propietario extends Usuario {
 
     //usado para mostrar el tipo de estado en tablero CU Tablero de control del propietario
     public String getEstado() {
-        return "Por Hacer";
-    }
-
+        return this.estadoPropietario.getNombre();
+    }   
     public int getSaldo() {
         return this.saldo;
     }
@@ -116,8 +115,6 @@ public class Propietario extends Usuario {
 	public void Validar() throws EstadoException, LoginException {
 		this.estadoPropietario.puedeEntrar();
 	}
-
-
 
 
     public ArrayList<InfoVehiculo> obtenerInfoVehiculos(){

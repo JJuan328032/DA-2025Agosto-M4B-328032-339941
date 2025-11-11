@@ -8,7 +8,7 @@ public class SinBono extends Bonificacion{
 
     @Override
     public double calcular(int monto, boolean validar) {
-        return monto;
+        return 0;
     }
 
 }

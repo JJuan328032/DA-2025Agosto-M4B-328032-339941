@@ -31,6 +31,8 @@ public class SistemaRegistro {
 	public InfoTransito realizarTransito(Puesto puesto, Vehiculo vehiculo, LocalDateTime fechaHora) throws SaldoException, EstadoException, Exception{
 		Tarifa tarifas = puesto.obtenerTarifaSegunCategoriaVehiculo(vehiculo);
 		Registro r = new Registro(puesto, vehiculo, fechaHora, tarifas);
+
+		//se cobra antes para validar estado de Propietario
 		r.cobrar();
 		
 		this.agregarRegistro(r);

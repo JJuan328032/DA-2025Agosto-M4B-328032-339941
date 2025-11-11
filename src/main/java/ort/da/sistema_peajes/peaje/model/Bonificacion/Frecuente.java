@@ -9,6 +9,6 @@ public class Frecuente extends Bonificacion{
 	@Override
 	public double calcular(int monto, boolean validar) {
 		if(validar) return this.getDescuento().calcularDescuento(monto);
-		return monto;
+		return 0;
 	}
 }

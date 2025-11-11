@@ -98,7 +98,7 @@ public class ControladorAsignarBonificaciones implements Observador{
         }catch(PuestoException e){
             mensaje = "No se pudo encontrar un Puesto con nombre: " + e.getMessage();
         }catch(AsignacionException e){
-            mensaje = "Ya existe un bono " + bonificacion + " en el puesto " + puesto + " asociada a ese propietario. Vuelva a Intentar con otros valores";
+            mensaje = "Ya existe un bono en el puesto " + puesto + " asociada a ese propietario. Vuelva a Intentar con otros valores";
         }
 
         return Respuesta.lista(new Respuesta(estado, mensaje));
@@ -119,15 +119,6 @@ public class ControladorAsignarBonificaciones implements Observador{
     }
 
     private Respuesta bonosPropietario(){
-
-        /*
-        ArrayList<AsignacionDTO> lista = MapperAsignacion.toDTOList((this.propietario.getAsignaciones()));
-
-        System.out.println();
-        for(AsignacionDTO a : lista) System.out.println(a.getBonificacion() + " | " + a.getPuesto());
-        */
-
-
         return new Respuesta("bonificaciones", MapperAsignacion.toDTOList((this.propietario.getAsignaciones())));
     }
 
@@ -135,9 +126,7 @@ public class ControladorAsignarBonificaciones implements Observador{
     @Override
     public void actualizar(Object evento, Observable origen) {
 
-        //System.out.println("Controller recibió evento: " + evento);
         if(evento.equals(EventosSistema.BONO_ASIGNADO)){
-            //System.out.println("ejecutando bonosPropietario");
             conexionNavegador.enviarJSON(Respuesta.lista(bonosPropietario()));
         }
     }

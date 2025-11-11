@@ -53,7 +53,7 @@ public class Vehiculo {
     }
 
     public void realizarPago(Registro registro) throws SaldoException, EstadoException{
-        this.getPropietario().realizarPago(registro);
+		Pagar.realizarPagoSimple(this.getPropietario(), registro);
     }
 
 

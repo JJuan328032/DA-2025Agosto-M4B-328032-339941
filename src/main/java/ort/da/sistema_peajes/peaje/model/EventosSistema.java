@@ -5,5 +5,6 @@ public enum EventosSistema {
     SALDO,
     BONO_ASIGNADO,
     TRANSITO_REALIZADO,
-    NOTIFICACION
+    NOTIFICACION,
+    ESTADO_NOTIFICACION
 }

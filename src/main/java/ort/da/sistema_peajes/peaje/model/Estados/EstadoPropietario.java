@@ -5,20 +5,18 @@ import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
 
 public abstract class EstadoPropietario {
 
-    @SuppressWarnings("unused")
     private Propietario propietario;
 
     public EstadoPropietario(Propietario propietario) {
         this.propietario = propietario;
     }
 
+    public Propietario getPropietario(){ return this.propietario;}
     
 
     public boolean mismoEstado(EstadoPropietario estado) {
         return this.getClass().equals(estado.getClass());
     }
-
-    public abstract void puedeEntrar() throws EstadoException;
 
     public abstract void habilitado() throws EstadoException;
     public abstract void suspendido() throws EstadoException;
@@ -28,6 +26,7 @@ public abstract class EstadoPropietario {
 
     public abstract boolean bonificable();
     public abstract void puedeTransitar() throws EstadoException;
-
+    public abstract void puedeEntrar() throws EstadoException;
+    
     public abstract String toString();
 }

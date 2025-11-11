@@ -12,7 +12,7 @@ public class Trabajador extends Bonificacion{
 	@Override
 	public double calcular(int monto, boolean validar) {
 		LocalDate fecha = LocalDate.now();
-		if(fecha.getDayOfWeek().equals(DayOfWeek.SATURDAY) || fecha.getDayOfWeek().equals(DayOfWeek.SUNDAY)) return monto;
+		if(fecha.getDayOfWeek().equals(DayOfWeek.SATURDAY) || fecha.getDayOfWeek().equals(DayOfWeek.SUNDAY)) return 0;
 		return this.getDescuento().calcularDescuento(monto);
 	}
 }

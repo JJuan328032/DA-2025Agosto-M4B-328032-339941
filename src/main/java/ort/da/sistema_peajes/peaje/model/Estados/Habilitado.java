@@ -17,22 +17,22 @@ public class Habilitado extends EstadoPropietario {
 
     @Override
     public void habilitado() throws EstadoException {
-        //ya esta habilitado
+        throw new EstadoException("Habilitado");
     }
 
     @Override
     public void suspendido() throws EstadoException {
-        throw new EstadoException("No se puede suspender un propietario habilitado directamente. Debe ser penalizado primero.");
+        this.getPropietario().cambiarEstado(new Suspendido(getPropietario()));
     }
 
     @Override
     public void penalizado() throws EstadoException {
-        throw new EstadoException("No se puede penalizar un propietario habilitado directamente. Debe ser suspendido primero.");
+        this.getPropietario().cambiarEstado(new Penalizado(getPropietario()));
     }   
 
     @Override
     public void deshabilitado() throws EstadoException {
-        throw new EstadoException("No se puede deshabilitar un propietario habilitado directamente. Debe ser penalizado primero.");
+        this.getPropietario().cambiarEstado(new Deshabilitado(getPropietario()));
     }
 
 

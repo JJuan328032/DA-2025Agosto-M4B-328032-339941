@@ -7,7 +7,6 @@ public class Suspendido extends EstadoPropietario {
 
     public Suspendido(Propietario propietario) {
         super(propietario);
-        //TODO Auto-generated constructor stub
     }
 
     @Override
@@ -17,26 +16,22 @@ public class Suspendido extends EstadoPropietario {
 
     @Override
     public void habilitado() throws EstadoException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'habilitado'");
+        this.getPropietario().cambiarEstado(new Habilitado(getPropietario()));
     }
 
     @Override
     public void suspendido() throws EstadoException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'suspendido'");
+        throw new EstadoException("Suspendido");
     }
 
     @Override
     public void penalizado() throws EstadoException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'penalizado'");
+        this.getPropietario().cambiarEstado(new Penalizado(getPropietario()));
     }
 
     @Override
     public void deshabilitado() throws EstadoException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deshabilitado'");
+        this.getPropietario().cambiarEstado(new Deshabilitado(getPropietario()));
     }
 
     @Override

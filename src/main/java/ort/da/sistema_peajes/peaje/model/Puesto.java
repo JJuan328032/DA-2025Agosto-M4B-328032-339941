@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import ort.da.sistema_peajes.peaje.model.Bonificacion.Bonificacion;
 
 public class Puesto {
+	
 	private String nombre;
 	private String direccion;
 	private ArrayList<Tarifa> tarifas;

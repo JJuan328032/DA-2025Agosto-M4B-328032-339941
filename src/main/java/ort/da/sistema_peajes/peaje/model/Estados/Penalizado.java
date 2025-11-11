@@ -16,26 +16,22 @@ public class Penalizado extends EstadoPropietario {
 
     @Override
     public void habilitado() throws EstadoException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'habilitado'");
+        this.getPropietario().cambiarEstado(new Habilitado(getPropietario()));
     }
 
     @Override
     public void suspendido() throws EstadoException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'suspendido'");
+        this.getPropietario().cambiarEstado(new Suspendido(getPropietario()));
     }
 
     @Override
     public void penalizado() throws EstadoException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'penalizado'");
+        throw new EstadoException("Penalizado");
     }
 
     @Override
     public void deshabilitado() throws EstadoException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deshabilitado'");
+        this.getPropietario().cambiarEstado(new Deshabilitado(getPropietario()));
     }
 
     @Override

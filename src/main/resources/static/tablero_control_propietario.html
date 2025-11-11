@@ -86,6 +86,11 @@
             transitosDiv.innerHTML = crearTablaDesdeJson(transitos);
         }
 
+        function mostrar_notificaciones(notificaciones){
+            const notificacionesSistema = document.getElementById('lista-notificaciones');
+            notificacionesSistema.innerHTML = crearTablaDesdeJson(notificaciones);
+        }
+
         function borrarNotificaciones() {
             const lista = document.getElementById('lista-notificaciones');
             lista.innerHTML = '';

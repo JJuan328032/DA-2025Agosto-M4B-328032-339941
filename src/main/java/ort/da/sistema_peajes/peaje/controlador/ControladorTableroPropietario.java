@@ -88,13 +88,16 @@ public class ControladorTableroPropietario implements Observador{
 
     @Override
     public void actualizar(Object evento, Observable origen) {
-        System.out.println("Entrando en actualizar de tableroPropietario");
         if(evento.equals(EventosSistema.TRANSITO_REALIZADO) || evento.equals(EventosSistema.ESTADO)){
             conexionNavegador.enviarJSON(Respuesta.lista(propietario(this.propietario), transitosRealizados(this.propietario)));
         }
 
         if(evento.equals(EventosSistema.BONO_ASIGNADO)){
             conexionNavegador.enviarJSON(Respuesta.lista(asignaciones(this.propietario)));
+        }
+
+        if(evento.equals(EventosSistema.ESTADO_NOTIFICACION)){
+            conexionNavegador.enviarJSON(Respuesta.lista(propietario(this.propietario), notificaciones(this.propietario)));
         }
 
         if(evento.equals(EventosSistema.NOTIFICACION)){

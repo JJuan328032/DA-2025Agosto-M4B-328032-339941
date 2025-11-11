@@ -14,7 +14,6 @@ import javax.security.auth.login.LoginException;
 
 import ort.da.sistema_peajes.peaje.exceptions.AsignacionException;
 import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
-import ort.da.sistema_peajes.peaje.exceptions.SaldoException;
 import ort.da.sistema_peajes.peaje.model.Asignacion;
 import ort.da.sistema_peajes.peaje.model.EventosSistema;
 import ort.da.sistema_peajes.peaje.model.InfoVehiculo;
@@ -99,24 +98,31 @@ public class Propietario extends Usuario {
 
     public void agregarRegistro(Registro r) {
         this.registros.add(r);
+        this.avisar(EventosSistema.TRANSITO_REALIZADO);
     }
 
     public void agregarAsignacion(Asignacion a) {
         this.asignaciones.add(a);
     }
 
-    public void agregarAsignacion(Bonificacion obtenerBonificacionByNombre, Puesto obtenerPuestoPorNombre) throws AsignacionException{
-        Asignacion nueva = new Asignacion(obtenerPuestoPorNombre, obtenerBonificacionByNombre, LocalDate.now());
+    public void agregarAsignacion(Bonificacion bonificacion, Puesto puesto) throws AsignacionException{
+        Asignacion nueva = new Asignacion(puesto, bonificacion, LocalDate.now());
 
-        existeAsignacion(nueva);
+        existeAsignacion(puesto);
         this.asignaciones.add(nueva);
+        //this.notificaciones.add(Notificacion.notificarBonificacion(bonificacion.getNombre()));
 
-        System.out.println("Mandando avisar(EventosSistema.BONO_ASIGNADO)");
+        // se puede mejorar para avisar una sola vez?
         this.avisar(EventosSistema.BONO_ASIGNADO);
+        //this.avisar(EventosSistema.NOTIFICACION);
     }
 
-    public void agregarNotificacion(String mensaje) {
-        notificaciones.add(new Notificacion(mensaje));
+    public void agregarNotificacion(Notificacion notificacion) {
+        agregarNotificacionAlPrincipio(notificacion);
+
+        if(this.saldo < this.saldoMinimo) agregarNotificacionAlPrincipio(Notificacion.notificarSaldoBajo(saldo));
+
+        this.avisar(EventosSistema.NOTIFICACION);
     }
 
 
@@ -124,9 +130,6 @@ public class Propietario extends Usuario {
 	public void Validar() throws EstadoException, LoginException {
 		this.estadoPropietario.puedeEntrar();
 	}
-
-
-
 
     public ArrayList<InfoVehiculo> obtenerInfoVehiculos(){
         ArrayList<InfoVehiculo> lista = new ArrayList<>();
@@ -153,63 +156,7 @@ public class Propietario extends Usuario {
 		return new InfoVehiculo(v, contador, montoTotal);
 	}
 
-
-    public void realizarPago(Registro registro) throws SaldoException, EstadoException{
-
-        //nueva clase Pagar
-        //conoce a Registro, Vehiculo, Propietario
-        //maneja registro de quienes pagaron y c centraliza la logica de pago
-
-        if(validarEstado()){
-            //validar si tengo una bonificacion en el puesto
-            Puesto puesto = registro.getPuesto();
-            Vehiculo vehiculo = registro.getVehiculo();
-            int montoTarifa = registro.getMontoTarifa();
-
-
-            Asignacion a = this.buscarAsignacionSegunPuesto(puesto);
-
-            //si la tengo, seteo el montoBonificado previamente inicializado en cero
-            //Y si dejamos propietario en Bonificacion y si es frecuente accede directamente a esSegundoTransitoDelDia()?
-            if(a != null) {
-
-                boolean segundoTransito =  false;
-
-                boolean aux = this.esSegundoTransitoDelDia(puesto, vehiculo, registro.getFecha());
-                System.out.println("segundoTransitoDia: " + aux);
-
-                if(a.getBonificacionNombre() == "frecuente") segundoTransito =  aux;
-
-                double montoBonificado = a.calcularMontoBonificado(montoTarifa, segundoTransito);
-                System.out.println("montoBonificado: " + montoBonificado);
-
-
-                registro.setMontoNombreBono(montoBonificado, a.getBonificacionNombre());
-            }
-        }
-
-        completarRegistro(registro);
-        this.avisar(EventosSistema.TRANSITO_REALIZADO);
-    }
-
-    private void completarRegistro(Registro registro) throws SaldoException{
-        //se usa registro.calcularPrecioFinal() por si existe un montoBonificado. Así se se puede usar para ambos casos
-        descontarTransito(registro.calcularMontoPagar());
-        registro.setMontoPagado();
-
-        this.agregarRegistro(registro);
-    }
-
-    private void descontarTransito(double monto) throws SaldoException{
-        //TODO: queda negativo por la resta? si saldo es cero y monto no
-        System.out.println("Resta descontarTransito: " + (this.saldo - monto));
-        if(this.saldo - monto < 0) throw new SaldoException("Saldo insuficiente: " + this.saldo + " para cobrar el total: " + monto);
-
-        //funciona si es Exonerado y el saldo es cero
-        this.saldo -= monto;
-    }
-
-    private boolean validarEstado() throws EstadoException{
+    public boolean validarEstado() throws EstadoException{
         //si no puede, manda exception y corta ejecucion
         this.estadoPropietario.puedeTransitar();
 
@@ -217,7 +164,7 @@ public class Propietario extends Usuario {
         return this.estadoPropietario.bonificable();
     }
 
-    private Asignacion buscarAsignacionSegunPuesto(Puesto puesto) {
+    public Asignacion buscarAsignacionSegunPuesto(Puesto puesto) {
         for(Asignacion a : this.asignaciones){
             if(a.equals(puesto)) return a;
         }
@@ -225,7 +172,7 @@ public class Propietario extends Usuario {
         return null;
     }
 
-    private void existeAsignacion(Asignacion buscada) throws AsignacionException{
+    private void existeAsignacion(Puesto buscada) throws AsignacionException{
         for(Asignacion a : this.asignaciones) if(a.equals(buscada)) throw new AsignacionException("");
     }
 
@@ -239,4 +186,25 @@ public class Propietario extends Usuario {
 		return cont == 2;
 	}
 
+    public void restarMonto(double monto){
+        this.saldo -= monto;
+    }
+
+
+    public void cambiarEstado(EstadoPropietario nuevo) {
+        this.estadoPropietario = nuevo;
+        agregarNotificacionAlPrincipio(Notificacion.notificarEstado(nuevo.toString()));
+
+        //TODO reorganizar para avisar una sola vez
+        this.avisar(EventosSistema.ESTADO_NOTIFICACION);
+    }
+
+    //usado en SeedData
+    public void agregarNotificacion(String string) {
+        agregarNotificacionAlPrincipio(new Notificacion(string));
+    }
+
+    private void agregarNotificacionAlPrincipio(Notificacion n){
+        this.notificaciones.add(0, n);
+    }
 }

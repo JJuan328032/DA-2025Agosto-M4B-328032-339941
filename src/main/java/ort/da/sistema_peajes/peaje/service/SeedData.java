@@ -1,6 +1,7 @@
 package ort.da.sistema_peajes.peaje.service;
 
 import ort.da.sistema_peajes.peaje.model.Bonificacion.*;
+import ort.da.sistema_peajes.peaje.model.Estados.Deshabilitado;
 import ort.da.sistema_peajes.peaje.model.*;
 import ort.da.sistema_peajes.peaje.model.Usuarios.*;
 
@@ -26,6 +27,9 @@ public class SeedData {
 
         Propietario prop2 = fachada.agregarPropietario("q", "q", "Ana Martínez", "50231689");
         prop2.setSaldo(0);
+
+        Propietario desabilitado = fachada.agregarPropietario("d", "d", "Facundo Nieves", "50231649");
+        desabilitado.setEstadoPropietario(new Deshabilitado(desabilitado));
 
         fachada.agregarAdministrador("a", "a", "Juan Pérez", "56464987");
         fachada.agregarAdministrador("s", "s", "Manuel Kant", "53464987");

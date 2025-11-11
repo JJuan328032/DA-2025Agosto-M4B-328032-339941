@@ -92,8 +92,6 @@ public class Fachada {
 		Vehiculo vehiculo = sistemaVehiculos.obtenerVehiculoPorMatricula(matricula);
 
 		return sistemaRegistro.realizarTransito(puesto, vehiculo, fechaHora);
-
-		//return sistemaRegistro.realizarTransito(sistemaPuestos.obtenerPuestoPorIndice(indicePuesto), sistemaVehiculos.obtenerVehiculoPorMatricula(matricula), fechaHora);
     }
 
 	public void agregarPuesto(Puesto peaje1) throws PuestoException{
@@ -136,8 +134,6 @@ public class Fachada {
 		Puesto puesto = sistemaPuestos.obtenerPuestoPorNombre(nombrePuesto);
 
 		propietario.agregarAsignacion(bonificacion, puesto);
-		
-		//sistemaUsuarios.buscarPropietarioPorCedula(cedulaPropietario).agregarAsignacion(sistemaBonificaciones.obtenerBonificacionByNombre(nombreBonificacion), sistemaPuestos.obtenerPuestoPorNombre(nombrePuesto));
     }
 
 	public ArrayList<Tarifa> obtenerTarifasPorPuesto(int indicePuesto) throws PuestoException{

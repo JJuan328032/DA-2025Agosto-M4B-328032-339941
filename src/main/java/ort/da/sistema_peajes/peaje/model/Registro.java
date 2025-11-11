@@ -111,13 +111,6 @@ public class Registro {
         return this.montoPagado;
     }
 
-    /*
-    public double calcularPrecioFinal() {
-        return this.montoTarifa - this.montoBonificado;
-    }
-    */
-
-
     public boolean validarMismoDia(Puesto puesto2, Vehiculo vehiculo2, LocalDateTime fecha2) {
         return this.puesto.equals(puesto2) && this.vehiculo.equals(vehiculo2) && this.fecha.equals(fecha2);
     }

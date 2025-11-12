@@ -45,8 +45,8 @@ public class Deshabilitado extends EstadoPropietario {
     }
 
     @Override
-    public String toString() {
-        return "Desabilitado";
+    public String getNombre() {
+        return "Deshabilitado";
     }
 
     

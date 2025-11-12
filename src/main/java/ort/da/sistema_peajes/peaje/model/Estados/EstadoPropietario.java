@@ -1,5 +1,7 @@
 package ort.da.sistema_peajes.peaje.model.Estados;
 
+import java.util.List;
+
 import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
 
@@ -11,7 +13,6 @@ public abstract class EstadoPropietario {
         this.propietario = propietario;
     }
 
-    public Propietario getPropietario(){ return this.propietario;}
     
 
     public boolean mismoEstado(EstadoPropietario estado) {
@@ -26,7 +27,8 @@ public abstract class EstadoPropietario {
 
     public abstract boolean bonificable();
     public abstract void puedeTransitar() throws EstadoException;
-    public abstract void puedeEntrar() throws EstadoException;
-    
-    public abstract String toString();
+
+
 }
+
+

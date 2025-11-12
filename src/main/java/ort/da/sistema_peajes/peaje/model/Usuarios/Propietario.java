@@ -49,9 +49,9 @@ public class Propietario extends Usuario {
 
     //usado para mostrar el tipo de estado en tablero CU Tablero de control del propietario
     public String getEstado() {
-        return this.estadoPropietario.toString();
-    }
-
+        return this.estadoPropietario.getNombre();
+    }   
+    
     public int getSaldo() {
         return this.saldo;
     }
@@ -133,6 +133,7 @@ public class Propietario extends Usuario {
 		this.estadoPropietario.puedeEntrar();
 	}
 
+
     public ArrayList<InfoVehiculo> obtenerInfoVehiculos(){
         ArrayList<InfoVehiculo> lista = new ArrayList<>();
 
@@ -211,4 +212,7 @@ public class Propietario extends Usuario {
     private void agregarNotificacionAlPrincipio(Notificacion n){
         this.notificaciones.add(0, n);
     }
+
+
+
 }

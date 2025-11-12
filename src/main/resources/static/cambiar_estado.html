@@ -4,18 +4,121 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cambiar Estado</title>
-    <link rel="stylesheet" href="css/menu_administrador.css">
+    <link rel="stylesheet" href="menu_administrador.css">
+    <script src="utilesVista.js"></script>
     <script src="vistaWeb.js"></script>
 </head>
 <body>
-    <script src="utilesVista.js"></script>
-    <main class="main-content">
-        <section class="welcome-section">
-            <h1>Gestión de Estados</h1>
-            <p>Modifica el estado de los elementos del sistema.</p>
-        </section>
+ <main>
+        <h2>Cambiar estado de propietario</h2>
 
-        <!-- Aquí irá el formulario de cambio de estados -->
+        <!-- Buscar propietario -->
+        <div class="busqueda">
+            <label for="cedula">Cédula:</label>
+            <input type="text" id="cedula" name="cedula" placeholder="Ingrese cédula">
+            <button onclick="buscarPropietario()">Buscar</button>
+        </div>
+
+        <!-- Información del propietario -->
+        <div class="info-propietario" style="display:none; margin-top:20px;">
+            <p><strong>Nombre:</strong> <span id="nombre-propietario"></span></p>
+            <p><strong>Estado actual:</strong> <span id="estado-propietario"></span></p>
+
+            <label for="nuevo-estado">Nuevo Estado:</label>
+            <select id="nuevo-estado" name="nuevoEstado" required></select>
+
+            <button onclick="cambiarEstado()" style="display:none;">Cambiar estado</button>
+        </div>
+
+        <!-- Mensaje de estado -->
+        <div id="mensaje-estado" style="margin-top:15px; padding:10px; border-radius:5px;"></div>
     </main>
+
+    <script>
+        // Variables estándar para vistaWeb.js
+        var urlIniciarVista = '/estado/opciones';
+        var parametrosInicioVista = '';
+        var prefijoNombreFuncionProcesoResultado = 'mostrar_';
+
+        // Cargar estados definidos desde backend
+        function mostrar_estadosDefinidos(estados) {
+            const select = document.getElementById("nuevo-estado");
+            if (!select) {
+                console.error("Elemento #nuevo-estado no encontrado en el DOM");
+                return;
+            }
+
+            select.innerHTML = "";
+            estados.forEach(e => {
+                const option = document.createElement("option");
+                option.value = e;
+                option.textContent = e;
+                select.appendChild(option);
+            });
+
+            console.log("Estados cargados:", estados);
+        }
+
+        // Buscar propietario por cédula
+        function buscarPropietario() {
+            const cedula = document.getElementById('cedula').value.trim();
+            if (!cedula) {
+                alert('Ingrese una cédula');
+                return;
+            }
+            submit('/estado/propietario/buscar', 'cedula=' + encodeURIComponent(cedula));
+        }
+
+        // Mostrar propietario encontrado
+        function mostrar_propietarioEstado(propietarioDTO) {
+            if (!propietarioDTO) {
+                mostrar_mal("No se encontró propietario con esa cédula.");
+                return;
+            }
+
+            document.querySelector(".info-propietario").style.display = "block";
+            document.getElementById("nombre-propietario").textContent = propietarioDTO.nombreCompleto || "Sin nombre";
+            document.getElementById("estado-propietario").textContent = propietarioDTO.estado || "Sin estado";
+
+            document.querySelector("button[onclick='cambiarEstado()']").style.display = "block";
+            mostrar_ok("Propietario encontrado.");
+        }
+
+        // Cambiar estado del propietario
+        function cambiarEstado() {
+            const cedula = document.getElementById('cedula').value;
+            const nuevoEstado = document.getElementById('nuevo-estado').value;
+
+            if (!cedula || !nuevoEstado) {
+                mostrar_mal("Debe completar todos los campos.");
+                return;
+            }
+
+            const data = 'cedula=' + encodeURIComponent(cedula) +
+                        '&nuevoEstado=' + encodeURIComponent(nuevoEstado);
+
+            submit('/estado/propietario/cambiar', data);
+        }
+
+        // Mensajes visuales
+        function mostrar_ok(mensaje) {
+            const div = document.getElementById("mensaje-estado");
+            div.textContent = mensaje || "Operación realizada con éxito.";
+            div.style.background = "#d4edda";
+            div.style.borderColor = "#28a745";
+            div.style.color = "#155724";
+        }
+
+        function mostrar_mal(mensaje) {
+            const div = document.getElementById("mensaje-estado");
+            div.textContent = mensaje || "Ocurrió un error al procesar la solicitud.";
+            div.style.background = "#f8d7da";
+            div.style.borderColor = "#dc3545";
+            div.style.color = "#721c24";
+        }
+    </script>
+
+
+<script src="utilesVista.js"></script>
 </body>
 </html>

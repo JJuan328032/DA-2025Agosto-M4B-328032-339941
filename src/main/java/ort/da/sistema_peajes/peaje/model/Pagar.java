@@ -18,6 +18,9 @@ public class Pagar {
 
                 boolean segundoTransito =  false;
 
+
+                //TODO validar que esta validacion es relevante
+                //TODO se puede mejorar esta secuencia?
                 System.out.println(a.getBonificacionNombre() == "frecuente");
 
                 if(a.getBonificacionNombre() == "frecuente") segundoTransito =  propietario.esSegundoTransitoDelDia(puesto, vehiculo, registro.getFecha());
@@ -57,6 +60,6 @@ public class Pagar {
     }
 
     private static void notificarTransito(Propietario propietario, String puesto, String matricula) {
-        propietario.agregarNotificacion(Notificacion.notificarTransito(puesto, matricula));
+        propietario.agregarNotificacion_PAGO_REALIZADO(Notificacion.notificarTransito(puesto, matricula));
     }
 }

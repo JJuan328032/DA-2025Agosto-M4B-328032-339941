@@ -84,9 +84,11 @@ public class Propietario extends Usuario {
         return this.notificaciones;
     }
 
+    /*
     public EstadoPropietario getEstadoPropietario() {
         return this.estadoPropietario;
     }
+    */
 
     public void setEstadoPropietario(EstadoPropietario estadoPropietario) {
         this.estadoPropietario = estadoPropietario;
@@ -101,23 +103,23 @@ public class Propietario extends Usuario {
         this.avisar(EventosSistema.TRANSITO_REALIZADO);
     }
 
+    /*
     public void agregarAsignacion(Asignacion a) {
         this.asignaciones.add(a);
     }
+    */
 
     public void agregarAsignacion(Bonificacion bonificacion, Puesto puesto) throws AsignacionException{
         Asignacion nueva = new Asignacion(puesto, bonificacion, LocalDate.now());
 
         existeAsignacion(puesto);
         this.asignaciones.add(nueva);
-        //this.notificaciones.add(Notificacion.notificarBonificacion(bonificacion.getNombre()));
+        //BONO NO MANDA NOTIFICACION
 
-        // se puede mejorar para avisar una sola vez?
         this.avisar(EventosSistema.BONO_ASIGNADO);
-        //this.avisar(EventosSistema.NOTIFICACION);
     }
 
-    public void agregarNotificacion(Notificacion notificacion) {
+    public void agregarNotificacion_PAGO_REALIZADO(Notificacion notificacion) {
         agregarNotificacionAlPrincipio(notificacion);
 
         if(this.saldo < this.saldoMinimo) agregarNotificacionAlPrincipio(Notificacion.notificarSaldoBajo(saldo));
@@ -195,7 +197,6 @@ public class Propietario extends Usuario {
         this.estadoPropietario = nuevo;
         agregarNotificacionAlPrincipio(Notificacion.notificarEstado(nuevo.toString()));
 
-        //TODO reorganizar para avisar una sola vez
         this.avisar(EventosSistema.ESTADO_NOTIFICACION);
     }
 

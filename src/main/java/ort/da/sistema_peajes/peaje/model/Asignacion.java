@@ -30,6 +30,7 @@ public class Asignacion {
 		return this.fecha;
 	}
 
+	//TODO es la forma correcta de usar equals?
 	public boolean equals(Puesto p){
 		return this.puesto.equals(p);
 	}

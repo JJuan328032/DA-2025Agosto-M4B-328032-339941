@@ -1,20 +1,17 @@
 package ort.da.sistema_peajes.peaje.model;
 
 import java.util.ArrayList;
-import ort.da.sistema_peajes.peaje.model.Bonificacion.Bonificacion;
 
 public class Puesto {
 	
 	private String nombre;
 	private String direccion;
 	private ArrayList<Tarifa> tarifas;
-	private ArrayList<Bonificacion> bonificaciones;
 
 	public Puesto(String nombre, String direccion) {
 		this.nombre = nombre;
 		this.direccion = direccion;
 		this.tarifas = new ArrayList<>();
-		this.bonificaciones = new ArrayList<>();
 	}
 
 	public String getNombre() {
@@ -31,14 +28,6 @@ public class Puesto {
 
 	public ArrayList<Tarifa> getTarifas() {
 		return tarifas;
-	}
-
-	public void agregarBonificacion(Bonificacion bonificacion) {
-		this.bonificaciones.add(bonificacion);
-	}
-
-	public ArrayList<Bonificacion> getBonificaciones() {
-		return bonificaciones;
 	}
 
     public void setTarifas(ArrayList<Tarifa> nuevasTarifas) {

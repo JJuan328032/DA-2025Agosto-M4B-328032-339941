@@ -30,12 +30,13 @@ public class SistemaBonificaciones {
         throw new BonificacionException(nombre);
 	}
 
-
+    /*
     public Bonificacion obtenerBonificacionByNombre(String bonificacion) throws BonificacionException {
         return buscarBonificacionNombre(bonificacion);
     }
+    */
 
-    public Bonificacion agregarBonificacion(String tipo) {
+    public Bonificacion crear_agregarBonificacion(String tipo) {
         Bonificacion b = BonificacionFactory.crear(tipo);
         agregarBonificacion(b);
         return b;

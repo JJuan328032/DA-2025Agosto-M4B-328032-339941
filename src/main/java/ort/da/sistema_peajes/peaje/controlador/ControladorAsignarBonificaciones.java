@@ -119,7 +119,7 @@ public class ControladorAsignarBonificaciones implements Observador{
     }
 
     private Respuesta bonosPropietario(){
-        return new Respuesta("bonificaciones", MapperAsignacion.toDTOList((this.propietario.getAsignaciones())));
+        return new Respuesta("bonificaciones", MapperAsignacion.toDTOList(this.propietario.getAsignaciones()));
     }
 
 

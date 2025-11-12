@@ -42,16 +42,14 @@ public class SistemaPuestos {
         return obtenerPuestoPorNombre(nombre).getTarifas();
     }
 
+	/*
     public Tarifa obtenerTarifaSegunPuestoYVehiculo(String puesto, Vehiculo vehiculo) throws Exception {
         return this.obtenerPuestoPorNombre(puesto).obtenerTarifaSegunCategoriaVehiculo(vehiculo);
     }
+	*/
 
     public Puesto obtenerPuestoPorIndice(int indicePuesto) throws PuestoException{
 		if(indicePuesto > -1 && indicePuesto < this.puestos.size()) return this.puestos.get(indicePuesto);
 		throw new PuestoException("indice inaccesible");
     }
-
-	public ArrayList<Tarifa> obtenerTarifasPuestoPorIndice(int indicePuesto) throws PuestoException{
-		return this.obtenerPuestoPorIndice(indicePuesto).getTarifas();
-	}
 }

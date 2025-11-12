@@ -25,9 +25,11 @@ public class SistemaUsuarios {
 	}
 
 
+	/*
 	public Propietario buscarPropietario(String usuario, String password) throws LoginException, EstadoException{
 		return buscarUsuario(usuario, password, this.propietarios);
 	}
+	*/
 
 	public Propietario loginPropietario(String usuario, String password) throws LoginException, EstadoException {
 		return login(usuario, password, this.propietarios);
@@ -71,10 +73,11 @@ public class SistemaUsuarios {
         a.setLogged(false);
     }
 
-
+	/*
 	public void agregarVehiculoPropietario(Vehiculo v, Propietario p) {
 		p.agregarVehiculo(v);
 	}
+	*/
 
 	public <T extends Usuario> T buscarUsuarioCedula(String cedula, ArrayList<T> lista) throws PropietarioException {
 		for (T u : lista) {
@@ -91,8 +94,10 @@ public class SistemaUsuarios {
 		return buscarUsuarioCedula(cedula, this.propietarios);
 	}
 
+	/*
     public ArrayList<Asignacion> obtenerAsignacionesDePropietario(Propietario encontrado) {
         return encontrado.getAsignaciones();
     }
+	*/
 
 }

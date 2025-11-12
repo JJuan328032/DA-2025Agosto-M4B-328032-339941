@@ -23,9 +23,8 @@ public class Notificacion {
         return new Notificacion("Pasaste por el puesto " + puesto + " con el vehiculo " + matricula);
     }
 
-    public static Notificacion notificarBonificacion(String nombre) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'notificarBonificacion'");
+    public static Notificacion notificarBonificacion(String bonificacion, String puesto) {
+        return new Notificacion("Se le ha asignado la bonificacion " + bonificacion + " en el puesto " + puesto);
     }
 
     public static Notificacion notificarEstado(String estado) {

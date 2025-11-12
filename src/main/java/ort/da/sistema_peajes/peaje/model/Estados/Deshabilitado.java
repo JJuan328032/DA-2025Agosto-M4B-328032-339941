@@ -49,6 +49,4 @@ public class Deshabilitado extends EstadoPropietario {
         return "Deshabilitado";
     }
 
-    
-
 }

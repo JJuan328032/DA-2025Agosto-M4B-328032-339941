@@ -30,6 +30,7 @@ public class Registro {
         this.pagoRealizado = false;
     }
 
+    public boolean getPagoRealizado(){return this.pagoRealizado;}
 
     public Puesto getPuesto() {
         return puesto;

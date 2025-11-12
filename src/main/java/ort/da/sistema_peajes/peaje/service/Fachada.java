@@ -25,12 +25,8 @@ import ort.da.sistema_peajes.peaje.model.Registro;
 import ort.da.sistema_peajes.peaje.model.Tarifa;
 import ort.da.sistema_peajes.peaje.model.Vehiculo;
 import ort.da.sistema_peajes.peaje.model.Bonificacion.*;
-import ort.da.sistema_peajes.peaje.model.Estados.Deshabilitado;
 import ort.da.sistema_peajes.peaje.model.Estados.EstadoFactory;
 import ort.da.sistema_peajes.peaje.model.Estados.EstadoPropietario;
-import ort.da.sistema_peajes.peaje.model.Estados.Habilitado;
-import ort.da.sistema_peajes.peaje.model.Estados.Penalizado;
-import ort.da.sistema_peajes.peaje.model.Estados.Suspendido;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Administrador;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
 

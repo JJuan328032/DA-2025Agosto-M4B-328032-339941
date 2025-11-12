@@ -179,11 +179,14 @@ public class Propietario extends Usuario {
     }
 
     public boolean esSegundoTransitoDelDia(Puesto puesto, Vehiculo vehiculo, LocalDateTime fecha) {
+
 		int cont = 0;
 
 		for(int i = 0; i < this.registros.size() && cont < 2; i++){
 			if(this.registros.get(i).validarMismoDia(puesto, vehiculo, fecha)) cont++;
 		}
+
+        System.out.println("ContadorFinal en esSegundoTransitoDelDia " + cont);
 
 		return cont == 2;
 	}

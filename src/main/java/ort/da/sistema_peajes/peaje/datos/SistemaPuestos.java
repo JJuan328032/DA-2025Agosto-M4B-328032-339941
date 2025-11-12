@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import ort.da.sistema_peajes.peaje.exceptions.PuestoException;
 import ort.da.sistema_peajes.peaje.model.Puesto;
 import ort.da.sistema_peajes.peaje.model.Tarifa;
-import ort.da.sistema_peajes.peaje.model.Vehiculo;
 
 public class SistemaPuestos {
 

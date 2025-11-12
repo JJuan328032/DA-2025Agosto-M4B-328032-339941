@@ -53,6 +53,7 @@
         urlIniciarVista = "/emular/inicio";
         urlTarifas = "/emular/tarifas";
         urlEmular = "/emular/transito";
+        urlLogin = "login_Administrador.html"
 
         console.log("Carlos Rodríguez | 52468975");
         console.log("Vehiculo: DEF456");
@@ -165,6 +166,32 @@
         async function excepcionDeAplicacion(text){
             await mostrarMensaje(text);
         }
+
+        async function mostrar_accesoDenegado(mensaje) {
+            let respuesta = await mostrarConfirmacion(mensaje, "Volver a Login", "Cerrar");
+
+            // Detectar si el script está corriendo dentro de un iframe
+            const enIframe = (window.top !== window.self);
+
+            if (respuesta) {
+                // Si el usuario elige volver al login
+                if (enIframe) {
+                    // Redirigir toda la página (no solo el iframe)
+                    window.top.location.href = urlLogin;
+                } else {
+                    window.location.href = urlLogin;
+                }
+            } else {
+                // Si elige ir al index
+                if (enIframe) {
+                    window.top.location.href = "index.html";
+                } else {
+                    window.location.href = "index.html";
+                }
+            }
+        }
+
+
     </script>
 
 </body>

@@ -36,7 +36,11 @@ public class ControladorMenu {
     }
 
     @PostMapping("/vistaConectada")
-    public List<Respuesta> inicializarVista(@SessionAttribute(name = "administrador") Administrador sesion){
+    public List<Respuesta> inicializarVista(@SessionAttribute(name = "administrador", required = false) Administrador sesion){
+        if(sesion == null){
+            return Respuesta.lista(new Respuesta("accesoDenegado", "No tiene permisos para acceder aquí"));
+        }
+
         return Respuesta.lista(new Respuesta("nombre", sesion.getNombreCompleto()));
     }
 }

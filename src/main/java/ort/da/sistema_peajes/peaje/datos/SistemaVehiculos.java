@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import ort.da.sistema_peajes.peaje.exceptions.VehiculoException;
 import ort.da.sistema_peajes.peaje.model.Vehiculo;
-import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
 
 public class SistemaVehiculos {
 

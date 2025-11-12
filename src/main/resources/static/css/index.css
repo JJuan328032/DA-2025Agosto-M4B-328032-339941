@@ -1,0 +1,90 @@
+:root {
+  /* Personaliza fácilmente */
+  --color-boton: #0078d7;      /* Color de fondo de los botones */
+  --color-boton-hover: #005fa3; /* Color al pasar el mouse */
+  --texto-boton: "";           /* Si deseas cambiar el texto global de los botones, ponlo aquí */
+  --color-panel: #ffffff;      /* Fondo del panel */
+  --color-fondo: #f2f4f8;      /* Fondo de la página */
+  --color-texto: #333333;      /* Color general del texto */
+}
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background-color: var(--color-fondo);
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contenedor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.panel {
+  display: flex;
+  background-color: var(--color-panel);
+  width: 800px;
+  min-height: 400px;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.panel-izquierdo, .panel-derecho {
+  padding: 40px;
+}
+
+.panel-izquierdo {
+  flex: 1;
+  border-right: 1px solid #ddd;
+}
+
+.panel-izquierdo h2 {
+  margin-top: 0;
+  color: var(--color-texto);
+}
+
+.btn-login {
+  display: block;
+  width: 200px;
+  padding: 10px;
+  margin: 10px 0 30px 0;
+  background-color: var(--color-boton);
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-login:hover {
+  background-color: var(--color-boton-hover);
+}
+
+.panel-derecho {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#mensaje-sistema {
+  font-size: 15px;
+  color: #d8000c;
+  background-color: #ffd2d2;
+  padding: 12px 20px;
+  border-radius: 8px;
+  text-align: center;
+  width: 90%;
+  display: none;
+}
+
+.mensaje-oculto {
+  display: none;
+}

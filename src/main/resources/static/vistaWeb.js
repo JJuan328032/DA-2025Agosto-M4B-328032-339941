@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Ejecuta un endpoint usando fetch y envía datos en formato URL Encoded
 function submit(endPointUrl, urlEncodedData) {
-    //console.log("URL: " + endPointUrl + "| Parametros: " + urlEncodedData);
+    console.log("URL: " + endPointUrl + "| Parametros: " + urlEncodedData);
     fetch(endPointUrl, {
         method: 'POST',
         headers: {

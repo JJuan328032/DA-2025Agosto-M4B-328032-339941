@@ -43,11 +43,13 @@ public class ControladorTableroPropietario implements Observador{
        
     }
 
-
+    //@SessionAttribute(name = "propietario") Propietario p
     @PostMapping("/informacion")
-    public List<Respuesta> iniciarTablero(@SessionAttribute(name = "propietario") Propietario p){
+    public List<Respuesta> iniciarTablero(@SessionAttribute(name = "propietario", required = false) Propietario p){
 
-        //TODO si entra por url se rompe todo
+        if(p == null){
+            return Respuesta.lista(new Respuesta("accesoDenegado", "login_Propietario.html"));
+        }
 
         this.propietario = p;
         this.propietario.agregarObservador(this);
@@ -56,7 +58,8 @@ public class ControladorTableroPropietario implements Observador{
             propietario(p),
             asignaciones(p),
             vehiculos(p),
-            transitosRealizados(p)
+            transitosRealizados(p),
+            notificaciones(p)
             );
     }
     

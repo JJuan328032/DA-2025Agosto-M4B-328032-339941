@@ -7,6 +7,9 @@ import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
 public class Pagar {
 
     protected static void realizarPagoSimple(Propietario propietario, Registro registro) throws EstadoException, SaldoException{
+        
+        propietario.agregarRegistro(registro);
+
         if(propietario.validarEstado()){
             Puesto puesto = registro.getPuesto();
             Vehiculo vehiculo = registro.getVehiculo();
@@ -21,15 +24,14 @@ public class Pagar {
 
                 //TODO validar que esta validacion es relevante
                 //TODO se puede mejorar esta secuencia?
-                System.out.println(a.getBonificacionNombre() == "frecuente");
 
-                if(a.getBonificacionNombre() == "frecuente") segundoTransito =  propietario.esSegundoTransitoDelDia(puesto, vehiculo, registro.getFecha());
+                if(a.getBonificacionNombre().toLowerCase().equals("frecuente")) segundoTransito =  propietario.esSegundoTransitoDelDia(puesto, vehiculo, registro.getFecha());
 
                 //boolean aux = this.esSegundoTransitoDelDia(puesto, vehiculo, registro.getFecha());
                 //System.out.println("segundoTransitoDia: " + aux);
 
                 double montoBonificado = a.calcularMontoBonificado(montoTarifa, segundoTransito);
-                System.out.println("montoBonificado: " + montoBonificado);
+                System.out.println("Pagar, montoBonificado: " + montoBonificado);
 
 
                 registro.setMontoNombreBono(montoBonificado, a.getBonificacionNombre());
@@ -44,8 +46,6 @@ public class Pagar {
         //se usa registro.calcularPrecioFinal() por si existe un montoBonificado. Así se se puede usar para ambos casos
         descontarTransito(propietario, registro.calcularMontoPagar());
         registro.setMontoPagado();
-
-        propietario.agregarRegistro(registro);
     }
 
     private static void descontarTransito(Propietario propietario, double monto) throws SaldoException{

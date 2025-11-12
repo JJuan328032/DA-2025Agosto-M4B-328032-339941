@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acceso al Sistema</title>
+  <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+  <div class="contenedor">
+    <div class="panel">
+      <div class="panel-izquierdo">
+        <h2>Acceso Propietario</h2>
+        <button class="btn-login" id="btn-propietario">Login Propietario</button>
+
+        <h2>Acceso Administrador</h2>
+        <button class="btn-login" id="btn-admin">Login Administrador</button>
+      </div>
+
+      <div class="panel-derecho">
+        <div id="mensaje-sistema" class="mensaje-oculto">
+          <!-- Mensajes del sistema aparecerán aquí -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+    // Ejemplo de navegación
+    document.getElementById('btn-propietario').addEventListener('click', () => {
+      window.location.href = "login_Propietario.html";
+    });
+
+    document.getElementById('btn-admin').addEventListener('click', () => {
+      window.location.href = "login_Administrador.html";
+    });
+  </script>
+</body>
+</html>

@@ -18,6 +18,19 @@ body {
     display: flex;
 }
 
+/* overlay base (invisible por defecto) */
+#overlay-bloqueo {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0,0,0,0.35);
+  display: none;
+  z-index: 10000; /* valor inicial; será ajustado por JS */
+  pointer-events: auto; /* bloquea clicks debajo */
+  backdrop-filter: blur(3px);
+}
+
+
+
 .sidebar {
     width: var(--sidebar-width);
     background: white;

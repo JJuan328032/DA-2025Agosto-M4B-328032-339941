@@ -19,6 +19,7 @@ import ort.da.sistema_peajes.peaje.dto.mappers.MapperSoloNombre;
 import ort.da.sistema_peajes.peaje.exceptions.PropietarioException;
 import ort.da.sistema_peajes.peaje.exceptions.PuestoException;
 import ort.da.sistema_peajes.peaje.model.EventosSistema;
+import ort.da.sistema_peajes.peaje.model.Usuarios.Administrador;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
 import ort.da.sistema_peajes.peaje.exceptions.AsignacionException;
 import ort.da.sistema_peajes.peaje.exceptions.BonificacionException;
@@ -42,7 +43,11 @@ public class ControladorAsignarBonificaciones implements Observador{
     @PostMapping("/opciones")
     public List<Respuesta> obtenerOpciones(HttpSession sesionHttp) throws Exception{
 
-        ValidarUsuario.validar(sesionHttp, "administrador");
+        Administrador a = (Administrador) sesionHttp.getAttribute("administrador");
+
+        if(a == null){
+            return Respuesta.lista(new Respuesta("accesoDenegado", "No tiene permisos para acceder aquí"));
+        }
 
         return Respuesta.lista(bonificaciones(), puestos());
     }

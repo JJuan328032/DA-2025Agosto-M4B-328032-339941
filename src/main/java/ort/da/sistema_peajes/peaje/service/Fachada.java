@@ -21,7 +21,6 @@ import ort.da.sistema_peajes.peaje.model.InfoTransito;
 import ort.da.sistema_peajes.peaje.model.Puesto;
 import ort.da.sistema_peajes.peaje.model.Registro;
 import ort.da.sistema_peajes.peaje.model.Tarifa;
-import ort.da.sistema_peajes.peaje.model.Asignacion;
 import ort.da.sistema_peajes.peaje.model.Vehiculo;
 import ort.da.sistema_peajes.peaje.model.Bonificacion.*;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Administrador;

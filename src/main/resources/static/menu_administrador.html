@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administración</title>
-    <link rel="stylesheet" href="menu_administrador.css">
+    <link rel="stylesheet" href="css/menu_administrador.css">
     <script src="vistaWeb.js"></script>
     <script src='sse.js'></script>
 </head>
 <body>
     <script src="utilesVista.js"></script>
     <!-- Sidebar -->
-    <nav class="sidebar">
+    <nav class="sidebar" id="sidebar-menu">
         <button class="toggle-button" onclick="toggleSidebar()"></button>
         <div class="nav-container">
             <h2><span style="text-decoration: none; color: inherit;" id="nombre"></span></h2>
@@ -33,6 +33,7 @@
         urlIniciarVista="/menu/vistaConectada";
         urlCierreVista = "acceso/salirAdministrador";
         urlRegistroSSE="/menu/registrarSSE";
+        urlLogin = "login_Administrador.html"
         
         function mostrar_nombre(nombre){
             console.log(nombre);
@@ -87,16 +88,50 @@
         function conexionSSECerrada(event){
               cerrar();
         }
+
+        opcion1 = "Volver a Login";
+        opcion2= "Cerrar";
+
         async function cerrar(){
-            let respuesta = await mostrarConfirmacion("Se ha cerrado la aplicacion en esta ventana", "Intenar volver a abrirla", "Cerrar");
+            ocultarSidebar(true);
+            let respuesta = await mostrarConfirmacion("Se ha cerrado la aplicacion en esta ventana", opcion1, opcion2);
+            moverPagina(respuesta);
+        }
+
+        async function mostrar_accesoDenegado(mensaje){
+            ocultarSidebar(true);
+            let respuesta = await mostrarConfirmacion(mensaje, opcion1, opcion2);
+            moverPagina(respuesta);
+        }
+
+        function moverPagina(respuesta){
             if (respuesta) {
-                location.reload();
-            } else {
-                document.body.innerHTML = '';
+                window.location.href = urlLogin;
+            }else{
+                window.location.href = "index.html";
             }
         }
 
+        function ocultarFondo(mostrarMensaje) {
+            const elementos = document.querySelectorAll("nav.sidebar, .content");
+            elementos.forEach(el => {
+                el.style.visibility = mostrarMensaje ? "hidden" : "visible";
+            });
+        }
+        function ocultarSidebar(ocultar) {
+            const sidebar = document.getElementById("sidebar-menu");
+            if (!sidebar) return;
+
+            sidebar.style.display = ocultar ? "none" : "block";
+        }
+
+
+
+
     </script>
+
+
+    <div id="overlay-bloqueo" aria-hidden="true"></div>
 
 </body>
 </html>

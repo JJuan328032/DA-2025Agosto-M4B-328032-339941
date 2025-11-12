@@ -17,6 +17,7 @@ public class Registro {
     private String bonificacion;
 
     private double montoPagado;
+    private boolean pagoRealizado;
 
     public Registro(Puesto puesto, Vehiculo vehiculo, LocalDateTime fecha, Tarifa tarifa) {
         this.puesto = puesto;
@@ -26,6 +27,7 @@ public class Registro {
         this.montoTarifa = tarifa.getMonto();
         this.montoBonificado = 0;
         this.bonificacion = "Sin Bonificacion";
+        this.pagoRealizado = false;
     }
 
 
@@ -90,6 +92,7 @@ public class Registro {
     //usado en SeedData
     public void setMontoPagado() {
         this.montoPagado = (double) (this.montoTarifa - this.montoBonificado);
+        this.pagoRealizado = true;
     }
 
     public String toString() {
@@ -112,7 +115,7 @@ public class Registro {
     }
 
     public boolean validarMismoDia(Puesto puesto2, Vehiculo vehiculo2, LocalDateTime fecha2) {
-        return this.puesto.equals(puesto2) && this.vehiculo.equals(vehiculo2) && this.fecha.equals(fecha2);
+        return this.puesto.equals(puesto2) && this.vehiculo.equals(vehiculo2) && this.fecha.toLocalDate().equals(fecha2.toLocalDate());
     }
 
 }

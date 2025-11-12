@@ -74,6 +74,7 @@
     <script>
         // Variables para vistaWeb.js - No necesitamos carga inicial
         var urlIniciarVista = '/bonificaciones/opciones';
+        urlLogin = "login_Administrador.html"
 
         console.log("Carlos Rodríguez | 52468975");
         console.log("Vehiculo: DEF456");
@@ -98,8 +99,6 @@
         // Función para buscar propietario y sus bonificaciones
         function buscarPropietario() {
             const cedula = document.getElementById('cedula').value;
-            console.log("cedula a buscar: " + cedula);
-
 
             if (!cedula) {
                 alert('Ingrese una cédula');   
@@ -110,9 +109,7 @@
         }
 
         
-        function mostrar_propietarioBonificacion(propietarioBonificacion) {
-            console.log(propietarioBonificacion);
-
+        function mostrar_propietarioBonificacion(propietarioBonificacion){
             if (!propietarioBonificacion) {
                 mostrarMensaje("No se encontró ningún propietario con esa cédula.");
                 return;
@@ -129,7 +126,6 @@
         //SE PUEDE SEPARAR MÁS PARA EVITAR FALIDACIONES INNECESARIAS
 
         function mostrar_bonificaciones(bonos){
-
             // Mostrar la tabla de asignaciones
             const contenedorTabla = document.getElementById("tabla-bonificaciones");
 
@@ -156,10 +152,6 @@
             const puesto = document.getElementById('indicePuesto');
             const cedula = document.getElementById('cedula').value;
 
-            console.log("Bono: " + bonificacion.value);
-            console.log("Puesto: " + puesto.value);
-            console.log("Cedula: " + cedula);
-
             if (!bonificacion.value || !puesto.value || !cedula) {
                 mostrar_mal('Por favor complete todos los campos');
                 return;
@@ -168,8 +160,6 @@
             const data ='cedula=' + encodeURIComponent(cedula) +
                         '&bonificacion=' + encodeURIComponent(bonificacion.options[bonificacion.selectedIndex].text) +
                         '&puesto=' + encodeURIComponent(puesto.options[puesto.selectedIndex].text);
-
-            console.log(data);
     
             submit('/bonificaciones/propietario/asignar', data);
         }
@@ -207,6 +197,30 @@
         async function excepcionDeAplicacion(mensaje){
             await mostrarMensaje(mensaje);
         } 
+
+        async function mostrar_accesoDenegado(mensaje) {
+            let respuesta = await mostrarConfirmacion(mensaje, "Volver a Login", "Cerrar");
+
+            // Detectar si el script está corriendo dentro de un iframe
+            const enIframe = (window.top !== window.self);
+
+            if (respuesta) {
+                // Si el usuario elige volver al login
+                if (enIframe) {
+                    // Redirigir toda la página (no solo el iframe)
+                    window.top.location.href = urlLogin;
+                } else {
+                    window.location.href = urlLogin;
+                }
+            } else {
+                // Si elige ir al index
+                if (enIframe) {
+                    window.top.location.href = "index.html";
+                } else {
+                    window.location.href = "index.html";
+                }
+            }
+        }
     </script>
 </body>
 </html>

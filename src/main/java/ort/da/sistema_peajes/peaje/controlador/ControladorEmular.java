@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import jakarta.servlet.http.HttpSession;
 import ort.da.sistema_peajes.ConexionNavegador;
 import ort.da.sistema_peajes.Respuesta;
 import ort.da.sistema_peajes.peaje.dto.mappers.MapperSoloNombre;
@@ -22,6 +23,8 @@ import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
 import ort.da.sistema_peajes.peaje.exceptions.PuestoException;
 import ort.da.sistema_peajes.peaje.exceptions.SaldoException;
 import ort.da.sistema_peajes.peaje.exceptions.VehiculoException;
+import ort.da.sistema_peajes.peaje.model.Usuarios.Administrador;
+import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
 import ort.da.sistema_peajes.peaje.service.Fachada;
 
 
@@ -44,8 +47,16 @@ public class ControladorEmular {
     }
 
     @PostMapping("/inicio")
-    public List<Respuesta> inicio(){
-        //ValidarUsuario.validar(null, null);
+    public List<Respuesta> inicio(HttpSession session) throws Exception{
+
+        Administrador a = (Administrador) session.getAttribute("administrador");
+
+        if(a == null){
+            return Respuesta.lista(new Respuesta("accesoDenegado", "No tiene permisos para acceder aquí"));
+        }
+
+        //ValidarUsuario.validar(session, "administrador");
+
         return Respuesta.lista(puestos());
     }
 

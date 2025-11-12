@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Login Administrador</title>
   <link rel="icon" href="/favicon.ico">
-  <link rel="stylesheet" href="./login_Administrador.css">
+  <link rel="stylesheet" href="css/login_Administrador.css">
   <script src="vistaWeb.js"></script>
 </head>
 <body>
@@ -38,6 +38,7 @@
 
 		// Enviar datos del formulario usando las utilidades del proyecto
 		function handleLogin(event) {
+			console.log(event);
             event.preventDefault();
             submit(URL_SUBMIT, serializarFormulario("formLogin"));
         }

@@ -5,6 +5,7 @@ import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
 import ort.da.sistema_peajes.peaje.exceptions.PropietarioException;
 import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
 import ort.da.sistema_peajes.peaje.model.Vehiculo;
+import ort.da.sistema_peajes.peaje.model.Estados.EstadoPropietario;
 import ort.da.sistema_peajes.peaje.model.Asignacion;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Administrador;
 
@@ -93,6 +94,11 @@ public class SistemaUsuarios {
 
     public ArrayList<Asignacion> obtenerAsignacionesDePropietario(Propietario encontrado) {
         return encontrado.getAsignaciones();
+    }
+
+
+    public void cambiarEstado(Propietario p, EstadoPropietario estado) throws PropietarioException {
+    	p.setEstadoPropietario(estado);
     }
 
 }

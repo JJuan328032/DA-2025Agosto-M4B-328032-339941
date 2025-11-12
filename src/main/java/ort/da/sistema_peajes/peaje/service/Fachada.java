@@ -27,6 +27,7 @@ import ort.da.sistema_peajes.peaje.model.Asignacion;
 import ort.da.sistema_peajes.peaje.model.Vehiculo;
 import ort.da.sistema_peajes.peaje.model.Bonificacion.*;
 import ort.da.sistema_peajes.peaje.model.Estados.Deshabilitado;
+import ort.da.sistema_peajes.peaje.model.Estados.EstadoFactory;
 import ort.da.sistema_peajes.peaje.model.Estados.EstadoPropietario;
 import ort.da.sistema_peajes.peaje.model.Estados.Habilitado;
 import ort.da.sistema_peajes.peaje.model.Estados.Penalizado;
@@ -170,12 +171,12 @@ public class Fachada {
 				.toList();
 	}	
 
-	
-
-	public void cambiarEstado(String cedula, String nuevoEstado) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'cambiarEstado'");
+	public void cambiarEstado(String cedula, String nuevoEstado) throws PropietarioException {
+    EstadoPropietario estado = EstadoFactory.crear(nuevoEstado);
+    sistemaUsuarios.buscarPropietarioPorCedula(cedula).setEstadoPropietario(estado);
 	}
+
+
 
 
 }

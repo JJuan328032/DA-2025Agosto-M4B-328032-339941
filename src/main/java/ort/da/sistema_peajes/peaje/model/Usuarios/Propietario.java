@@ -221,4 +221,7 @@ public class Propietario extends Usuario {
 		return cont == 2;
 	}
 
+
+
+
 }

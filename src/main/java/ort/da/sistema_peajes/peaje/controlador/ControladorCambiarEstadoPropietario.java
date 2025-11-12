@@ -51,7 +51,7 @@ public class ControladorCambiarEstadoPropietario {
         ValidarUsuario.validar(sesionHttp, "administrador");
         try {
             this.propietario = Fachada.getInstancia().buscarPropietarioPorCedula(cedula);
-            return Respuesta.lista(new Respuesta("propietarioBonificacion", 
+            return Respuesta.lista(new Respuesta("propietarioEstado", 
                 MapperPropietarioBonificacion.toDTO(this.propietario)));
         } catch (PropietarioException e) {
             return Respuesta.lista(new Respuesta("error", 
@@ -59,31 +59,36 @@ public class ControladorCambiarEstadoPropietario {
         }
     }
 
-    @PostMapping("/opciones")
-    public List<String> obtenerOpciones(HttpSession sesionHttp) throws Exception {
-    ValidarUsuario.validar(sesionHttp, "administrador");
-    return Fachada.getInstancia().obtenerEstadosPropietario();
+  @PostMapping("/opciones")
+    public List<Respuesta> obtenerOpciones(HttpSession sesionHttp) throws Exception {
+        ValidarUsuario.validar(sesionHttp, "administrador");
 
-    }
+        List<String> estados = Fachada.getInstancia().obtenerEstadosPropietario();
+    return Respuesta.lista(new Respuesta("estadosDefinidos", estados));
+}
 
     @PostMapping("/propietario/cambiar")
     public List<Respuesta> cambiarEstado(@RequestParam String cedula, 
-                                         @RequestParam String nuevoEstado, 
-                                         HttpSession sesionHttp)
-            throws PropietarioException, Exception {
+                                     @RequestParam String nuevoEstado, 
+                                     HttpSession sesionHttp) {
 
         String tipo = "mal";
-        String mensaje = "Estado cambiado a: " + nuevoEstado + " con éxito.";
+        String mensaje = "";
         try {
             ValidarUsuario.validar(sesionHttp, "administrador");
             Fachada.getInstancia().cambiarEstado(cedula, nuevoEstado);
             tipo = "ok";
+            mensaje = "Estado cambiado a: " + nuevoEstado + " con éxito.";
         } catch (PropietarioException e) {
-            mensaje = "No se pudo encontrar un Propietario con nombre: " + e.getMessage();
+            mensaje = "No se pudo encontrar un Propietario: " + e.getMessage();
         } catch (EstadoException e) {
-            mensaje = "No se pudo encontrar un Estado con nombre: " + e.getMessage();
+            mensaje = "No se pudo encontrar un Estado: " + e.getMessage();
+        } catch (Exception e) {
+            mensaje = "Ocurrió un error interno al cambiar el estado: " + e.getMessage();
         }
+
         return Respuesta.lista(new Respuesta(tipo, mensaje));
     }
+
 
 }

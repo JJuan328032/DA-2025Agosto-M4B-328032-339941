@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cambiar Estado</title>
-    <link rel="stylesheet" href="menu_administrador.css">
-    <script src="utilesVista.js"></script>
+    <link rel="stylesheet" href="css/cambiar_estado.css">
     <script src="vistaWeb.js"></script>
 </head>
 <body>
+    <script src="utilesVista.js"></script>
  <main>
         <h2>Cambiar estado de propietario</h2>
 
@@ -66,7 +66,7 @@
                 alert('Ingrese una cédula');
                 return;
             }
-            submit('/estado/propietario/buscar', 'cedula=' + encodeURIComponent(cedula));
+            submit('/estado/buscar', 'cedula=' + encodeURIComponent(cedula));
         }
 
         // Mostrar propietario encontrado
@@ -97,7 +97,7 @@
             const data = 'cedula=' + encodeURIComponent(cedula) +
                         '&nuevoEstado=' + encodeURIComponent(nuevoEstado);
 
-            submit('/estado/propietario/cambiar', data);
+            submit('/estado/cambiar', data);
         }
 
         // Mensajes visuales

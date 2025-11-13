@@ -38,12 +38,9 @@ public class SistemaEstados {
                 return b;
             }
         }
+
         throw new EstadoException(nombre);
 	}
-
-    public EstadoPropietario ObtenerEstadoByNombre(String estado) throws EstadoException {
-        return buscarEstadosNombre(estado);
-    }
 
     public EstadoPropietario agregarEstado(String tipo) {
         EstadoPropietario b = EstadoFactory.crear(tipo);

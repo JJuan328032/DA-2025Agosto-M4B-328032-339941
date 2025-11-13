@@ -2,12 +2,10 @@ package ort.da.sistema_peajes.peaje.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.security.auth.login.LoginException;
 
 import ort.da.sistema_peajes.peaje.datos.SistemaBonificaciones;
-import ort.da.sistema_peajes.peaje.datos.SistemaEstados;
 import ort.da.sistema_peajes.peaje.datos.SistemaPuestos;
 import ort.da.sistema_peajes.peaje.datos.SistemaRegistro;
 import ort.da.sistema_peajes.peaje.datos.SistemaVehiculos;
@@ -25,8 +23,6 @@ import ort.da.sistema_peajes.peaje.model.Registro;
 import ort.da.sistema_peajes.peaje.model.Tarifa;
 import ort.da.sistema_peajes.peaje.model.Vehiculo;
 import ort.da.sistema_peajes.peaje.model.Bonificacion.*;
-import ort.da.sistema_peajes.peaje.model.Estados.EstadoFactory;
-import ort.da.sistema_peajes.peaje.model.Estados.EstadoPropietario;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Administrador;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
 
@@ -41,7 +37,6 @@ public class Fachada {
 	private SistemaVehiculos sistemaVehiculos;
 	private SistemaUsuarios sistemaUsuarios;
 	private SistemaBonificaciones sistemaBonificaciones;
-	private SistemaEstados sistemaEstados;
 
 	public Fachada() {
 		this.sistemaPuestos = new SistemaPuestos();
@@ -49,7 +44,6 @@ public class Fachada {
 		this.sistemaVehiculos = new SistemaVehiculos();
 		this.sistemaUsuarios = new SistemaUsuarios();
 		this.sistemaBonificaciones = new SistemaBonificaciones();
-		this.sistemaEstados = new SistemaEstados();
 	}
 
 	public static Fachada getInstancia() {
@@ -116,19 +110,9 @@ public class Fachada {
 		propietario.agregarAsignacion(bonificacion, puesto);
     }
 
-  	public List<String> obtenerEstadosPropietario() {
-		return sistemaEstados.getEstados()
-				.stream()
-				.map(e -> e.getNombre())
-				.toList();
+  	public ArrayList<String> obtenerEstadosPropietario() {
+		return sistemaUsuarios.getEstadosPropietario();
 	}	
-
-	public void cambiarEstado(String cedula, String nuevoEstado) throws PropietarioException {
-    EstadoPropietario estado = EstadoFactory.crear(nuevoEstado);
-    sistemaUsuarios.buscarPropietarioPorCedula(cedula).setEstadoPropietario(estado);
-	}
-
-
 
 
 	//EMULAR TRANSITO EMULAR TRANSITO EMULAR TRANSITO EMULAR TRANSITO EMULAR TRANSITO EMULAR TRANSITO EMULAR TRANSITO 
@@ -147,19 +131,5 @@ public class Fachada {
 
 		return sistemaRegistro.realizarTransito(puesto, vehiculo, fechaHora);
     }
-
-
-	/*
-	public void asociarVehiculoAPropietario(Vehiculo v, Propietario p) {
-		sistemaVehiculos.asociarVehiculoAPropietario(v, p);
-		sistemaUsuarios.agregarVehiculoPropietario(v, p);
-	}
-	*/
-
-	/*
-	public ArrayList<Asignacion> obtenerAsignacionesDePropietario(Propietario encontrado) {
-		return sistemaUsuarios.obtenerAsignacionesDePropietario(encontrado);
-	}
-	*/
 }
  

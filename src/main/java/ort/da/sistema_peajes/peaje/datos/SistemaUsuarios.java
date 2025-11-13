@@ -17,18 +17,24 @@ public class SistemaUsuarios {
 	private ArrayList<Propietario> propietarios;
 	private ArrayList<Administrador> administradores;
 
+	private ArrayList<String> estadosPropietario;
 
 	public SistemaUsuarios() {
 		this.propietarios = new ArrayList<>();
 		this.administradores = new ArrayList<>();
+		this.estadosPropietario = new ArrayList<>();
+
+		this.poblarEstados();
 	}
 
-
-	/*
-	public Propietario buscarPropietario(String usuario, String password) throws LoginException, EstadoException{
-		return buscarUsuario(usuario, password, this.propietarios);
+	private void poblarEstados(){
+		this.estadosPropietario.add("Habilitado");
+		this.estadosPropietario.add("Deshabilitado");
+		this.estadosPropietario.add("Penalizado");
+		this.estadosPropietario.add("Suspendido");
 	}
-	*/
+
+	public ArrayList<String> getEstadosPropietario(){ return this.estadosPropietario;}
 
 	public Propietario loginPropietario(String usuario, String password) throws LoginException, EstadoException {
 		return login(usuario, password, this.propietarios);
@@ -72,12 +78,6 @@ public class SistemaUsuarios {
         a.setLogged(false);
     }
 
-	/*
-	public void agregarVehiculoPropietario(Vehiculo v, Propietario p) {
-		p.agregarVehiculo(v);
-	}
-	*/
-
 	public <T extends Usuario> T buscarUsuarioCedula(String cedula, ArrayList<T> lista) throws PropietarioException {
 		for (T u : lista) {
 			if (u.validarCedula(cedula)) {
@@ -92,13 +92,6 @@ public class SistemaUsuarios {
 	public Propietario buscarPropietarioPorCedula(String cedula) throws PropietarioException{
 		return buscarUsuarioCedula(cedula, this.propietarios);
 	}
-
-	/*
-    public ArrayList<Asignacion> obtenerAsignacionesDePropietario(Propietario encontrado) {
-        return encontrado.getAsignaciones();
-    }
-	*/
-
 
     public void cambiarEstado(Propietario p, EstadoPropietario estado) throws PropietarioException {
     	p.setEstadoPropietario(estado);

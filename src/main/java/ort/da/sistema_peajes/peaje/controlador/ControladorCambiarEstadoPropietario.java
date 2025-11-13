@@ -2,7 +2,6 @@ package ort.da.sistema_peajes.peaje.controlador;
 
 import java.util.List;
 
-import javax.security.auth.login.LoginException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -15,20 +14,25 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import jakarta.servlet.http.HttpSession;
+import observador.Observable;
+import observador.Observador;
 import ort.da.sistema_peajes.ConexionNavegador;
 import ort.da.sistema_peajes.Respuesta;
-import ort.da.sistema_peajes.peaje.dto.mappers.MapperPropietarioBonificacion;
+import ort.da.sistema_peajes.peaje.dto.mappers.MapperPropietario;
 import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
+import ort.da.sistema_peajes.peaje.exceptions.NoEncontradoException;
 import ort.da.sistema_peajes.peaje.exceptions.PropietarioException;
+import ort.da.sistema_peajes.peaje.model.EventosSistema;
+import ort.da.sistema_peajes.peaje.model.Usuarios.Administrador;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
 import ort.da.sistema_peajes.peaje.service.Fachada;
 
 @RestController
 @RequestMapping("/estado")
 @Scope("session")
-public class ControladorCambiarEstadoPropietario {
+public class ControladorCambiarEstadoPropietario implements Observador{
 
-    private final ConexionNavegador conexionNavegador; 
+    private final ConexionNavegador conexionNavegador;
     private Propietario propietario;
 
     public ControladorCambiarEstadoPropietario(@Autowired ConexionNavegador conexionNavegador) {
@@ -42,50 +46,81 @@ public class ControladorCambiarEstadoPropietario {
        
     }
     
+    @PostMapping("/opciones")
+    public List<Respuesta> obtenerOpciones(HttpSession sesionHttp) throws Exception {
+        
+        Administrador a = (Administrador) sesionHttp.getAttribute("administrador");
 
-    @PostMapping("/propietario/buscar")
-    public List<Respuesta> buscarPropietario(@RequestParam String cedula, HttpSession sesionHttp) 
-            throws LoginException, EstadoException, Exception {
+        if(a == null){
+            return Respuesta.lista(new Respuesta("accesoDenegado", "No tiene permisos para acceder aquí"));
+        }
+
+        List<String> estados = Fachada.getInstancia().obtenerEstadosPropietario();
+
+        return Respuesta.lista(new Respuesta("estadosDefinidos", estados));
+    }
+
+
+    @PostMapping("/buscar")
+    public List<Respuesta> buscarPropietario(@RequestParam String cedula, HttpSession sesionHttp) throws EstadoException, Exception {
+
         ValidarUsuario.validar(sesionHttp, "administrador");
+
         try {
             this.propietario = Fachada.getInstancia().buscarPropietarioPorCedula(cedula);
-            return Respuesta.lista(new Respuesta("propietarioEstado", 
-                MapperPropietarioBonificacion.toDTO(this.propietario)));
+
+            sesionHttp.setAttribute("propietario", this.propietario);
+            //si un admin agrega un bono y están mirando al mismo propietario, la vista debe actualizarse
+            this.propietario.agregarObservador(this);
+
+            return Respuesta.lista(propietario());
         } catch (PropietarioException e) {
-            return Respuesta.lista(new Respuesta("error", 
-                "No se pudo encontrar un propietario con cédula: " + e.getMessage()));
+            return Respuesta.lista(new Respuesta("error", "No se pudo encontrar un propietario con cédula: " + e.getMessage()));
         }
     }
 
-  @PostMapping("/opciones")
-    public List<Respuesta> obtenerOpciones(HttpSession sesionHttp) throws Exception {
+    @PostMapping("/cambiar")
+    public List<Respuesta> cambiarEstado(@RequestParam String nuevoEstadoNombre, HttpSession sesionHttp) throws Exception{
+
         ValidarUsuario.validar(sesionHttp, "administrador");
 
-        List<String> estados = Fachada.getInstancia().obtenerEstadosPropietario();
-    return Respuesta.lista(new Respuesta("estadosDefinidos", estados));
-}
-
-    @PostMapping("/propietario/cambiar")
-    public List<Respuesta> cambiarEstado(@RequestParam String cedula, 
-                                     @RequestParam String nuevoEstado, 
-                                     HttpSession sesionHttp) {
-
         String tipo = "mal";
-        String mensaje = "";
+        String mensaje;
+
+        this.propietario = (Propietario) sesionHttp.getAttribute("propietario");
+
+        if(this.propietario == null){ 
+            mensaje = "Debe buscar un Propietario primero";
+            return Respuesta.lista(new Respuesta(tipo, mensaje));
+        }
+
+        mensaje = "Estado cambiado a: " + nuevoEstadoNombre + " con éxito.";
+
         try {
-            ValidarUsuario.validar(sesionHttp, "administrador");
-            Fachada.getInstancia().cambiarEstado(cedula, nuevoEstado);
+
+            this.propietario.controlCambioEstado(nuevoEstadoNombre);
             tipo = "ok";
-            mensaje = "Estado cambiado a: " + nuevoEstado + " con éxito.";
-        } catch (PropietarioException e) {
-            mensaje = "No se pudo encontrar un Propietario: " + e.getMessage();
+            
         } catch (EstadoException e) {
-            mensaje = "No se pudo encontrar un Estado: " + e.getMessage();
-        } catch (Exception e) {
-            mensaje = "Ocurrió un error interno al cambiar el estado: " + e.getMessage();
+            mensaje = "El usuario ya se encuentra " + e.getMessage();
+        } catch(NoEncontradoException e){
+            mensaje = "El estado " + e.getMessage() + " no se encuentra";
         }
 
         return Respuesta.lista(new Respuesta(tipo, mensaje));
+    }
+
+    private Respuesta propietario(){
+        return new Respuesta("propietarioEstado", MapperPropietario.toDTO(this.propietario));
+    }
+
+    
+
+    @Override
+    public void actualizar(Object evento, Observable origen) {
+        if(evento.equals(EventosSistema.ESTADO)){
+            conexionNavegador.enviarJSON(Respuesta.lista(propietario()));
+        }
     }
 
 

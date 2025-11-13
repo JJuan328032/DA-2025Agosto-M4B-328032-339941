@@ -14,6 +14,7 @@ import javax.security.auth.login.LoginException;
 
 import ort.da.sistema_peajes.peaje.exceptions.AsignacionException;
 import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
+import ort.da.sistema_peajes.peaje.exceptions.NoEncontradoException;
 import ort.da.sistema_peajes.peaje.model.Asignacion;
 import ort.da.sistema_peajes.peaje.model.EventosSistema;
 import ort.da.sistema_peajes.peaje.model.InfoVehiculo;
@@ -180,14 +181,11 @@ public class Propietario extends Usuario {
     }
 
     public boolean esSegundoTransitoDelDia(Puesto puesto, Vehiculo vehiculo, LocalDateTime fecha) {
-
 		int cont = 0;
 
 		for(int i = 0; i < this.registros.size() && cont < 2; i++){
 			if(this.registros.get(i).validarMismoDia(puesto, vehiculo, fecha)) cont++;
 		}
-
-        System.out.println("ContadorFinal en esSegundoTransitoDelDia " + cont);
 
 		return cont == 2;
 	}
@@ -211,6 +209,39 @@ public class Propietario extends Usuario {
 
     private void agregarNotificacionAlPrincipio(Notificacion n){
         this.notificaciones.add(0, n);
+    }
+
+
+    public void controlCambioEstado(String nombreEstado) throws NoEncontradoException, EstadoException {
+        switch (nombreEstado) {
+            case "Deshabilitado": this.deshabilitado(); break;
+            case "Habilitado": this.habilitado(); break;
+            case "Penalizado": this.penalizado(); break;
+            case "Suspendido": this.suspendido(); break;
+        
+            default: throw new NoEncontradoException(nombreEstado);
+        }
+    }
+
+
+
+    public void deshabilitado() throws EstadoException {
+        this.estadoPropietario.deshabilitado();
+    }
+
+
+    public void habilitado() throws EstadoException {
+        this.estadoPropietario.habilitado();
+    }
+
+
+    public void penalizado() throws EstadoException {
+        this.estadoPropietario.penalizado();
+    }
+
+
+    public void suspendido() throws EstadoException {
+        this.estadoPropietario.suspendido();
     }
 
 

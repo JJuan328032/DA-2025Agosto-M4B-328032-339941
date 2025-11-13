@@ -4,56 +4,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cambiar Estado</title>
-    <link rel="stylesheet" href="css/cambiar_estado.css">
+    <link rel="stylesheet" href="css/common.css">
     <script src="vistaWeb.js"></script>
+    <script src="utilesVista.js" defer></script>
 </head>
 <body>
-    <script src="utilesVista.js"></script>
- <main>
-        <h2>Cambiar estado de propietario</h2>
+    <div class="page-wrapper">
+        <div class="panel">
+            <h1>Cambiar Estado de Propietario</h1>
+            <div class="subtitle">Ingrese una cédula, revise el estado actual y seleccione un nuevo estado (datos de ejemplo).</div>
 
-        <!-- Buscar propietario -->
-        <div class="busqueda">
-            <label for="cedula">Cédula:</label>
-            <input type="text" id="cedula" name="cedula" placeholder="Ingrese cédula">
-            <button onclick="buscarPropietario()">Buscar</button>
+            <!-- Panel superior dividido en dos -->
+            <div class="emular-grid">
+                <!-- Panel Izquierdo: Búsqueda -->
+                <div class="left-col">
+                    <div class="field">
+                        <div class="field-label">Cédula de Identidad</div>
+                        <input type="text" id="cedula" name="cedula" placeholder="Ingrese cédula" required>
+                        <button class="btn-emular" onclick="buscarPropietario()" style="margin-top:8px;width:100%">Buscar</button>
+                    </div>
+                </div>
+
+                <!-- Panel Derecho: Estados -->
+                <div class="right-col">
+                    <div class="field">
+                        <div class="field-label">Estados Definidos</div>
+                        <div id="estados-container" style="margin-bottom:8px">
+                            Cargando estados...
+                        </div>
+                        <button class="btn-emular" id="btnCambiarEstado" onclick="cambiarEstado()" disabled style="width:100%">Cambiar Estado</button>
+                        <div class="help-text">El estado actual se mostrará preseleccionado</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel inferior: Información del propietario con borde punteado -->
+            <div style="margin-top:24px;padding:15px;border:2px dashed #ddd;background:#f5f5f5;border-radius:8px;display:none" id="panel-propietario">
+                <h3 style="margin:0 0 16px 0;font-weight:700">Propietario</h3>
+                
+                <!-- Grid de dos columnas para Nombre y Estado -->
+                <div class="emular-grid" style="gap:16px">
+                    <div>
+                        <div style="display:block;color:#888;font-size:12px;font-weight:600;margin-bottom:6px">Nombre</div>
+                        <div style="background:#fff;padding:12px;border:1px solid #d0d4da;border-radius:6px;min-height:40px;display:flex;align-items:center" id="nombre-propietario">
+                            -
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display:block;color:#888;font-size:12px;font-weight:600;margin-bottom:6px">Estado</div>
+                        <div style="background:#fff;padding:12px;border:1px solid #d0d4da;border-radius:6px;min-height:40px;display:flex;align-items:center" id="estado-propietario">
+                            -
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Espacio para mensajes -->
+            <div id="mensaje-estado" style="margin-top:24px;padding:12px;border:1px solid var(--color-primary);background:#f9f9f9;border-radius:6px;text-align:center;color:#666;transition:all 0.3s ease">
+                Seleccione una cédula y realice una búsqueda
+            </div>
         </div>
-
-        <!-- Información del propietario -->
-        <div class="info-propietario" style="display:none; margin-top:20px;">
-            <p><strong>Nombre:</strong> <span id="nombre-propietario"></span></p>
-            <p><strong>Estado actual:</strong> <span id="estado-propietario"></span></p>
-
-            <label for="nuevo-estado">Nuevo Estado:</label>
-            <select id="nuevo-estado" name="nuevoEstado" required></select>
-
-            <button onclick="cambiarEstado()" style="display:none;">Cambiar estado</button>
-        </div>
-
-        <!-- Mensaje de estado -->
-        <div id="mensaje-estado" style="margin-top:15px; padding:10px; border-radius:5px;"></div>
-    </main>
+    </div>
 
     <script>
         // Variables estándar para vistaWeb.js
         var urlIniciarVista = '/estado/opciones';
         var parametrosInicioVista = '';
         var prefijoNombreFuncionProcesoResultado = 'mostrar_';
+        var urlLogin = "login_Administrador.html";
 
         // Cargar estados definidos desde backend
         function mostrar_estadosDefinidos(estados) {
-            const select = document.getElementById("nuevo-estado");
-            if (!select) {
-                console.error("Elemento #nuevo-estado no encontrado en el DOM");
+            const container = document.getElementById("estados-container");
+            if (!container) {
+                console.error("Elemento #estados-container no encontrado en el DOM");
                 return;
             }
 
-            select.innerHTML = "";
-            estados.forEach(e => {
-                const option = document.createElement("option");
-                option.value = e;
-                option.textContent = e;
-                select.appendChild(option);
+            container.innerHTML = crearListaDesdeJson({
+                data: estados,
+                id: "nuevoEstadoNombre",
+                campoMostrar: "nombre"
             });
 
             console.log("Estados cargados:", estados);
@@ -63,7 +94,7 @@
         function buscarPropietario() {
             const cedula = document.getElementById('cedula').value.trim();
             if (!cedula) {
-                alert('Ingrese una cédula');
+                mostrar_mal('Ingrese una cédula');
                 return;
             }
             submit('/estado/buscar', 'cedula=' + encodeURIComponent(cedula));
@@ -76,26 +107,43 @@
                 return;
             }
 
-            document.querySelector(".info-propietario").style.display = "block";
+            document.getElementById("panel-propietario").style.display = "block";
             document.getElementById("nombre-propietario").textContent = propietarioDTO.nombreCompleto || "Sin nombre";
             document.getElementById("estado-propietario").textContent = propietarioDTO.estado || "Sin estado";
 
-            document.querySelector("button[onclick='cambiarEstado()']").style.display = "block";
+            // Habilitar botón y preseleccionar estado actual
+            const btnCambiar = document.getElementById("btnCambiarEstado");
+            btnCambiar.disabled = false;
+            
+            const selectEstado = document.getElementById("nuevoEstadoNombre");
+            if (selectEstado) {
+                // Buscar y seleccionar el estado actual
+                for (let i = 0; i < selectEstado.options.length; i++) {
+                    if (selectEstado.options[i].text === propietarioDTO.estado) {
+                        selectEstado.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
+
             mostrar_ok("Propietario encontrado.");
         }
 
         // Cambiar estado del propietario
         function cambiarEstado() {
             const cedula = document.getElementById('cedula').value;
-            const nuevoEstado = document.getElementById('nuevo-estado').value;
+            const selectEstado = document.getElementById('nuevoEstadoNombre');
+            const nuevoEstadoNombre = selectEstado.options[selectEstado.selectedIndex].text;
 
-            if (!cedula || !nuevoEstado) {
+            console.log(selectEstado.value);
+
+            if (!cedula || !nuevoEstadoNombre || selectEstado.value == -1) {
                 mostrar_mal("Debe completar todos los campos.");
                 return;
             }
 
             const data = 'cedula=' + encodeURIComponent(cedula) +
-                        '&nuevoEstado=' + encodeURIComponent(nuevoEstado);
+                        '&nuevoEstadoNombre=' + encodeURIComponent(nuevoEstadoNombre);
 
             submit('/estado/cambiar', data);
         }
@@ -126,7 +174,6 @@
             if (respuesta) {
                 // Si el usuario elige volver al login
                 if (enIframe) {
-                    // Redirigir toda la página (no solo el iframe)
                     window.top.location.href = urlLogin;
                 } else {
                     window.location.href = urlLogin;
@@ -140,9 +187,10 @@
                 }
             }
         }
+
+        async function excepcionDeAplicacion(mensaje) {
+            await mostrarMensaje(mensaje);
+        }
     </script>
-
-
-<script src="utilesVista.js"></script>
 </body>
 </html>

@@ -91,7 +91,7 @@ public class ControladorTableroPropietario implements Observador{
 
     @Override
     public void actualizar(Object evento, Observable origen) {
-        if(evento.equals(EventosSistema.TRANSITO_REALIZADO) || evento.equals(EventosSistema.ESTADO)){
+        if(evento.equals(EventosSistema.TRANSITO_REALIZADO)){
             conexionNavegador.enviarJSON(Respuesta.lista(propietario(this.propietario), transitosRealizados(this.propietario)));
         }
 

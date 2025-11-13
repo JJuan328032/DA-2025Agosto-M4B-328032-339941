@@ -101,7 +101,7 @@
             const cedula = document.getElementById('cedula').value;
 
             if (!cedula) {
-                alert('Ingrese una cédula');   
+                mostrar_mal('Ingrese una cédula');   
                 return;
             }
 
@@ -152,7 +152,7 @@
             const puesto = document.getElementById('indicePuesto');
             const cedula = document.getElementById('cedula').value;
 
-            if (!bonificacion.value || !puesto.value || !cedula) {
+            if (!bonificacion.value || !puesto.value || !cedula || bonificacion.value == -1 || puesto.value == -1) {
                 mostrar_mal('Por favor complete todos los campos');
                 return;
             }

@@ -33,4 +33,15 @@ public class MapperSoloNombre {
 
         return nueva;
     }
+
+    public static ArrayList<NombreDTO> toDTOlistString(ArrayList<String> lista) {
+        ArrayList<NombreDTO> nueva = new ArrayList<>();
+
+        for(String s : lista) {
+            nueva.add(toDTO(s));
+        }
+        
+
+        return nueva;
+    }
 }

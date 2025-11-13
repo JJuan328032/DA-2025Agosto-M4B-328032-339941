@@ -19,6 +19,7 @@ import observador.Observador;
 import ort.da.sistema_peajes.ConexionNavegador;
 import ort.da.sistema_peajes.Respuesta;
 import ort.da.sistema_peajes.peaje.dto.mappers.MapperPropietario;
+import ort.da.sistema_peajes.peaje.dto.mappers.MapperSoloNombre;
 import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
 import ort.da.sistema_peajes.peaje.exceptions.NoEncontradoException;
 import ort.da.sistema_peajes.peaje.exceptions.PropietarioException;
@@ -55,9 +56,7 @@ public class ControladorCambiarEstadoPropietario implements Observador{
             return Respuesta.lista(new Respuesta("accesoDenegado", "No tiene permisos para acceder aquí"));
         }
 
-        List<String> estados = Fachada.getInstancia().obtenerEstadosPropietario();
-
-        return Respuesta.lista(new Respuesta("estadosDefinidos", estados));
+        return Respuesta.lista(new Respuesta("estadosDefinidos", MapperSoloNombre.toDTOlistString(Fachada.getInstancia().obtenerEstadosPropietario())));
     }
 
 
@@ -118,7 +117,7 @@ public class ControladorCambiarEstadoPropietario implements Observador{
 
     @Override
     public void actualizar(Object evento, Observable origen) {
-        if(evento.equals(EventosSistema.ESTADO)){
+        if(evento.equals(EventosSistema.ESTADO_NOTIFICACION)){
             conexionNavegador.enviarJSON(Respuesta.lista(propietario()));
         }
     }

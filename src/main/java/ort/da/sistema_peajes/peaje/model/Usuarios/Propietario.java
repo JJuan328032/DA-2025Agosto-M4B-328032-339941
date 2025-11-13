@@ -197,7 +197,7 @@ public class Propietario extends Usuario {
 
     public void cambiarEstado(EstadoPropietario nuevo) {
         this.estadoPropietario = nuevo;
-        agregarNotificacionAlPrincipio(Notificacion.notificarEstado(nuevo.toString()));
+        agregarNotificacionAlPrincipio(Notificacion.notificarEstado(nuevo.getNombre()));
 
         this.avisar(EventosSistema.ESTADO_NOTIFICACION);
     }

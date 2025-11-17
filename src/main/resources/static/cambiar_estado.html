@@ -165,6 +165,10 @@
             div.style.color = "#721c24";
         }
 
+        function mostrar_error(mensaje) {
+         mostrar_mal(mensaje);
+        }
+
         async function mostrar_accesoDenegado(mensaje) {
             let respuesta = await mostrarConfirmacion(mensaje, "Volver a Login", "Cerrar");
 

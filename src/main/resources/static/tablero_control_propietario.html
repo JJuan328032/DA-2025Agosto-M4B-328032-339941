@@ -16,8 +16,21 @@
         <section class="seccion" id="datos-propietario">
             <h2>Datos del Propietario</h2>
             <div id="info-propietario">
-                <!-- Los datos del propietario se cargarán dinámicamente -->
+                <div id="propietario-datos"></div>
+
+                <div class="fila-propietario">
+                    <div class="prop-item">
+                        <h3>Estado</h3>
+                        <div id="prop-estado"></div>
+                    </div>
+
+                    <div class="prop-item">
+                        <h3>Saldo</h3>
+                        <div id="prop-saldo"></div>
+                    </div>
             </div>
+        </div>
+
         </section>
 
         <!-- Grid de 2 columnas para bonificaciones y vehículos -->
@@ -25,7 +38,7 @@
             <section class="seccion" id="bonificaciones">
                 <h2>Bonificaciones Asignadas</h2>
                 <div id="lista-bonificaciones">
-                    <!-- La tabla de bonificaciones se generará dinámicamente -->
+                    <!-- La tabla de bonificaciones se generará dinámicamente --> 
                 </div>
             </section>
 
@@ -66,10 +79,22 @@
         urlLogin = "login_Propietario.html"
 
         // Funciones para mostrar los datos recibidos del controlador
-        function mostrar_propietario(propietario) {
-            const propietarioDiv = document.getElementById('info-propietario');
-            propietarioDiv.innerHTML = crearTablaDesdeJson([propietario]);
+        function mostrar_propietario(prop) {
+
+        // Datos que no cambian seguido (nombre, cédula, etc.)
+        document.getElementById("propietario-datos").innerHTML =
+            crearTablaDesdeJson([{
+                nombre: prop.nombre,
+                 cedula: prop.cedula
+            }]);
+
+            // Parte dinámica del estado
+            document.getElementById("prop-estado").textContent = prop.estado;
+
+            // Saldo actualizado
+            document.getElementById("prop-saldo").textContent = prop.saldo;
         }
+
 
         function mostrar_asignaciones(asignaciones) {
             console.log("Llegaron asignaciones: ", asignaciones);

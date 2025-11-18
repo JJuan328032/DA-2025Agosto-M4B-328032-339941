@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+
+import jakarta.servlet.http.HttpSession;
 import observador.Observable;
 import observador.Observador;
 import ort.da.sistema_peajes.ConexionNavegador;
@@ -39,74 +41,91 @@ public class ControladorTableroPropietario implements Observador{
     @GetMapping(value = "/registrarSSE", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter registrarSSE() {
         conexionNavegador.conectarSSE();
-        return conexionNavegador.getConexionSSE(); 
-       
+        return conexionNavegador.getConexionSSE();
     }
 
     //TODO que pasa cuando un propietario se va de su sesion y el boserver sigue asignado? Como manejamos la descuscripcion?
 
-    //@SessionAttribute(name = "propietario") Propietario p
+
     @PostMapping("/informacion")
     public List<Respuesta> iniciarTablero(@SessionAttribute(name = "propietario", required = false) Propietario p){
 
         if(p == null){
-            return Respuesta.lista(new Respuesta("accesoDenegado", "login_Propietario.html"));
+            return Respuesta.lista(new Respuesta("accesoDenegado", "Debe volver a entrar"));
         }
 
         this.propietario = p;
         this.propietario.agregarObservador(this);
 
         return Respuesta.lista(
-            propietario(p),
-            asignaciones(p),
-            vehiculos(p),
-            transitosRealizados(p),
-            notificaciones(p)
+            propietario(),
+            asignaciones(),
+            vehiculos(),
+            transitosRealizados(),
+            notificaciones()
             );
+    }
+
+    @PostMapping("/nosVemos")
+    public void salida(HttpSession sesionHttp){
+
+        Propietario p = (Propietario) sesionHttp.getAttribute("propietario");
+
+        if(p != null){
+            sesionHttp.removeAttribute("propietario");
+        }
+
+        //return Respuesta.lista(new Respuesta("volver", "Debe volver a entrar"));
     }
     
 
-    private Respuesta propietario(Propietario p){
-        return new Respuesta("propietario", MapperPropietario.toDTO(p));
+    private Respuesta propietario(){
+        return new Respuesta("propietario", MapperPropietario.toDTO(this.propietario));
     }
 
     //Lista de Asignaciones de Peajes del Propietario - Bonificacion, Puesto, FechaAsignada
-    private Respuesta asignaciones(Propietario p){
-        return new Respuesta("asignaciones", MapperAsignacion.toDTOList(p.getAsignaciones()));
+    private Respuesta asignaciones(){
+        return new Respuesta("asignaciones", MapperAsignacion.toDTOList(this.propietario.getAsignaciones()));
     }
 
     //Vehiculos del Propietario - Matricula, Modelo, Color, Transitos, MontoTotal
-    private Respuesta vehiculos(Propietario p){
-        return new Respuesta("vehiculos", MapperInfoVehiculo.toDTOList(p.obtenerInfoVehiculos()));
+    private Respuesta vehiculos(){
+        return new Respuesta("vehiculos", MapperInfoVehiculo.toDTOList(this.propietario.obtenerInfoVehiculos()));
     }
 
     //Transitos Realizados - Puesto, Matricula, Tarifa, MontoTarifa, Bonificacion, MontoBonificacion, MontoPagado, Fecha, Hora
-    private Respuesta transitosRealizados(Propietario p){
-        return new Respuesta("transitosRealizados", MapperRegistro.toDTO(p.getRegistros()));
+    private Respuesta transitosRealizados(){
+        return new Respuesta("transitosRealizados", MapperRegistro.toDTO(this.propietario.getRegistros()));
     }
 
-    private Respuesta notificaciones(Propietario p){
-        return new Respuesta("notificaciones", MapperNotificacion.toDTOList(p.getNotificaciones()));
+    private Respuesta notificaciones(){
+        return new Respuesta("notificaciones", MapperNotificacion.toDTOList(this.propietario.getNotificaciones()));
     }
 
-    //TODO separar en vista el espacio del saldo y estado. Si no se separan, siempre actualizo tres campos por cambiar uno
+    private Respuesta estado(){
+        return new Respuesta("estado",this.propietario.getEstado());
+    }
+
+    private Respuesta saldo(){
+        return new Respuesta("saldo", this.propietario.getSaldo());
+    }
 
     @Override
     public void actualizar(Object evento, Observable origen) {
         if(evento.equals(EventosSistema.TRANSITO_REALIZADO)){
-            conexionNavegador.enviarJSON(Respuesta.lista(propietario(this.propietario), transitosRealizados(this.propietario)));
+            conexionNavegador.enviarJSON(Respuesta.lista(saldo(), transitosRealizados()));
         }
 
         if(evento.equals(EventosSistema.BONO_ASIGNADO)){
-            conexionNavegador.enviarJSON(Respuesta.lista(asignaciones(this.propietario)));
+            conexionNavegador.enviarJSON(Respuesta.lista(asignaciones()));
         }
 
         if(evento.equals(EventosSistema.ESTADO_NOTIFICACION)){
-            conexionNavegador.enviarJSON(Respuesta.lista(propietario(this.propietario), notificaciones(this.propietario)));
+            conexionNavegador.enviarJSON(Respuesta.lista(estado(), notificaciones()));
         }
 
         if(evento.equals(EventosSistema.NOTIFICACION)){
-            conexionNavegador.enviarJSON(Respuesta.lista(notificaciones(this.propietario)));
+            conexionNavegador.enviarJSON(Respuesta.lista(notificaciones()));
         }
     }
 }

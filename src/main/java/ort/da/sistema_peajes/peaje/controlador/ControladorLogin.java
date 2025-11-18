@@ -57,7 +57,7 @@ public class ControladorLogin {
     public List<Respuesta> salirAdministrador(HttpSession sesionHttp){
         // Lógica para autenticar al propietario
         Administrador a = (Administrador) sesionHttp.getAttribute("administrador");
-        if(a!=null){
+        if(a != null){
             Fachada.getInstancia().logoutAdmin(a);
             sesionHttp.removeAttribute("administrador");
         }

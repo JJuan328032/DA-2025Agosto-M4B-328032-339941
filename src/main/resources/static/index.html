@@ -18,7 +18,7 @@
       </div>
 
       <div class="panel-derecho">
-        <div id="mensaje-sistema" class="mensaje-oculto">
+        <div id="mensaje-sistema">
           <!-- Mensajes del sistema aparecerán aquí -->
         </div>
       </div>
@@ -35,6 +35,22 @@
     document.getElementById('btn-admin').addEventListener('click', () => {
       window.location.href = "login_Administrador.html";
     });
+
+    function mostrar_error(mensaje){
+       const div = document.getElementById("mensaje-sistema");
+       div.textContent = mensaje;
+    }
+
+    //capturar parámetro 'error' si fue enviado en el redirect
+    const params = new URLSearchParams(window.location.search);
+    const error = params.get("error");
+
+    if (error) {
+        mostrar_error(error);
+    }
+
+
+
   </script>
 </body>
 </html>

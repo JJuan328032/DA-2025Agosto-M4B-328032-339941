@@ -35,6 +35,9 @@
         urlRegistroSSE="/menu/registrarSSE";
         urlLogin = "login_Administrador.html"
         
+        urlQSBono = "/bonificaciones/vistaCerrada"; 
+        urlQSEstado = "/estado/vistaCerrada";
+
         function mostrar_nombre(nombre){
             console.log(nombre);
             document.getElementById("nombre").innerHTML = nombre;
@@ -42,7 +45,9 @@
 
         function cerrarSesion() {
             // Realizar la petición de cierre de sesión
-            submit(urlCierreVista, "");
+            submit(urlQSBono);
+            submit(urlQSEstado);
+            submit(urlCierreVista);
         }
 
         // Manejador de respuesta exitosa del cierre de sesión
@@ -86,7 +91,10 @@
         });
 
         function conexionSSECerrada(event){
-              cerrar();
+
+            console.log("NOOOOO en donde te sentaste!");
+
+            cerrar();
         }
 
         opcion1 = "Volver a Login";

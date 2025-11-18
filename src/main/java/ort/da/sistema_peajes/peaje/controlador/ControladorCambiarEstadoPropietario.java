@@ -56,7 +56,11 @@ public class ControladorCambiarEstadoPropietario implements Observador{
             return Respuesta.lista(new Respuesta("accesoDenegado", "No tiene permisos para acceder aquí"));
         }
 
-        return Respuesta.lista(new Respuesta("estadosDefinidos", MapperSoloNombre.toDTOlistString(Fachada.getInstancia().obtenerEstadosPropietario())));
+        if(this.propietario != null){
+            return Respuesta.lista(estadosDefinidos(), propietario());
+        }
+
+        return Respuesta.lista();
     }
 
 
@@ -66,13 +70,12 @@ public class ControladorCambiarEstadoPropietario implements Observador{
         ValidarUsuario.validar(sesionHttp, "administrador");
 
         try {
-            this.propietario = Fachada.getInstancia().buscarPropietarioPorCedula(cedula);
 
-            sesionHttp.setAttribute("propietario", this.propietario);
-            //si un admin agrega un bono y están mirando al mismo propietario, la vista debe actualizarse
+            this.propietario = Fachada.getInstancia().buscarPropietarioPorCedula(cedula);
             this.propietario.agregarObservador(this);
 
-            return Respuesta.lista(propietario());
+            return Respuesta.lista(propietario(), estadosDefinidos());
+
         } catch (PropietarioException e) {
             return Respuesta.lista(new Respuesta("error", "No se pudo encontrar un propietario con cédula: " + e.getMessage()));
         }
@@ -85,8 +88,6 @@ public class ControladorCambiarEstadoPropietario implements Observador{
 
         String tipo = "mal";
         String mensaje;
-
-        this.propietario = (Propietario) sesionHttp.getAttribute("propietario");
 
         if(this.propietario == null){ 
             mensaje = "Debe buscar un Propietario primero";
@@ -109,8 +110,21 @@ public class ControladorCambiarEstadoPropietario implements Observador{
         return Respuesta.lista(new Respuesta(tipo, mensaje));
     }
 
+    @PostMapping("/vistaCerrada")
+    public void salir(){
+        if(this.propietario != null){
+            this.propietario.quitarObservador(this);
+            this.propietario = null;
+        }
+    }
+
+
     private Respuesta propietario(){
         return new Respuesta("propietarioEstado", MapperPropietario.toDTO(this.propietario));
+    }
+
+    private Respuesta estadosDefinidos(){
+        return new Respuesta("estadosDefinidos", MapperSoloNombre.toDTOlistString(Fachada.getInstancia().obtenerEstadosPropietario()));
     }
 
 

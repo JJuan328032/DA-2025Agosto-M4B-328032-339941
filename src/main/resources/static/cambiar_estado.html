@@ -30,7 +30,7 @@
                     <div class="field">
                         <div class="field-label">Estados Definidos</div>
                         <div id="estados-container" style="margin-bottom:8px">
-                            Cargando estados...
+                            Busque un propietario para continuar
                         </div>
                         <button class="btn-emular" id="btnCambiarEstado" onclick="cambiarEstado()" disabled style="width:100%">Cambiar Estado</button>
                         <div class="help-text">El estado actual se mostrará preseleccionado</div>
@@ -69,12 +69,16 @@
     <script>
         // Variables estándar para vistaWeb.js
         var urlIniciarVista = '/estado/opciones';
+
         var parametrosInicioVista = '';
         var prefijoNombreFuncionProcesoResultado = 'mostrar_';
         var urlLogin = "login_Administrador.html";
 
         // Cargar estados definidos desde backend
         function mostrar_estadosDefinidos(estados) {
+
+            console.log(estados);
+
             const container = document.getElementById("estados-container");
             if (!container) {
                 console.error("Elemento #estados-container no encontrado en el DOM");
@@ -87,7 +91,6 @@
                 campoMostrar: "nombre"
             });
 
-            console.log("Estados cargados:", estados);
         }
 
         // Buscar propietario por cédula
@@ -102,6 +105,9 @@
 
         // Mostrar propietario encontrado
         function mostrar_propietarioEstado(propietarioDTO) {
+
+            console.log(propietarioDTO);
+
             if (!propietarioDTO) {
                 mostrar_mal("No se encontró propietario con esa cédula.");
                 return;
@@ -131,19 +137,17 @@
 
         // Cambiar estado del propietario
         function cambiarEstado() {
-            const cedula = document.getElementById('cedula').value;
             const selectEstado = document.getElementById('nuevoEstadoNombre');
             const nuevoEstadoNombre = selectEstado.options[selectEstado.selectedIndex].text;
 
             console.log(selectEstado.value);
 
-            if (!cedula || !nuevoEstadoNombre || selectEstado.value == -1) {
+            if (!nuevoEstadoNombre || selectEstado.value == -1) {
                 mostrar_mal("Debe completar todos los campos.");
                 return;
             }
 
-            const data = 'cedula=' + encodeURIComponent(cedula) +
-                        '&nuevoEstadoNombre=' + encodeURIComponent(nuevoEstadoNombre);
+            const data = '&nuevoEstadoNombre=' + encodeURIComponent(nuevoEstadoNombre);
 
             submit('/estado/cambiar', data);
         }

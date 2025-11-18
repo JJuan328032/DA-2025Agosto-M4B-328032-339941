@@ -5,6 +5,7 @@ import javax.security.auth.login.LoginException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.ModelAndView;
 
 import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
 
@@ -24,4 +25,5 @@ public class GlobalExceptionHandler {
         String msg = "Error interno del servidor: " + (ex.getMessage() != null ? ex.getMessage() : "-");
         return ResponseEntity.status(500).body(msg);
     }
+
 }

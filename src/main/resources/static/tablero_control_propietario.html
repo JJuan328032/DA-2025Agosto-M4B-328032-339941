@@ -77,22 +77,28 @@
         urlIniciarVista = "/tablero/informacion";
         urlRegistroSSE="/tablero/registrarSSE";
         urlLogin = "login_Propietario.html"
+        urlCierreVista = "/tablero/nosVemos"
 
         // Funciones para mostrar los datos recibidos del controlador
         function mostrar_propietario(prop) {
-
-        // Datos que no cambian seguido (nombre, cédula, etc.)
-        document.getElementById("propietario-datos").innerHTML =
-            crearTablaDesdeJson([{
-                nombre: prop.nombre,
-                 cedula: prop.cedula
-            }]);
+            // Datos que no cambian seguido (nombre, cédula, etc.)
+            document.getElementById("propietario-datos").textContent = prop.nombreCompleto;
 
             // Parte dinámica del estado
-            document.getElementById("prop-estado").textContent = prop.estado;
+            mostrar_estado(prop.estado);
+
+            //cambiar css para que quede como tabla
 
             // Saldo actualizado
-            document.getElementById("prop-saldo").textContent = prop.saldo;
+            mostrar_saldo(prop.saldo);
+        }
+
+        function mostrar_estado(estado){
+            document.getElementById("prop-estado").textContent = estado;
+        }
+
+        function mostrar_saldo(saldo){
+            document.getElementById("prop-saldo").textContent = saldo;
         }
 
 

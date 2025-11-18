@@ -49,6 +49,10 @@ public class ControladorAsignarBonificaciones implements Observador{
             return Respuesta.lista(new Respuesta("accesoDenegado", "No tiene permisos para acceder aquí"));
         }
 
+        if(this.propietario != null){
+            return Respuesta.lista(bonificaciones(), puestos(), formatoPropietario());
+        }
+
         return Respuesta.lista(bonificaciones(), puestos());
     }
 
@@ -109,6 +113,13 @@ public class ControladorAsignarBonificaciones implements Observador{
         return Respuesta.lista(new Respuesta(estado, mensaje));
     }
 
+    @PostMapping("/vistaCerrada")
+    public void salir(){
+        if(this.propietario != null){
+            this.propietario.quitarObservador(this);
+            this.propietario = null;
+        }
+    }
 
 
     private Respuesta bonificaciones(){

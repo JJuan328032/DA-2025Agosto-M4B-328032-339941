@@ -28,6 +28,10 @@ public class SeedData {
         Propietario prop2 = fachada.agregarPropietario("q", "q", "Ana Martínez", "50231689");
         prop2.setSaldo(0);
 
+        Propietario prop3 = fachada.agregarPropietario("r", "r", "Sin Comentarios", "00000000");
+        prop2.setSaldo(0);
+
+
         Propietario desabilitado = fachada.agregarPropietario("d", "d", "Facundo Nieves", "50231649");
         desabilitado.setEstadoPropietario(new Deshabilitado(desabilitado));
 

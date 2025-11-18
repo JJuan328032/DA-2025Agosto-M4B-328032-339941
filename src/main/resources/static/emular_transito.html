@@ -103,23 +103,29 @@
             submit(urlTarifas, params);
         }
 
-        function mostrar_tarifas(tarifas){
-            document.getElementById("tarifas-container").innerHTML = crearTablaDesdeJson(tarifas);
-        }
 
-        function handleEmularTransito(event){
+        function handleEmularTransito(event) {
+            event.preventDefault(); // SIEMPRE evitamos que refresque
+
             const select = document.getElementById("indicePuesto");
+
             if (!select) {
-                console.error("No se encontró el select de puestos");
+                mostrar_error("No se encontró el selector de puestos.");
                 return;
             }
 
             const valorSeleccionado = select.value;
-            if (valorSeleccionado === "-1") return;
 
-            event.preventDefault();
+            if (valorSeleccionado === "-1") {
+                mostrar_error("Debe seleccionar un puesto antes de emular el tránsito.");
+                return;
+            }
+
+            ocultarError(); // limpiar error previo si todo está ok
+
             submit(urlEmular, serializarFormulario("formEmular"));
         }
+
 
         function mostrar_transitoEmulado(datos){
             console.log("Datos del tránsito:", datos);

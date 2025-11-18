@@ -83,6 +83,9 @@ public class ControladorEmular {
         return Respuesta.lista(new Respuesta("error", mensaje));
     }
 
+    //TODO cuando muestra la bonificaion no se muestra nombre en tabla de transitos realiza2
+    //TODO en transitos realizados aparecen transitos que no fueron pagos. Evaluar momento de guardado en lista de propietario para evaluar condicion de Frecuente
+
     private Respuesta puestos() {
         return new Respuesta("puestos", MapperSoloNombre.toDTOlistPuestos(Fachada.getInstancia().getPuestos()));
     }

@@ -29,14 +29,15 @@ public class Asignacion {
 	public LocalDate getFecha() {
 		return this.fecha;
 	}
+	
 
-	//TODO es la forma correcta de usar equals?
+	
 	public boolean equals(Puesto p){
 		return this.puesto.equals(p);
 	}
 
-	public boolean equals(Asignacion a){
-		return this.bonificacion.equals(a.getBonificacion()) && this.puesto.equals(a.getPuesto());
+	public boolean mismoBono(String bonoNombre){
+		return this.getBonificacionNombre().equals(bonoNombre);
 	}
 
     public double calcularMontoBonificado(int montoTarifa, boolean val) {

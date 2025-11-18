@@ -13,11 +13,7 @@ public abstract class EstadoPropietario {
     }
 
     public Propietario getPropietario(){ return this.propietario;}
-    
 
-    public boolean mismoEstado(EstadoPropietario estado) {
-        return this.getClass().equals(estado.getClass());
-    }
 
     public abstract void habilitado() throws EstadoException;
     public abstract void suspendido() throws EstadoException;

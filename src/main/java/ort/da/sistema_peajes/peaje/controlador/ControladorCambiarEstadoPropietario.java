@@ -43,7 +43,7 @@ public class ControladorCambiarEstadoPropietario implements Observador{
      @GetMapping(value = "/registrarSSE", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter registrarSSE() {
         conexionNavegador.conectarSSE();
-        return conexionNavegador.getConexionSSE(); 
+        return conexionNavegador.getConexionSSE();
        
     }
     
@@ -113,6 +113,8 @@ public class ControladorCambiarEstadoPropietario implements Observador{
         return new Respuesta("propietarioEstado", MapperPropietario.toDTO(this.propietario));
     }
 
+
+    //TODO si cambia el estado a uno que no pueda entrar, forzar volver al login
     
 
     @Override

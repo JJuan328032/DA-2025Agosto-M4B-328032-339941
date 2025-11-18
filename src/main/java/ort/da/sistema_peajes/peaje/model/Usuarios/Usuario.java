@@ -40,4 +40,5 @@ public abstract class Usuario extends Observable {
 	public boolean validarCedula(String cedula) {
 		return this.cedula != null && this.cedula.equals(cedula);
 	}
+
 }

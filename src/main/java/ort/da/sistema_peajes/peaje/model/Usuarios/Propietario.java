@@ -29,8 +29,6 @@ public class Propietario extends Usuario {
 	private ArrayList<Vehiculo> vehiculos;
 	private ArrayList<Registro> registros;
 	private ArrayList<Asignacion> asignaciones;
-
-
     private ArrayList<Notificacion> notificaciones;
 
 	private EstadoPropietario estadoPropietario;
@@ -85,11 +83,9 @@ public class Propietario extends Usuario {
         return this.notificaciones;
     }
 
-    /*
     public EstadoPropietario getEstadoPropietario() {
         return this.estadoPropietario;
     }
-    */
 
     public void setEstadoPropietario(EstadoPropietario estadoPropietario) {
         this.estadoPropietario = estadoPropietario;
@@ -104,11 +100,11 @@ public class Propietario extends Usuario {
         this.avisar(EventosSistema.TRANSITO_REALIZADO);
     }
 
-    /*
     public void agregarAsignacion(Asignacion a) {
         this.asignaciones.add(a);
     }
-    */
+    
+
 
     public void agregarAsignacion(Bonificacion bonificacion, Puesto puesto) throws AsignacionException{
         Asignacion nueva = new Asignacion(puesto, bonificacion, LocalDate.now());
@@ -176,6 +172,8 @@ public class Propietario extends Usuario {
         return null;
     }
 
+    //TODO unificar logica para validar existencia de Asignacion y poder buscar para Pagar
+
     private void existeAsignacion(Puesto buscada) throws AsignacionException{
         for(Asignacion a : this.asignaciones) if(a.equals(buscada)) throw new AsignacionException("");
     }
@@ -183,17 +181,18 @@ public class Propietario extends Usuario {
     public boolean esSegundoTransitoDelDia(Puesto puesto, Vehiculo vehiculo, LocalDateTime fecha) {
 		int cont = 0;
 
-		for(int i = 0; i < this.registros.size() && cont < 2; i++){
+		for(int i = 0; i < this.registros.size() && cont < 1; i++){
 			if(this.registros.get(i).validarMismoDia(puesto, vehiculo, fecha)) cont++;
 		}
 
-		return cont == 2;
+		return cont == 1;
 	}
 
+
+    
     public void restarMonto(double monto){
         this.saldo -= monto;
     }
-
 
     public void cambiarEstado(EstadoPropietario nuevo) {
         this.estadoPropietario = nuevo;
@@ -229,21 +228,16 @@ public class Propietario extends Usuario {
         this.estadoPropietario.deshabilitado();
     }
 
-
     public void habilitado() throws EstadoException {
         this.estadoPropietario.habilitado();
     }
-
 
     public void penalizado() throws EstadoException {
         this.estadoPropietario.penalizado();
     }
 
-
     public void suspendido() throws EstadoException {
         this.estadoPropietario.suspendido();
     }
-
-
 
 }

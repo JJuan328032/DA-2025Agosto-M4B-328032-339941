@@ -43,4 +43,6 @@ public class ControladorMenu {
 
         return Respuesta.lista(new Respuesta("nombre", sesion.getNombreCompleto()));
     }
+
+    //TODO mostrar mensaje de logoput
 }

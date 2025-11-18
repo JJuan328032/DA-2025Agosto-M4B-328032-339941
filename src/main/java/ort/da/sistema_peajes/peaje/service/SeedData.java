@@ -37,6 +37,7 @@ public class SeedData {
         
         Bonificacion bonFrecuente = fachada.agregarBonificacion("frecuente");
         Bonificacion bonExonerado = fachada.agregarBonificacion("exonerado");
+        Bonificacion bonTrabajador = fachada.agregarBonificacion("trabajador");
 
         // Crear puestos con tarifas
         Puesto peaje1 = new Puesto("Peaje Ruta 1", "Km 56 Ruta 1");

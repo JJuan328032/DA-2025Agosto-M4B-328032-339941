@@ -4,7 +4,6 @@ import ort.da.sistema_peajes.peaje.model.Usuarios.Usuario;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
 import ort.da.sistema_peajes.peaje.exceptions.PropietarioException;
 import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
-import ort.da.sistema_peajes.peaje.model.Estados.EstadoPropietario;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Administrador;
 
 import java.util.ArrayList;
@@ -67,18 +66,17 @@ public class SistemaUsuarios {
 		return u;
 	}
 
-	public <T extends Usuario> T buscarUsuario(String usuario, String password, ArrayList<T> lista) throws LoginException, EstadoException{
+	private <T extends Usuario> T buscarUsuario(String usuario, String password, ArrayList<T> lista) throws LoginException, EstadoException{
 		for (T u : lista) if (u.validarCredenciales(usuario, password)) return u;
 
-		throw new LoginException("Algo salió mal...");
+		throw new LoginException("Acceso denegado");
 	}
-
 
     public void logoutAdmin(Administrador a) {
         a.setLogged(false);
     }
 
-	public <T extends Usuario> T buscarUsuarioCedula(String cedula, ArrayList<T> lista) throws PropietarioException {
+	private <T extends Usuario> T buscarUsuarioCedula(String cedula, ArrayList<T> lista) throws PropietarioException {
 		for (T u : lista) {
 			if (u.validarCedula(cedula)) {
 				return u;
@@ -92,9 +90,5 @@ public class SistemaUsuarios {
 	public Propietario buscarPropietarioPorCedula(String cedula) throws PropietarioException{
 		return buscarUsuarioCedula(cedula, this.propietarios);
 	}
-
-    public void cambiarEstado(Propietario p, EstadoPropietario estado) throws PropietarioException {
-    	p.setEstadoPropietario(estado);
-    }
 
 }

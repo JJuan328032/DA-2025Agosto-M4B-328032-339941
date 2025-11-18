@@ -7,34 +7,29 @@ import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
 public class Pagar {
 
     protected static void realizarPagoSimple(Propietario propietario, Registro registro) throws EstadoException, SaldoException{
-        
-        propietario.agregarRegistro(registro);
 
         if(propietario.validarEstado()){
             Puesto puesto = registro.getPuesto();
             Vehiculo vehiculo = registro.getVehiculo();
             int montoTarifa = registro.getMontoTarifa();
 
-            Asignacion a = propietario.buscarAsignacionSegunPuesto(puesto);
+            Asignacion asignacion = propietario.buscarAsignacionSegunPuesto(puesto);
 
-            if(a != null) {
+            if(asignacion != null) {
 
                 boolean segundoTransito =  false;
 
-
-                //TODO validar que esta validacion es relevante
+                //TODO esta validacion es relevante?
                 //TODO se puede mejorar esta secuencia?
 
-                if(a.getBonificacionNombre().toLowerCase().equals("frecuente")) segundoTransito =  propietario.esSegundoTransitoDelDia(puesto, vehiculo, registro.getFecha());
+                if(asignacion.mismoBono("frecuente")) segundoTransito =  propietario.esSegundoTransitoDelDia(puesto, vehiculo, registro.getFecha());
 
                 //boolean aux = this.esSegundoTransitoDelDia(puesto, vehiculo, registro.getFecha());
                 //System.out.println("segundoTransitoDia: " + aux);
 
-                double montoBonificado = a.calcularMontoBonificado(montoTarifa, segundoTransito);
-                System.out.println("Pagar, montoBonificado: " + montoBonificado);
+                double montoBonificado = asignacion.calcularMontoBonificado(montoTarifa, segundoTransito);
 
-
-                registro.setMontoNombreBono(montoBonificado, a.getBonificacionNombre());
+                registro.setMontoNombreBono(montoBonificado, asignacion.getBonificacionNombre());
             }
 
             completarRegistro(propietario, registro);
@@ -46,6 +41,8 @@ public class Pagar {
         //se usa registro.calcularPrecioFinal() por si existe un montoBonificado. Así se se puede usar para ambos casos
         descontarTransito(propietario, registro.calcularMontoPagar());
         registro.setMontoPagado();
+
+        propietario.agregarRegistro(registro);
     }
 
     private static void descontarTransito(Propietario propietario, double monto) throws SaldoException{
@@ -53,7 +50,7 @@ public class Pagar {
         int saldo = propietario.getSaldo();
 
         //System.out.println("Resta descontarTransito: " + (this.saldo - monto));
-        if(saldo - monto < 0) throw new SaldoException("Saldo insuficiente: " + saldo + " para cobrar el total: " + monto);
+        if(saldo - monto < 0) throw new SaldoException("Saldo Actual: " + saldo + "\n Saldo insuficiente para cobrar el total: " + monto);
 
         //funciona si es Exonerado y el saldo es cero
         propietario.restarMonto(monto);

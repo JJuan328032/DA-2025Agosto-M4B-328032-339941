@@ -50,4 +50,9 @@ public class Penalizado extends EstadoPropietario {
         return "Penalizado";
     }
 
+    @Override
+    public void puedeAsignarBono() throws EstadoException {
+        return;
+    }
+
 }

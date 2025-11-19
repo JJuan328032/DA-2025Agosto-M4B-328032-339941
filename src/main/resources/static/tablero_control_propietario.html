@@ -12,26 +12,29 @@
 <body>
     <script src="utilesVista.js"></script>
     <div class="tablero-container">
-        <!-- Datos del Propietario -->
         <section class="seccion" id="datos-propietario">
-            <h2>Datos del Propietario</h2>
-            <div id="info-propietario">
-                <div id="propietario-datos"></div>
+            <h2>Resumen del Propietario</h2>
 
-                <div class="fila-propietario">
-                    <div class="prop-item">
-                        <h3>Estado</h3>
-                        <div id="prop-estado"></div>
-                    </div>
+            <div class="resumen-propietario">
 
-                    <div class="prop-item">
-                        <h3>Saldo</h3>
-                        <div id="prop-saldo"></div>
-                    </div>
+                <div class="prop-card">
+                    <div class="label">Nombre Completo</div>
+                    <div class="value" id="propietario-datos"></div>
+                </div>
+
+                <div class="prop-card">
+                    <div class="label">Estado</div>
+                    <div class="value" id="prop-estado"></div>
+                </div>
+
+                <div class="prop-card">
+                    <div class="label">Saldo Actual</div>
+                    <div class="value" id="prop-saldo"></div>
+                </div>
+
             </div>
-        </div>
-
         </section>
+
 
         <!-- Grid de 2 columnas para bonificaciones y vehículos -->
         <div class="grid-50-50">
@@ -103,7 +106,6 @@
 
 
         function mostrar_asignaciones(asignaciones) {
-            console.log("Llegaron asignaciones: ", asignaciones);
             const bonificacionesDiv = document.getElementById('lista-bonificaciones');
             bonificacionesDiv.innerHTML = crearTablaDesdeJson(asignaciones);
         }
@@ -127,7 +129,11 @@
             const lista = document.getElementById('lista-notificaciones');
             lista.innerHTML = '';
             // Opcional: llamar al backend para marcar como leídas
-            submit('/api/propietario/notificaciones/borrar', '');
+            submit('/tablero/borrarNotificaciones');
+        }
+
+        function mostrar_borrarNotificaciones(mensaje){
+            alert(mensaje);
         }
 
         function procesarErrorSubmit(status,text){

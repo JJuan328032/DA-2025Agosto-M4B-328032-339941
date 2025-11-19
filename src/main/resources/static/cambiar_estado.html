@@ -76,9 +76,6 @@
 
         // Cargar estados definidos desde backend
         function mostrar_estadosDefinidos(estados) {
-
-            console.log(estados);
-
             const container = document.getElementById("estados-container");
             if (!container) {
                 console.error("Elemento #estados-container no encontrado en el DOM");
@@ -105,8 +102,6 @@
 
         // Mostrar propietario encontrado
         function mostrar_propietarioEstado(propietarioDTO) {
-
-            console.log(propietarioDTO);
 
             if (!propietarioDTO) {
                 mostrar_mal("No se encontró propietario con esa cédula.");
@@ -140,8 +135,6 @@
             const selectEstado = document.getElementById('nuevoEstadoNombre');
             const nuevoEstadoNombre = selectEstado.options[selectEstado.selectedIndex].text;
 
-            console.log(selectEstado.value);
-
             if (!nuevoEstadoNombre || selectEstado.value == -1) {
                 mostrar_mal("Debe completar todos los campos.");
                 return;
@@ -170,7 +163,7 @@
         }
 
         function mostrar_error(mensaje) {
-         mostrar_mal(mensaje);
+            mostrar_mal(mensaje);
         }
 
         async function mostrar_accesoDenegado(mensaje) {

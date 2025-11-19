@@ -2,9 +2,6 @@ package ort.da.sistema_peajes.peaje.model;
 
 import java.time.LocalDateTime;
 
-import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
-import ort.da.sistema_peajes.peaje.exceptions.SaldoException;
-
 public class Registro {
     private Puesto puesto;
     private Vehiculo vehiculo;
@@ -101,11 +98,6 @@ public class Registro {
                 + ", hora=" + fecha.toLocalTime() + ", tarifa=" + tarifa + ", montoTarifa=" + montoTarifa + ", montoBonificado="
                 + montoBonificado + ", bonificacion=" + (bonificacion != null ? bonificacion : "N/A") 
                 + ", montoPagado=" + montoPagado + "]";
-    }
-
-
-    public void cobrar() throws SaldoException, EstadoException{
-        this.getVehiculo().realizarPago(this);
     }
 
 

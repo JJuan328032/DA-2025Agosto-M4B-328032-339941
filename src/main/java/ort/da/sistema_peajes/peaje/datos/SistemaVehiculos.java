@@ -32,6 +32,10 @@ public class SistemaVehiculos {
 		throw new VehiculoException(matricula);
 	}
 
+    public void agregarVariosVehiculos(ArrayList<Vehiculo> lista) {
+        this.vehiculos.addAll(lista);
+    }
+
 	/*
     public void asociarVehiculoAPropietario(Vehiculo v, Propietario p) {
         v.setPropietario(p);

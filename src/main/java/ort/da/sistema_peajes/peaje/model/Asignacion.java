@@ -37,10 +37,14 @@ public class Asignacion {
 	}
 
 	public boolean mismoBono(String bonoNombre){
-		return this.getBonificacionNombre().equals(bonoNombre);
+		return this.getBonificacionNombre().toLowerCase().equals(bonoNombre);
 	}
 
     public double calcularMontoBonificado(int montoTarifa, boolean val) {
         return this.bonificacion.calcular(montoTarifa, val);
     }
+
+	public String toString(){
+		return "Bono: " + this.getBonificacionNombre() + " | " + "Puesto: " + this.getPuestoNombre();
+	}
 }

@@ -17,7 +17,7 @@
 
 
 			<div class="field">
-				<label for="user">Usuario</label>
+				<label for="user">Cedula</label>
 				<input type="text" id="user" name="user" required />
 			</div>
 			<div class="field">
@@ -38,7 +38,6 @@
 
 		// Enviar datos del formulario usando las utilidades del proyecto
 		function handleLogin(event) {
-			console.log(event);
             event.preventDefault();
             submit(URL_SUBMIT, serializarFormulario("formLogin"));
         }

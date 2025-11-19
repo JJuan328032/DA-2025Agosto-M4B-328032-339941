@@ -54,8 +54,6 @@ public class ControladorEmular {
             return Respuesta.lista(new Respuesta("accesoDenegado", "No tiene permisos para acceder aquí"));
         }
 
-        //ValidarUsuario.validar(session, "administrador");
-
         return Respuesta.lista(puestos());
     }
 
@@ -68,6 +66,8 @@ public class ControladorEmular {
     public List<Respuesta> emularTransito(@RequestParam int indicePuesto, @RequestParam String matricula, @RequestParam LocalDateTime fechaHora) throws SaldoException, EstadoException, VehiculoException, PuestoException, Exception{
         //las exceptions son manejadas en sus respectivos objetos usando mensajes genericos o mas de un atributo
 
+
+
         String mensaje = "";
 
         try{
@@ -77,14 +77,13 @@ public class ControladorEmular {
         }catch(SaldoException e){
             mensaje = e.getMessage();
         }catch(EstadoException e){
-            mensaje = e.getMessage();
+            mensaje = "El propietario de este vehiculo está " + e.getMessage() + ". No puede realizar Tránsitos";
         }
 
         return Respuesta.lista(new Respuesta("error", mensaje));
     }
 
-    //TODO cuando muestra la bonificaion no se muestra nombre en tabla de transitos realiza2
-    //TODO en transitos realizados aparecen transitos que no fueron pagos. Evaluar momento de guardado en lista de propietario para evaluar condicion de Frecuente
+
 
     private Respuesta puestos() {
         return new Respuesta("puestos", MapperSoloNombre.toDTOlistPuestos(Fachada.getInstancia().getPuestos()));

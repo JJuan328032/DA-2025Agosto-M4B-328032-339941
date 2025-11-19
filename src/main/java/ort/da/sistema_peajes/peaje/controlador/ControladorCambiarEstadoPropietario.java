@@ -127,8 +127,6 @@ public class ControladorCambiarEstadoPropietario implements Observador{
         return new Respuesta("estadosDefinidos", MapperSoloNombre.toDTOlistString(Fachada.getInstancia().obtenerEstadosPropietario()));
     }
 
-
-    //TODO si cambia el estado a uno que no pueda entrar, forzar volver al login
     
 
     @Override

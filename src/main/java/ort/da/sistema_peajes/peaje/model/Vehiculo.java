@@ -1,7 +1,5 @@
 package ort.da.sistema_peajes.peaje.model;
 
-import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
-import ort.da.sistema_peajes.peaje.exceptions.SaldoException;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
 
 public class Vehiculo {
@@ -51,11 +49,6 @@ public class Vehiculo {
     public boolean igualPatente(String matricula) {
         return this.matricula.equalsIgnoreCase(matricula);
     }
-
-    public void realizarPago(Registro registro) throws SaldoException, EstadoException{
-		Pagar.realizarPagoSimple(this.getPropietario(), registro);
-    }
-
 
 	public String toString(){ return "MAtricula: " + this.matricula + " Categoria: " + this.getCategoriaNombre();}
 }

@@ -64,9 +64,6 @@ public class ControladorAsignarBonificaciones implements Observador{
         
         try{
             this.propietario = Fachada.getInstancia().buscarPropietarioPorCedula(cedula);
-
-            sesionHttp.setAttribute("propietario", this.propietario);
-            //si un admin agrega un bono y están mirando al mismo propietario, la vista debe actualizarse
             this.propietario.agregarObservador(this);
 
             return Respuesta.lista(formatoPropietario());
@@ -87,8 +84,6 @@ public class ControladorAsignarBonificaciones implements Observador{
 
         String estado = "mal";
         String mensaje;
-
-        this.propietario = (Propietario) sesionHttp.getAttribute("propietario");
 
         if(this.propietario == null){ 
             mensaje = "Debe buscar un Propietario primero";

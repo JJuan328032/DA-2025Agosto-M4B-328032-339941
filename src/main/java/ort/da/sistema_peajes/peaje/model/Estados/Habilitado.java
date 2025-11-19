@@ -52,4 +52,9 @@ public class Habilitado extends EstadoPropietario {
     public String getNombre() {
         return "Habilitado";
     }
+
+    @Override
+    public void puedeAsignarBono() throws EstadoException {
+        return;
+    }
 }

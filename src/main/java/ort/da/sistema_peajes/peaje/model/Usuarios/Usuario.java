@@ -7,18 +7,16 @@ import observador.Observable;
 
 public abstract class Usuario extends Observable {
 
-	private String usuario;
+	private String cedula;	
 	private String password;
 	private String nombreCompleto;
-	private String cedula;	
 	
 
 
-	public Usuario(String usuario, String password, String nombreCompleto, String cedula) {
-		this.usuario = usuario;
+	public Usuario(String cedula, String password, String nombreCompleto) {
+		this.cedula = cedula;
 		this.password = password;
 		this.nombreCompleto = nombreCompleto;
-		this.cedula = cedula;
 	}
 
 	abstract public void Validar() throws EstadoException ,LoginException;
@@ -33,8 +31,8 @@ public abstract class Usuario extends Observable {
 	}
 
 	
-	public boolean validarCredenciales(String usuario, String password) throws EstadoException, LoginException{
-		return this.usuario.equals(usuario) && this.password.equals(password);
+	public boolean validarCredenciales(String cedula, String password) throws EstadoException, LoginException{
+		return this.cedula.equals(cedula) && this.password.equals(password);
 	}
 
 	public boolean validarCedula(String cedula) {

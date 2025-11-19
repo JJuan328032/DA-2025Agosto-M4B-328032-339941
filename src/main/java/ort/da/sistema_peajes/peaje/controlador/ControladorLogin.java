@@ -25,31 +25,20 @@ public class ControladorLogin {
     public List<Respuesta> loginPropietario(HttpSession sesionHttp, @RequestParam String user, @RequestParam String pass) throws LoginException, EstadoException {
         // Lógica para autenticar al propietario
 
-        try {
-            Propietario p = Fachada.getInstancia().loginPropietario(user, pass);
+        Propietario p = Fachada.getInstancia().loginPropietario(user, pass);
         
-            sesionHttp.setAttribute("propietario", p);
-            return Respuesta.lista(new Respuesta("LoginExitoso", "tablero_control_propietario.html"));
-        } catch (LoginException e) {
-            throw new LoginException("Credenciales inválidas para propietario.");
-        }
-
+        sesionHttp.setAttribute("propietario", p);
+        return Respuesta.lista(new Respuesta("LoginExitoso", "tablero_control_propietario.html"));
     }
 
     @PostMapping("/loginAdministrador")
     public List<Respuesta> loginAdministrador(HttpSession sesionHttp, @RequestParam String user, @RequestParam String pass) throws LoginException, EstadoException{
         // Lógica para autenticar al propietario
 
-        try {
-            Administrador a = Fachada.getInstancia().loginAdministrador(user, pass);
+        Administrador a = Fachada.getInstancia().loginAdministrador(user, pass);
 
         sesionHttp.setAttribute("administrador", a);
         return Respuesta.lista(new Respuesta("LoginExitoso", "menu_administrador.html"));
-
-        } catch (LoginException e) {
-            throw new LoginException("Credenciales inválidas para administrador.");
-
-        }
 
     }
 

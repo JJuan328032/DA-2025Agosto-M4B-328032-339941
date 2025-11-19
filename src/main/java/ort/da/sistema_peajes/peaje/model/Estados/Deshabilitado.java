@@ -36,7 +36,7 @@ public class Deshabilitado extends EstadoPropietario {
 
     @Override
     public void puedeTransitar() throws EstadoException {
-        throw new EstadoException("No puede realizar Transitos");
+        throw new EstadoException("Deshabilitado");
     }
 
     @Override
@@ -47,6 +47,11 @@ public class Deshabilitado extends EstadoPropietario {
     @Override
     public String getNombre() {
         return "Deshabilitado";
+    }
+
+    @Override
+    public void puedeAsignarBono() throws EstadoException {
+        throw new EstadoException("El propietario esta deshabilitado. No se pueden asignar bonificaciones");
     }
 
 }

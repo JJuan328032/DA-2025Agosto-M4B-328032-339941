@@ -5,7 +5,6 @@ import javax.security.auth.login.LoginException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.ModelAndView;
 
 import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
 

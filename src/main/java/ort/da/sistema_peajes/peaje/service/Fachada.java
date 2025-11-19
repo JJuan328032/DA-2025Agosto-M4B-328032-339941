@@ -57,9 +57,17 @@ public class Fachada {
 		sistemaPuestos.agregarPuesto(peaje1);
 	}
 
+	public void agregarVariosPuestos(ArrayList<Puesto> listaPuestos) {
+        sistemaPuestos.agregarVariosPuestos(listaPuestos);
+    }
+
     public void agregarVehiculo(Vehiculo v1) {
         sistemaVehiculos.agregarVehiculo(v1);
     }
+
+	public void agregarVariosVehiculos(ArrayList<Vehiculo> lista){
+		sistemaVehiculos.agregarVariosVehiculos(lista);
+	}
 
     public void agregarRegistro(Registro r1) {
         sistemaRegistro.agregarRegistro(r1);
@@ -69,23 +77,23 @@ public class Fachada {
 		return sistemaBonificaciones.crear_agregarBonificacion(tipo);
 	}
 
-	public void agregarAdministrador(String user, String pass, String nombreCompleto, String cedula) {
-		sistemaUsuarios.agregarAdministrador(user, pass, nombreCompleto, cedula);
+	public void agregarAdministrador(String cedula, String pass, String nombreCompleto) {
+		sistemaUsuarios.agregarAdministrador(cedula, pass, nombreCompleto);
 	}
 
-    public Propietario agregarPropietario(String user, String pass, String nombreCompleto, String cedula) {
-        return sistemaUsuarios.agregarPropietario(user, pass, nombreCompleto, cedula);
+    public Propietario agregarPropietario(String cedula, String pass, String nombreCompleto, int saldo, int saldoMinimo) {
+        return sistemaUsuarios.agregarPropietario(cedula, pass, nombreCompleto, saldo, saldoMinimo);
     }
 
 
 	//LOGIN LOGIN LOGIN LOGIN LOGIN LOGIN LOGIN LOGIN LOGIN LOGIN LOGIN LOGIN LOGIN LOGIN LOGIN LOGIN LOGIN LOGIN
 
-	public Propietario loginPropietario(String user, String pass) throws LoginException, EstadoException{
-		return sistemaUsuarios.loginPropietario(user, pass);
+	public Propietario loginPropietario(String cedula, String pass) throws LoginException, EstadoException{
+		return sistemaUsuarios.loginPropietario(cedula, pass);
 	}
 
-	public Administrador loginAdministrador(String user, String pass) throws LoginException, EstadoException{
-		return sistemaUsuarios.loginAdministrador(user, pass);
+	public Administrador loginAdministrador(String cedula, String pass) throws LoginException, EstadoException{
+		return sistemaUsuarios.loginAdministrador(cedula, pass);
 	}
 
     public void logoutAdmin(Administrador a) {
@@ -103,7 +111,7 @@ public class Fachada {
 		return sistemaUsuarios.buscarPropietarioPorCedula(cedula);
 	}
 
-	public void asignarBonificaciones(Propietario propietario, String nombreBonificacion, String nombrePuesto) throws PropietarioException, BonificacionException, PuestoException, AsignacionException {
+	public void asignarBonificaciones(Propietario propietario, String nombreBonificacion, String nombrePuesto) throws PropietarioException, BonificacionException, PuestoException, AsignacionException, EstadoException {
 		Bonificacion bonificacion = sistemaBonificaciones.buscarBonificacionNombre(nombreBonificacion);
 		Puesto puesto = sistemaPuestos.obtenerPuestoPorNombre(nombrePuesto);
 

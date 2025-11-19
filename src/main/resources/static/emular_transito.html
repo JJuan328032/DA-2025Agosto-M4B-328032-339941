@@ -55,14 +55,6 @@
         urlEmular = "/emular/transito";
         urlLogin = "login_Administrador.html"
 
-        console.log("Carlos Rodríguez | 52468975");
-        console.log("Vehiculo: DEF456");
-        console.log("          ABC123");
-
-        console.log("Ana Martínez | 50231689");
-        console.log("Vehiculo: JKL012");
-        console.log("          GHI789");
-
 
         function mostrar_puestos(puestos){
             console.log(puestos);
@@ -72,12 +64,10 @@
         function mostrarSelect(){
             const select = document.getElementById("indicePuesto");
             const valorSeleccionado = select.value;
-            console.log("Seleccionaste:", valorSeleccionado);
             const textoSeleccionado = select.options[select.selectedIndex].text;
 
             if (valorSeleccionado === "-1") return;
 
-            console.log("Seleccionaste:", valorSeleccionado, " Nombre: ", textoSeleccionado);
         }
 
         function pedirTarifas(){
@@ -92,8 +82,6 @@
             const valorSeleccionado = select.value;
             if (valorSeleccionado === "-1") return;
 
-            console.log("valorSeleccionado: " + valorSeleccionado);
-
             const nombre = select.options[select.selectedIndex].text;
             // Construir los datos en formato application/x-www-form-urlencoded
             const params = "nombre=" + encodeURIComponent(nombre);
@@ -101,6 +89,11 @@
             
             //console.log("Enviando a " + urlTarifas + " con parámetros: " + params);
             submit(urlTarifas, params);
+        }
+
+
+        function mostrar_tarifas(tarifas){
+            document.getElementById("tarifas-container").innerHTML = crearTablaDesdeJson(tarifas);
         }
 
 
@@ -128,7 +121,6 @@
 
 
         function mostrar_transitoEmulado(datos){
-            console.log("Datos del tránsito:", datos);
             ocultarError();
             
             // Crear tabla vertical con los datos

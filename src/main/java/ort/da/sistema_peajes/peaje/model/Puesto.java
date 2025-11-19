@@ -14,6 +14,12 @@ public class Puesto {
 		this.tarifas = new ArrayList<>();
 	}
 
+	public Puesto(String nombre, String direccion, ArrayList<Tarifa> tarifas) {
+		this.nombre = nombre;
+		this.direccion = direccion;
+		this.tarifas = tarifas;
+	}
+
 	public String getNombre() {
 		return nombre;
 	}

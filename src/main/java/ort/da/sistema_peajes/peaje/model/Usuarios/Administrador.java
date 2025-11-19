@@ -9,14 +9,14 @@ public class Administrador extends Usuario {
     private boolean logged;
 
 
-    public Administrador(String usuario, String password, String nombreCompleto, String cedula) {
-        super(usuario, password, nombreCompleto, cedula);  
+    public Administrador(String cedula, String password, String nombreCompleto) {
+        super(cedula, password, nombreCompleto);  
         this.logged = false;
     }
 
     @Override
     public void Validar() throws EstadoException, LoginException {
-        if(logged) throw new LoginException("El administrador ya se encuentra logueado.");
+        if(logged) throw new LoginException("Ud. Ya está logueado");
     }
 
     public void setLogged(boolean status) {

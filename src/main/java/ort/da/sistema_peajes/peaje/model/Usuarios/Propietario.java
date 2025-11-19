@@ -15,6 +15,7 @@ import javax.security.auth.login.LoginException;
 import ort.da.sistema_peajes.peaje.exceptions.AsignacionException;
 import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
 import ort.da.sistema_peajes.peaje.exceptions.NoEncontradoException;
+import ort.da.sistema_peajes.peaje.exceptions.PropietarioException;
 import ort.da.sistema_peajes.peaje.model.Asignacion;
 import ort.da.sistema_peajes.peaje.model.EventosSistema;
 import ort.da.sistema_peajes.peaje.model.InfoVehiculo;
@@ -34,14 +35,15 @@ public class Propietario extends Usuario {
 	private EstadoPropietario estadoPropietario;
 
 
-	public Propietario(String usuario, String password, String nombreCompleto, String cedula) {
-        super(usuario, password, nombreCompleto, cedula);
+
+    public Propietario(String cedula, String password, String nombreCompleto, int saldo, int saldoMinimo) {
+        super(cedula, password, nombreCompleto);
         this.vehiculos = new ArrayList<>();
         this.registros = new ArrayList<>();
         this.asignaciones = new ArrayList<>();
         this.notificaciones = new ArrayList<>();
-        this.saldo = 0;
-        this.saldoMinimo = 1000;
+        this.saldo = saldo;
+        this.saldoMinimo = saldoMinimo;
         this.estadoPropietario = new Habilitado(this);
     }
 
@@ -105,13 +107,13 @@ public class Propietario extends Usuario {
     }
     
 
+    public void agregarAsignacion(Bonificacion bonificacion, Puesto puesto) throws AsignacionException, EstadoException{
+        this.estadoPropietario.puedeAsignarBono();
 
-    public void agregarAsignacion(Bonificacion bonificacion, Puesto puesto) throws AsignacionException{
         Asignacion nueva = new Asignacion(puesto, bonificacion, LocalDate.now());
 
         existeAsignacion(puesto);
         this.asignaciones.add(nueva);
-        //BONO NO MANDA NOTIFICACION
 
         this.avisar(EventosSistema.BONO_ASIGNADO);
     }
@@ -238,6 +240,17 @@ public class Propietario extends Usuario {
 
     public void suspendido() throws EstadoException {
         this.estadoPropietario.suspendido();
+    }
+
+
+    public void borrarNotificaciones() throws PropietarioException{
+        if(this.notificaciones.isEmpty()) throw new PropietarioException("");
+        this.notificaciones.clear();
+    }
+
+
+    public boolean esBonificable() {
+        return this.estadoPropietario.bonificable();
     }
 
 }

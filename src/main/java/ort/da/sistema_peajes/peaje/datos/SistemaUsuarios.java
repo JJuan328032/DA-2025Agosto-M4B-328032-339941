@@ -35,39 +35,39 @@ public class SistemaUsuarios {
 
 	public ArrayList<String> getEstadosPropietario(){ return this.estadosPropietario;}
 
-	public Propietario loginPropietario(String usuario, String password) throws LoginException, EstadoException {
-		return login(usuario, password, this.propietarios);
+	public Propietario loginPropietario(String cedula, String password) throws LoginException, EstadoException {
+		return login(cedula, password, this.propietarios);
 	}
 
-	public Administrador loginAdministrador(String usuario, String password) throws LoginException, EstadoException{
-		Administrador administrador = login(usuario, password, administradores);
+	public Administrador loginAdministrador(String cedula, String password) throws LoginException, EstadoException{
+		Administrador administrador = login(cedula, password, administradores);
 		administrador.setLogged(true);
 		
 		return administrador;
 	}
 
-    public void agregarAdministrador(String user, String pass, String nombreCompleto, String cedula) {
-        this.administradores.add(new Administrador(user, pass, nombreCompleto,cedula));
+    public void agregarAdministrador(String cedula, String pass, String nombreCompleto) {
+        this.administradores.add(new Administrador(cedula, pass, nombreCompleto));
     }
 
 
-    public Propietario agregarPropietario(String user, String pass, String nombreCompleto, String cedula) {
-		Propietario p = new Propietario(user, pass, nombreCompleto, cedula);
+    public Propietario agregarPropietario(String cedula, String pass, String nombreCompleto, int saldo, int saldoMinimo) {
+		Propietario p = new Propietario(cedula, pass, nombreCompleto, saldo, saldoMinimo);
         this.propietarios.add(p);
 
 		return p;
     }
 
 
-	private <T extends Usuario> T login(String usuario, String password, ArrayList<T> lista) throws LoginException, EstadoException{
-		T u = buscarUsuario(usuario, password, lista);
+	private <T extends Usuario> T login(String cedula, String password, ArrayList<T> lista) throws LoginException, EstadoException{
+		T u = buscarUsuario(cedula, password, lista);
 		u.Validar();
 
 		return u;
 	}
 
-	private <T extends Usuario> T buscarUsuario(String usuario, String password, ArrayList<T> lista) throws LoginException, EstadoException{
-		for (T u : lista) if (u.validarCredenciales(usuario, password)) return u;
+	private <T extends Usuario> T buscarUsuario(String cedula, String password, ArrayList<T> lista) throws LoginException, EstadoException{
+		for (T u : lista) if (u.validarCredenciales(cedula, password)) return u;
 
 		throw new LoginException("Acceso denegado");
 	}

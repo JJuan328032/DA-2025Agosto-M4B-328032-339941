@@ -22,6 +22,7 @@ import ort.da.sistema_peajes.peaje.dto.mappers.MapperAsignacion;
 import ort.da.sistema_peajes.peaje.dto.mappers.MapperInfoVehiculo;
 import ort.da.sistema_peajes.peaje.dto.mappers.MapperNotificacion;
 import ort.da.sistema_peajes.peaje.dto.mappers.MapperRegistro;
+import ort.da.sistema_peajes.peaje.exceptions.PropietarioException;
 import ort.da.sistema_peajes.peaje.dto.mappers.MapperPropietario;
 import ort.da.sistema_peajes.peaje.model.EventosSistema;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
@@ -64,6 +65,20 @@ public class ControladorTableroPropietario implements Observador{
             transitosRealizados(),
             notificaciones()
             );
+    }
+
+    @PostMapping("/borrarNotificaciones")
+    public List<Respuesta> borrarNotificaciones(HttpSession sesionHttp){
+        Propietario p = (Propietario) sesionHttp.getAttribute("propietario");
+        String mensaje = "Notificaciones borradas con Éxito!";
+
+        try{
+            p.borrarNotificaciones();
+        }catch(PropietarioException e){
+            mensaje = "No hay notificaciones para borrar";
+        }
+        
+        return Respuesta.lista(new Respuesta("borrarNotificaciones", mensaje));
     }
 
     @PostMapping("/nosVemos")

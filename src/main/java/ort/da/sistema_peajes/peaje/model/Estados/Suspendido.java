@@ -36,7 +36,7 @@ public class Suspendido extends EstadoPropietario {
 
     @Override
     public void puedeTransitar() throws EstadoException {
-        throw new EstadoException("Se encuentra actualmente Suspendido. No puede realizar Transitos");
+        throw new EstadoException("Suspendido");
     }
 
     @Override
@@ -47,5 +47,10 @@ public class Suspendido extends EstadoPropietario {
     @Override
     public String getNombre() {
         return "Suspendido";
+    }
+
+    @Override
+    public void puedeAsignarBono() throws EstadoException {
+        return;
     }
 }

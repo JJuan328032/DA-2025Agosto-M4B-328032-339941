@@ -127,6 +127,7 @@ public class Propietario extends Usuario {
     }
 
 
+
 	@Override
 	public void Validar() throws EstadoException, LoginException {
 		this.estadoPropietario.puedeEntrar();
@@ -251,6 +252,11 @@ public class Propietario extends Usuario {
 
     public boolean esBonificable() {
         return this.estadoPropietario.bonificable();
+    }
+
+
+    public void refrescarTransitoSinNotificar() {
+        this.avisar(EventosSistema.TRANSITO_REALIZADO);
     }
 
 }

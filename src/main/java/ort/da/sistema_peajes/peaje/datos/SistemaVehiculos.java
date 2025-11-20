@@ -21,12 +21,6 @@ public class SistemaVehiculos {
 		this.vehiculos.add(vehiculo);
 	}
 
-	/*
-	public void agregarVariosVehiculos(ArrayList<Vehiculo> vehiculos) {
-		this.vehiculos.addAll(vehiculos);
-	}
-	*/
-
 	public Vehiculo obtenerVehiculoPorMatricula(String matricula) throws VehiculoException{
 		for (Vehiculo vehiculo : vehiculos) if (vehiculo.igualPatente(matricula)) return vehiculo;
 		throw new VehiculoException(matricula);
@@ -35,6 +29,14 @@ public class SistemaVehiculos {
     public void agregarVariosVehiculos(ArrayList<Vehiculo> lista) {
         this.vehiculos.addAll(lista);
     }
+
+
+
+	/*
+	public void agregarVariosVehiculos(ArrayList<Vehiculo> vehiculos) {
+		this.vehiculos.addAll(vehiculos);
+	}
+	*/
 
 	/*
     public void asociarVehiculoAPropietario(Vehiculo v, Propietario p) {

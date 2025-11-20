@@ -1,6 +1,8 @@
 package ort.da.sistema_peajes.peaje.model.Estados;
 
 import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
+import ort.da.sistema_peajes.peaje.exceptions.SaldoException;
+import ort.da.sistema_peajes.peaje.model.Registro;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
 
 public class Deshabilitado extends EstadoPropietario {
@@ -31,12 +33,12 @@ public class Deshabilitado extends EstadoPropietario {
 
     @Override
     public void deshabilitado() throws EstadoException {
-        throw new EstadoException("Deshabilitado");
+        throw new EstadoException("Ya se encuentra Deshabilitado");
     }
 
     @Override
     public void puedeTransitar() throws EstadoException {
-        throw new EstadoException("Deshabilitado");
+        throw new EstadoException("Deshabilitado. No puede realizar Tránsitos");
     }
 
     @Override
@@ -52,6 +54,13 @@ public class Deshabilitado extends EstadoPropietario {
     @Override
     public void puedeAsignarBono() throws EstadoException {
         throw new EstadoException("El propietario esta deshabilitado. No se pueden asignar bonificaciones");
+    }
+
+    @Override
+    public void procesarPagoSimple(Pagar pagar, Registro registro)
+            throws EstadoException, SaldoException {
+        
+        this.puedeTransitar();
     }
 
 }

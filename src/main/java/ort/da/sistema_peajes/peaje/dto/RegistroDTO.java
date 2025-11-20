@@ -12,8 +12,10 @@ public class RegistroDTO {
     private double montoBonificacion;
     private double montoPagado;
     private String fecha;
+    private String hora;
 
     private static final DateTimeFormatter FORMATO = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter FORMATO_HORA  = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     public RegistroDTO(String puesto, String matricula, String tarifa, int montoTarifa, String bonificacion,
             double montoBonificacion, double montoPagado, LocalDateTime fecha) {
@@ -25,6 +27,7 @@ public class RegistroDTO {
         this.montoBonificacion = montoBonificacion;
         this.montoPagado = montoPagado;
         this.fecha = fecha.format(FORMATO);
+        this.hora = fecha.format(FORMATO_HORA);
     }
 
     public String getPuesto() {
@@ -51,5 +54,5 @@ public class RegistroDTO {
     public String getFecha() {
         return fecha;
     }
-    
+    public String getHora(){ return this.hora;}
 }

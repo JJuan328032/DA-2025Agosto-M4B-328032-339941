@@ -1,6 +1,8 @@
 package ort.da.sistema_peajes.peaje.model.Estados;
 
 import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
+import ort.da.sistema_peajes.peaje.exceptions.SaldoException;
+import ort.da.sistema_peajes.peaje.model.Registro;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
 
 public class Penalizado extends EstadoPropietario {
@@ -26,7 +28,7 @@ public class Penalizado extends EstadoPropietario {
 
     @Override
     public void penalizado() throws EstadoException {
-        throw new EstadoException("Penalizado");
+        throw new EstadoException("Ya se encuentra Penalizado");
     }
 
     @Override
@@ -53,6 +55,13 @@ public class Penalizado extends EstadoPropietario {
     @Override
     public void puedeAsignarBono() throws EstadoException {
         return;
+    }
+
+    @Override
+    public void procesarPagoSimple(Pagar pagar, Registro registro)
+            throws EstadoException, SaldoException {
+        
+        pagar.completarRegistro(this.getPropietario(), registro);
     }
 
 }

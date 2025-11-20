@@ -63,27 +63,32 @@ public class ControladorEmular {
     }
 
     @PostMapping("/transito")
-    public List<Respuesta> emularTransito(@RequestParam int indicePuesto, @RequestParam String matricula, @RequestParam LocalDateTime fechaHora) throws SaldoException, EstadoException, VehiculoException, PuestoException, Exception{
-        //las exceptions son manejadas en sus respectivos objetos usando mensajes genericos o mas de un atributo
-
-
+    public List<Respuesta> emularTransito(@RequestParam int indicePuesto, @RequestParam String matricula, @RequestParam LocalDateTime fechaHora) throws PuestoException{
 
         String mensaje = "";
 
         try{
-            return Respuesta.lista(new Respuesta("transitoEmulado", MapperTransito.toDTO(Fachada.getInstancia().emularTransito(indicePuesto, matricula, fechaHora))));
+            return Respuesta.lista(emular(indicePuesto, matricula, fechaHora));
+
         }catch(VehiculoException e){
             mensaje = "No existe el Vehiculo con Matricula: " + e.getMessage();
         }catch(SaldoException e){
             mensaje = e.getMessage();
         }catch(EstadoException e){
-            mensaje = "El propietario de este vehiculo está " + e.getMessage() + ". No puede realizar Tránsitos";
+            mensaje = "El propietario de este vehiculo está " + e.getMessage();
+        }catch(Exception e){
+            mensaje = e.getMessage();
         }
 
         return Respuesta.lista(new Respuesta("error", mensaje));
     }
 
 
+
+    
+    private Respuesta emular(int indicePuesto, String matricula, LocalDateTime fechaHora) throws SaldoException, EstadoException, VehiculoException, PuestoException, Exception{
+        return new Respuesta("transitoEmulado", MapperTransito.toDTO(Fachada.getInstancia().emularTransito(indicePuesto, matricula, fechaHora)));
+    }
 
     private Respuesta puestos() {
         return new Respuesta("puestos", MapperSoloNombre.toDTOlistPuestos(Fachada.getInstancia().getPuestos()));

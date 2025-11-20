@@ -16,6 +16,13 @@ public class InfoTransito {
         this.montoTransito = montoTransito;
     }
 
+    public InfoTransito(Puesto puesto, Vehiculo vehiculo, Registro registro) {
+        this.puesto = puesto;
+        this.vehiculo = vehiculo;
+        this.bono = registro.getBonificacion();
+        this.montoTransito = registro.getMontoPagado();
+    }
+
     public Puesto getPuesto(){
         return this.puesto;
     }

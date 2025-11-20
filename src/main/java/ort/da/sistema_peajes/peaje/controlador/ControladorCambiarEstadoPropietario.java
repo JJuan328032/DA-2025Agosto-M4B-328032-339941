@@ -74,7 +74,7 @@ public class ControladorCambiarEstadoPropietario implements Observador{
             this.propietario = Fachada.getInstancia().buscarPropietarioPorCedula(cedula);
             this.propietario.agregarObservador(this);
 
-            return Respuesta.lista(propietario(), estadosDefinidos());
+            return Respuesta.lista(estadosDefinidos(), propietario());
 
         } catch (PropietarioException e) {
             return Respuesta.lista(new Respuesta("error", "No se pudo encontrar un propietario con cédula: " + e.getMessage()));

@@ -52,7 +52,6 @@ public class Puesto {
 			}
 		}
 
-		//TODO: generalizar el mensaje en controller
 		throw new Exception("Hubo un error inesperado. No se encuentra la Tarifa");
 	}
 

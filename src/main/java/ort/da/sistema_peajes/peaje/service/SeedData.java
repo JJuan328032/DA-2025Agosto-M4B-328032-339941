@@ -128,7 +128,7 @@ public class SeedData {
         r1.setMontoBonificado(20);
         r1.setMontoPagado();
         fachada.agregarRegistro(r1);
-        prop1.agregarRegistro(r1);
+        v1.agregarRegistro(r1);
 
         //System.out.println("Primer Registro: " + r1);
 
@@ -137,7 +137,7 @@ public class SeedData {
         r2.setMontoBonificado(0);
         r2.setMontoPagado();
         fachada.agregarRegistro(r2);
-        prop1.agregarRegistro(r2);
+        v2.agregarRegistro(r2);
 
         //System.out.println("Segundo Registro: " + r2);
 
@@ -146,7 +146,7 @@ public class SeedData {
         r3.setMontoBonificado(50);
         r3.setMontoPagado();
         fachada.agregarRegistro(r3);
-        prop2.agregarRegistro(r3);
+        v3.agregarRegistro(r3);
 
         //System.out.println("Tercer Registro: " + r3);
 
@@ -155,7 +155,7 @@ public class SeedData {
         r4.setMontoBonificado(0);
         r4.setMontoPagado();
         fachada.agregarRegistro(r4);
-        prop2.agregarRegistro(r4);
+        v4.agregarRegistro(r4);
 
         //System.out.println("Cuarto Registro: " + r4);
 
@@ -164,7 +164,7 @@ public class SeedData {
         r5.setMontoBonificado(10);
         r5.setMontoPagado();
         fachada.agregarRegistro(r5);
-        prop1.agregarRegistro(r5);
+        v1.agregarRegistro(r5);
 
         //System.out.println("Quinto Registro: " + r5);
 

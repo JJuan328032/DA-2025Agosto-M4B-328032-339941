@@ -139,5 +139,7 @@ public class Fachada {
 
 		return sistemaRegistro.realizarTransito(puesto, vehiculo, fechaHora);
     }
+
+
 }
  

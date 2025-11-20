@@ -121,6 +121,9 @@
         }
 
         function mostrar_notificaciones(notificaciones){
+
+            console.log(notificaciones);
+
             const notificacionesSistema = document.getElementById('lista-notificaciones');
             notificacionesSistema.innerHTML = crearTablaDesdeJson(notificaciones);
         }

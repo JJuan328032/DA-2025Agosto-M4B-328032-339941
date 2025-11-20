@@ -141,15 +141,13 @@
         function asignarBonificacion() {
             const bonificacion = document.getElementById('indiceBono');
             const puesto = document.getElementById('indicePuesto');
-            const cedula = document.getElementById('cedula').value;
 
-            if (!bonificacion.value || !puesto.value || !cedula || bonificacion.value == -1 || puesto.value == -1) {
+            if (!bonificacion.value || !puesto.value || bonificacion.value == -1 || puesto.value == -1) {
                 mostrar_mal('Por favor complete todos los campos');
                 return;
             }
 
-            const data ='cedula=' + encodeURIComponent(cedula) +
-                        '&bonificacion=' + encodeURIComponent(bonificacion.options[bonificacion.selectedIndex].text) +
+            const data = '&bonificacion=' + encodeURIComponent(bonificacion.options[bonificacion.selectedIndex].text) +
                         '&puesto=' + encodeURIComponent(puesto.options[puesto.selectedIndex].text);
     
             submit('/bonificaciones/propietario/asignar', data);

@@ -2,6 +2,9 @@ package ort.da.sistema_peajes.peaje.model.Estados;
 
 
 import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
+import ort.da.sistema_peajes.peaje.exceptions.NoEncontradoException;
+import ort.da.sistema_peajes.peaje.exceptions.SaldoException;
+import ort.da.sistema_peajes.peaje.model.Registro;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
 
 public abstract class EstadoPropietario {
@@ -25,6 +28,19 @@ public abstract class EstadoPropietario {
     public abstract void puedeTransitar() throws EstadoException;
     public abstract String getNombre();
     public abstract void puedeAsignarBono() throws EstadoException;
+
+    public abstract void procesarPagoSimple(Pagar pagar, Registro registro) throws EstadoException, SaldoException;
+
+    public void cambiarEstado(String nombreEstado) throws NoEncontradoException, EstadoException {
+        switch (nombreEstado) {
+            case "Deshabilitado": deshabilitado(); break;
+            case "Habilitado": habilitado(); break;
+            case "Penalizado": penalizado(); break;
+            case "Suspendido": suspendido(); break;
+        
+            default: throw new NoEncontradoException(nombreEstado);
+        }
+    }
 
 }
 

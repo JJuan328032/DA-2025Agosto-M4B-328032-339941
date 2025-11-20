@@ -2,6 +2,8 @@ package ort.da.sistema_peajes.peaje.model.Estados;
 
 
 import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
+import ort.da.sistema_peajes.peaje.exceptions.SaldoException;
+import ort.da.sistema_peajes.peaje.model.Registro;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
 
 public class Habilitado extends EstadoPropietario {
@@ -17,7 +19,7 @@ public class Habilitado extends EstadoPropietario {
 
     @Override
     public void habilitado() throws EstadoException {
-        throw new EstadoException("Habilitado");
+        throw new EstadoException("Ya se encuentra Habilitado");
     }
 
     @Override
@@ -56,5 +58,14 @@ public class Habilitado extends EstadoPropietario {
     @Override
     public void puedeAsignarBono() throws EstadoException {
         return;
+    }
+
+    @Override
+    public void procesarPagoSimple(Pagar pagar, Registro registro)
+            throws EstadoException, SaldoException {
+        
+        pagar.calcularBonificacion(this.getPropietario(), registro);
+        pagar.completarRegistro(this.getPropietario(), registro);
+        pagar.notificarTransito(this.getPropietario(), registro);
     }
 }

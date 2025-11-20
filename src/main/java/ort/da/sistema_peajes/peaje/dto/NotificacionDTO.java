@@ -7,10 +7,12 @@ public class NotificacionDTO {
     private String fecha;
     private String mensaje;
 
-    private static final DateTimeFormatter FORMATO = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter FORMATO_COMPLETO =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
 
     public NotificacionDTO(LocalDateTime fecha, String mensaje){
-        this.fecha = fecha.format(FORMATO);
+        this.fecha = fecha.format(FORMATO_COMPLETO);
         this.mensaje = mensaje;
     }
 

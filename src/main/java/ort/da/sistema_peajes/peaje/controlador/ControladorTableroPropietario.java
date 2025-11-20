@@ -45,8 +45,6 @@ public class ControladorTableroPropietario implements Observador{
         return conexionNavegador.getConexionSSE();
     }
 
-    //TODO que pasa cuando un propietario se va de su sesion y el boserver sigue asignado? Como manejamos la descuscripcion?
-
 
     @PostMapping("/informacion")
     public List<Respuesta> iniciarTablero(@SessionAttribute(name = "propietario", required = false) Propietario p){
@@ -88,6 +86,7 @@ public class ControladorTableroPropietario implements Observador{
 
         if(p != null){
             sesionHttp.removeAttribute("propietario");
+            p.quitarObservador(this);
         }
 
         //return Respuesta.lista(new Respuesta("volver", "Debe volver a entrar"));

@@ -1,6 +1,8 @@
 package ort.da.sistema_peajes.peaje.model.Estados;
 
 import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
+import ort.da.sistema_peajes.peaje.exceptions.SaldoException;
+import ort.da.sistema_peajes.peaje.model.Registro;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
 
 public class Suspendido extends EstadoPropietario {
@@ -21,7 +23,7 @@ public class Suspendido extends EstadoPropietario {
 
     @Override
     public void suspendido() throws EstadoException {
-        throw new EstadoException("Suspendido");
+        throw new EstadoException("Ya se encuentra Suspendido");
     }
 
     @Override
@@ -36,7 +38,7 @@ public class Suspendido extends EstadoPropietario {
 
     @Override
     public void puedeTransitar() throws EstadoException {
-        throw new EstadoException("Suspendido");
+        throw new EstadoException("Suspendido. No puede realizar Tránsitos");
     }
 
     @Override
@@ -52,5 +54,12 @@ public class Suspendido extends EstadoPropietario {
     @Override
     public void puedeAsignarBono() throws EstadoException {
         return;
+    }
+
+    @Override
+    public void procesarPagoSimple(Pagar pagar, Registro registro)
+            throws EstadoException, SaldoException {
+        
+        this.puedeTransitar();
     }
 }

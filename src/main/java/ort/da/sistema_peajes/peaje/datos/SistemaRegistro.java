@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import ort.da.sistema_peajes.peaje.exceptions.EstadoException;
 import ort.da.sistema_peajes.peaje.exceptions.SaldoException;
 import ort.da.sistema_peajes.peaje.model.InfoTransito;
-import ort.da.sistema_peajes.peaje.model.Pagar;
 import ort.da.sistema_peajes.peaje.model.Puesto;
 import ort.da.sistema_peajes.peaje.model.Registro;
 import ort.da.sistema_peajes.peaje.model.Tarifa;
 import ort.da.sistema_peajes.peaje.model.Vehiculo;
+import ort.da.sistema_peajes.peaje.model.Estados.Pagar;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
 
 public class SistemaRegistro {
@@ -37,11 +37,12 @@ public class SistemaRegistro {
 		Registro r = new Registro(puesto, vehiculo, fechaHora, tarifas);
 
 		Propietario propietario = vehiculo.getPropietario();
+
 		//se cobra antes para validar estado de Propietario
 		this.servicioPago.realizarPagoSimple(propietario, r);
 		
 		this.agregarRegistro(r);
 
-		return new InfoTransito(puesto, vehiculo, r.getBonificacion(), r.getMontoPagado());
+		return new InfoTransito(puesto, vehiculo, r);
 	}
 }

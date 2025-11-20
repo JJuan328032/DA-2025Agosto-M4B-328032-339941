@@ -9,7 +9,6 @@ import ort.da.sistema_peajes.peaje.exceptions.SaldoException;
 import ort.da.sistema_peajes.peaje.model.InfoTransito;
 import ort.da.sistema_peajes.peaje.model.Puesto;
 import ort.da.sistema_peajes.peaje.model.Registro;
-import ort.da.sistema_peajes.peaje.model.Tarifa;
 import ort.da.sistema_peajes.peaje.model.Vehiculo;
 import ort.da.sistema_peajes.peaje.model.Estados.Pagar;
 import ort.da.sistema_peajes.peaje.model.Usuarios.Propietario;
@@ -33,8 +32,7 @@ public class SistemaRegistro {
 	}
 
 	public InfoTransito realizarTransito(Puesto puesto, Vehiculo vehiculo, LocalDateTime fechaHora) throws SaldoException, EstadoException, Exception{
-		Tarifa tarifas = puesto.obtenerTarifaSegunCategoriaVehiculo(vehiculo);
-		Registro r = new Registro(puesto, vehiculo, fechaHora, tarifas);
+		Registro r = new Registro(puesto, vehiculo, fechaHora);
 
 		Propietario propietario = vehiculo.getPropietario();
 

@@ -40,9 +40,11 @@ public class Puesto {
 		for(Tarifa t : nuevasTarifas) this.tarifas.add(t);
     }
 
+	/*
 	public int obtenerMontoTarifaSegunVehiculo(Vehiculo vehiculo) throws Exception{
 		return this.obtenerTarifaSegunCategoriaVehiculo(vehiculo).getMonto();
 	}
+	*/
 
 	public Tarifa obtenerTarifaSegunCategoriaVehiculo(Vehiculo vehiculo) throws Exception {
 

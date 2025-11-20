@@ -16,12 +16,26 @@ public class Registro {
     private double montoPagado;
     private boolean pagoRealizado;
 
-    public Registro(Puesto puesto, Vehiculo vehiculo, LocalDateTime fecha, Tarifa tarifa) {
+    public Registro(Puesto puesto, Vehiculo vehiculo, LocalDateTime fecha) throws Exception {
+        Tarifa t = puesto.obtenerTarifaSegunCategoriaVehiculo(vehiculo);
+
         this.puesto = puesto;
         this.vehiculo = vehiculo;
         this.fecha = fecha;
-        this.tarifa = tarifa.getTipo();
-        this.montoTarifa = tarifa.getMonto();
+        this.tarifa = t.getTipo();
+        this.montoTarifa = t.getMonto();
+        this.montoBonificado = 0;
+        this.bonificacion = "Sin Bonificacion";
+        this.pagoRealizado = false;
+    }
+
+    //usado en seedData
+    public Registro(Puesto puesto, Vehiculo vehiculo, LocalDateTime fecha, Tarifa tAuto) {
+        this.puesto = puesto;
+        this.vehiculo = vehiculo;
+        this.fecha = fecha;
+        this.tarifa = tAuto.getTipo();
+        this.montoTarifa = tAuto.getMonto();
         this.montoBonificado = 0;
         this.bonificacion = "Sin Bonificacion";
         this.pagoRealizado = false;
